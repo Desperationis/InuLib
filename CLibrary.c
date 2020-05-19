@@ -1,12 +1,7 @@
-// Notes:
-//		90 degree turns aren't possible.
-//		Partner joytsicks ARE discontinued.
-
+#pragma systemFile
+#include "CLibrary.h"
 
 // TODO:
-// 		Arcade Control
-// 		Tank Control
-// 		Gamer Control
 //		Slew Control
 // 		PID Control
 //		Precision Control With Encoder
@@ -29,6 +24,7 @@ int rightEncoderPort;
 int taskDelay = 20;
 
 void SetLeftMotor(int port) {
+	SetUpInfo i;
 	leftMotorPort = port;
 }
 
