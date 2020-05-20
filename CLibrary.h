@@ -26,11 +26,12 @@ short GetSlewStep();                                             // Gets the ste
 void ResetEncoders();                                            // Reset chassis' encoder's value to 0.
 short Clamp(short value);                                        // Clamps values down to -127 and 127
 short Step(short original, short step, short target);            // Increments a value to a target by maximum fixed amount.
+short SlewStep(short original, short step, short target);        // Only Increments a value to a target by maximum fixed amount if it's a higher value.
 bool HasReached(short encoderPort, short value);                 // Returns if an encoder has passed a threshold.
 bool BothHasReached(short enc1, short enc2, short value);        // Returns if two encoders have passed a threshold.
 
 // Tasks
-task Slew();
+task Slew();                                                     // Slew all motors
 task LeftArcadeControl();                                        // Control chassis with only the left joystick
 task RightArcadeControl();                                       // Control chassis with only the right joystick
 task CustomTankControl();                                        // Control chassis with both joysticks like a tank
@@ -38,3 +39,5 @@ task GamerControl();                                             // Control chas
 
 // Functions
 void MoveUntil(short encoderValue, short Lpow, short Rpow);      // Move chassis based on encoder value
+short PIDCalculate(short encoderValue, short target);            // Calculate motor speed using PID
+void PID(short target, short leftReverse, short rightReverse);

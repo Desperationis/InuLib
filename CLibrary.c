@@ -13,6 +13,7 @@
 // Right Axle Variables
 // Ch1: X -> Ch2: Y Positive Down
 
+// Public
 short slewMotor[10];
 short leftMotorPort;
 short leftEncoderPort;
@@ -24,6 +25,9 @@ double maximumMotorValue;
 
 short taskDelay;
 short slewStep;
+
+// Private
+double integral = 0.0;
 
 // Setters
 void SetLeftMotor(short port) {
@@ -109,6 +113,20 @@ short Step(short original, short step, short target){
 	return target;
 }
 
+short SlewStep(short original, short step, short target){
+	if(abs(original - target) > step){
+		// Ignore if target is "less" of a motor power than original
+		if(abs(target) < abs(original) && target < 0 && original < 0) {
+			return target;
+		}
+		if(abs(target) < abs(original) && target > 0 && original > 0) {
+			return target;
+		}
+		return Step(original, step, target);
+	}
+	return target;
+}
+
 bool HasReached(short encoderPort, short value) {
 	return abs(SensorValue[encoderPort]) > value;
 }
@@ -125,7 +143,7 @@ task Slew() {
 
 	while(true) {
 		for(short i = 0; i < 10; i++) {
-			motor[i] = Clamp(Step(motor[i], slewStep, slewMotor[i]));
+			motor[i] = Clamp(SlewStep(motor[i], slewStep, slewMotor[i]));
 		}
 		delay(taskDelay);
 	}
@@ -187,4 +205,29 @@ void MoveUntil(short encoderValue, short Lpow, short Rpow) {
 	}
 	slewMotor[leftMotorPort] = 0;
 	slewMotor[rightMotorPort] = 0;
+}
+
+short PIDCalculate(short encoderValue, short target) {
+	double kP = 1.5;
+	double kI = 0.1;
+	double kD = 0.0;
+
+	// LEFTMOTOR
+	double difference = target - encoderValue;
+	integral += difference;
+
+	if(abs(difference) < 5) {
+		integral = 0;
+	}
+
+	return Clamp((difference * kP) + (integral * kI));
+}
+
+void PID(short target, short leftReverse, short rightReverse) {
+	while(true) {
+		slewMotor[leftMotorPort] = PIDCalculate(SensorValue[leftEncoderPort], target) * leftReverse;
+		slewMotor[rightMotorPort] = PIDCalculate(-SensorValue[rightEncoderPort], target) * rightReverse;
+
+		delay(taskDelay);
+	}
 }
