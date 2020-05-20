@@ -27,7 +27,10 @@ short taskDelay;
 short slewStep;
 
 // Private
-double integral = 0.0;
+double leftIntegral = 0.0;
+double rightIntegral = 0.0;
+double leftPastError = 0.0;
+double rightPastError = 0.0;
 
 // Setters
 void SetLeftMotor(short port) {
@@ -143,7 +146,7 @@ task Slew() {
 
 	while(true) {
 		for(short i = 0; i < 10; i++) {
-			motor[i] = Clamp(SlewStep(motor[i], slewStep, slewMotor[i]));
+			motor[i] = Clamp(Step(motor[i], slewStep, slewMotor[i]));
 		}
 		delay(taskDelay);
 	}
@@ -207,26 +210,28 @@ void MoveUntil(short encoderValue, short Lpow, short Rpow) {
 	slewMotor[rightMotorPort] = 0;
 }
 
-short PIDCalculate(short encoderValue, short target) {
-	double kP = 1.5;
-	double kI = 0.1;
-	double kD = 0.0;
+short PIDCalculate(short encoderValue, short target, double* integral, double* pastError ) {
+	double kP = 2.1;
+	double kI = 0.0;
+	double kD = 10;
 
 	// LEFTMOTOR
 	double difference = target - encoderValue;
-	integral += difference;
+	*integral += difference;
+	double derivative = difference - *pastError;
+	*pastError = difference;
 
 	if(abs(difference) < 5) {
-		integral = 0;
+		*integral = 0;
 	}
 
-	return Clamp((difference * kP) + (integral * kI));
+	return Clamp((difference * kP) + (*integral * kI) + (derivative * kD));
 }
 
 void PID(short target, short leftReverse, short rightReverse) {
 	while(true) {
-		slewMotor[leftMotorPort] = PIDCalculate(SensorValue[leftEncoderPort], target) * leftReverse;
-		slewMotor[rightMotorPort] = PIDCalculate(-SensorValue[rightEncoderPort], target) * rightReverse;
+		slewMotor[leftMotorPort] = PIDCalculate(SensorValue[leftEncoderPort], target, &leftIntegral, &leftPastError) * leftReverse;
+		slewMotor[rightMotorPort] = PIDCalculate(-SensorValue[rightEncoderPort], target, &rightIntegral, &rightPastError) * rightReverse;
 
 		delay(taskDelay);
 	}
