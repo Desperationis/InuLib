@@ -15,45 +15,72 @@
 // Right Axle Variables
 // Ch1: X -> Ch2: Y Positive Down
 
-int controllerSpeed = 1;
-double maximumMotorValue = 127.0;
-int leftMotorPort;
-int rightMotorPort;
-int leftEncoderPort;
-int rightEncoderPort;
-int taskDelay = 20;
+short leftMotorPort;
+short leftEncoderPort;
+short rightMotorPort;
+short rightEncoderPort;
 
-void SetLeftMotor(int port) {
-	SetUpInfo i;
+double controllerSpeed;
+double maximumMotorValue;
+
+short taskDelay;
+
+// Setters
+void SetLeftMotor(short port) {
 	leftMotorPort = port;
 }
 
-void SetRightMotor(int port) {
+void SetRightMotor(short port) {
 	rightMotorPort = port;
 }
 
-void SetLeftEncoder(int port) {
+void SetLeftEncoder(short port) {
 	leftEncoderPort = port;
 }
 
-void SetRightEncoder(int port) {
+void SetRightEncoder(short port) {
 	rightEncoderPort = port;
 }
 
 void SetControllerSpeed(double speed) {
-	controllerSpeed = speed;
-	maximumMotorValue = 127.0 / speed;
+	if(speed <= 1) {
+		controllerSpeed = speed;
+		maximumMotorValue = 127.0 * speed;
+	}
 }
 
-void SetAverageDelay(int delayTime) {
+void SetAverageDelay(short delayTime) {
 	taskDelay = delayTime;
 }
 
-int GetDelay() {
+// Getters
+short GetLeftMotor(){
+	return leftMotorPort;
+}
+
+short GetRightMotor(){
+	return rightMotorPort;
+}
+
+short GetLeftEncoder(){
+	return leftEncoderPort;
+}
+
+short GetRightEncoder(){
+	return rightEncoderPort;
+}
+
+short GetDelay() {
 	return taskDelay;
 }
 
-int Clamp(int value) {
+// Helper Functions
+void ResetEncoders() {
+	SensorValue[leftEncoderPort] = 0;
+	SensorValue[rightEncoderPort] = 0;
+}
+
+short Clamp(short value) {
 	// Clamps integers to maximum motor value; 127
 	if (value > 127) {
 		return 127;
@@ -64,6 +91,15 @@ int Clamp(int value) {
 	return value;
 }
 
+bool HasReached(short encoderPort, short value) {
+	return abs(SensorValue[encoderPort]) > value;
+}
+
+bool BothHasReached(short enc1, short enc2, short value) {
+	return HasReached(enc1, value) && HasReached(enc2, value);
+}
+
+// Tasks
 task LeftArcadeControl() {
 	// Keep thread alive.
 	while (true) {
@@ -91,8 +127,8 @@ task CustomTankControl() {
 	// Keep thread alive.
 	while (true) {
 		// Tank control with both joysticks.
-		motor[leftMotorPort] = Clamp(-vexRT[Ch3]) * (maximumMotorValue / 127);
-		motor[rightMotorPort] = Clamp(-vexRT[Ch2]) * (maximumMotorValue / 127);
+		motor[leftMotorPort] = Clamp(-vexRT[Ch3]) * (maximumMotorValue / 127.0);
+		motor[rightMotorPort] = Clamp(-vexRT[Ch2]) * (maximumMotorValue / 127.0);
 
 		delay(taskDelay);
 	}
@@ -111,8 +147,14 @@ task GamerControl() {
 	}
 }
 
-void MoveForwardUntil(int encoderValue) {
-	while( abs(SensorValue[leftEncoderPort]) < encoderValue || abs(SensorValue[rightEncoderPort]) < encoderValue) {
-
+// Functions
+void MoveUntil(short encoderValue, short Lpow, short Rpow) {
+	ResetEncoders();
+	while(!BothHasReached(leftEncoderPort, rightEncoderPort, encoderValue)) {
+		motor[leftMotorPort] = Clamp(Lpow);
+		motor[rightMotorPort] = Clamp(Rpow);
+		delay(taskDelay);
 	}
+	motor[leftMotorPort] = 0;
+	motor[rightMotorPort] = 0;
 }
