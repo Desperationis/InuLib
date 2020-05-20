@@ -12,6 +12,7 @@ void SetLeftEncoder(short port);                                 // Sets the lef
 void SetRightEncoder(short port);                                // Sets the right encoder port
 void SetControllerSpeed(double speed);                           // Sets the controller speed of the robot's wheels
 void SetAverageDelay(short delayTime);                           // Sets the delay of all tasks
+void SetSlewStep(short step);                                    // Sets the step amount for slew controller
 
 // Getters
 short GetLeftMotor();                                            // Gets the left motor port
@@ -19,14 +20,17 @@ short GetRightMotor();                                           // Gets the rig
 short GetLeftEncoder();                                          // Gets the left encoder port
 short GetRightEncoder();                                         // Gets the right encoder port
 short GetDelay();                                                // Gets the delay of all tasks
+short GetSlewStep();                                             // Gets the step amount of slew controller
 
 // Helper Functions
 void ResetEncoders();                                            // Reset chassis' encoder's value to 0.
 short Clamp(short value);                                        // Clamps values down to -127 and 127
+short Step(short original, short step, short target);            // Increments a value to a target by maximum fixed amount.
 bool HasReached(short encoderPort, short value);                 // Returns if an encoder has passed a threshold.
 bool BothHasReached(short enc1, short enc2, short value);        // Returns if two encoders have passed a threshold.
 
 // Tasks
+task Slew();
 task LeftArcadeControl();                                        // Control chassis with only the left joystick
 task RightArcadeControl();                                       // Control chassis with only the right joystick
 task CustomTankControl();                                        // Control chassis with both joysticks like a tank

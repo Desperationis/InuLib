@@ -2,9 +2,7 @@
 #include "CLibrary.h"
 
 // TODO:
-//		Slew Control
 // 		PID Control
-//		Precision Control With Encoder
 
 
 // Positive Power turns left motor clockwise. + Forward - Backward
@@ -15,6 +13,7 @@
 // Right Axle Variables
 // Ch1: X -> Ch2: Y Positive Down
 
+short slewMotor[10];
 short leftMotorPort;
 short leftEncoderPort;
 short rightMotorPort;
@@ -24,6 +23,7 @@ double controllerSpeed;
 double maximumMotorValue;
 
 short taskDelay;
+short slewStep;
 
 // Setters
 void SetLeftMotor(short port) {
@@ -53,6 +53,10 @@ void SetAverageDelay(short delayTime) {
 	taskDelay = delayTime;
 }
 
+void SetSlewStep(short step) {
+	slewStep = step;
+}
+
 // Getters
 short GetLeftMotor(){
 	return leftMotorPort;
@@ -74,6 +78,10 @@ short GetDelay() {
 	return taskDelay;
 }
 
+short GetSlewStep() {
+	return slewStep;
+}
+
 // Helper Functions
 void ResetEncoders() {
 	SensorValue[leftEncoderPort] = 0;
@@ -91,6 +99,16 @@ short Clamp(short value) {
 	return value;
 }
 
+short Step(short original, short step, short target){
+	if(abs(original - target) > step){
+		if(original > target) {
+			return original - step;
+		}
+		return original + step;
+	}
+	return target;
+}
+
 bool HasReached(short encoderPort, short value) {
 	return abs(SensorValue[encoderPort]) > value;
 }
@@ -100,24 +118,36 @@ bool BothHasReached(short enc1, short enc2, short value) {
 }
 
 // Tasks
+task Slew() {
+	for(short i = 0; i < 10; i++) {
+		slewMotor[i] = 0;
+	}
+
+	while(true) {
+		for(short i = 0; i < 10; i++) {
+			motor[i] = Clamp(Step(motor[i], slewStep, slewMotor[i]));
+		}
+		delay(taskDelay);
+	}
+}
+
 task LeftArcadeControl() {
 	// Keep thread alive.
 	while (true) {
 		// Arcade control with left joystick.
-		motor[leftMotorPort] = Clamp(-vexRT[Ch3] - vexRT[Ch4]) * (maximumMotorValue / 127.0);
-		motor[rightMotorPort] = Clamp(-vexRT[Ch3] + vexRT[Ch4]) * (maximumMotorValue / 127.0);
+		slewMotor[leftMotorPort] = Clamp(-vexRT[Ch3] - vexRT[Ch4]) * (maximumMotorValue / 127.0);
+		slewMotor[rightMotorPort] = Clamp(-vexRT[Ch3] + vexRT[Ch4]) * (maximumMotorValue / 127.0);
 
 		delay(taskDelay);
 	}
 }
 
-
 task RightArcadeControl() {
 	// Keep thread alive.
 	while (true) {
 		// Arcade control with right joystick.
-		motor[leftMotorPort] = Clamp(-vexRT[Ch2] + vexRT[Ch1]) * (maximumMotorValue / 127.0);
-		motor[rightMotorPort] = Clamp(-vexRT[Ch2] - vexRT[Ch1]) * (maximumMotorValue / 127.0);
+		slewMotor[leftMotorPort] = Clamp(-vexRT[Ch2] + vexRT[Ch1]) * (maximumMotorValue / 127.0);
+		slewMotor[rightMotorPort] = Clamp(-vexRT[Ch2] - vexRT[Ch1]) * (maximumMotorValue / 127.0);
 
 		delay(taskDelay);
 	}
@@ -127,8 +157,8 @@ task CustomTankControl() {
 	// Keep thread alive.
 	while (true) {
 		// Tank control with both joysticks.
-		motor[leftMotorPort] = Clamp(-vexRT[Ch3]) * (maximumMotorValue / 127.0);
-		motor[rightMotorPort] = Clamp(-vexRT[Ch2]) * (maximumMotorValue / 127.0);
+		slewMotor[leftMotorPort] = Clamp(-vexRT[Ch3]) * (maximumMotorValue / 127.0);
+		slewMotor[rightMotorPort] = Clamp(-vexRT[Ch2]) * (maximumMotorValue / 127.0);
 
 		delay(taskDelay);
 	}
@@ -140,8 +170,8 @@ task GamerControl() {
 		// Game control (Similar to controls in racing games)
 		// Left Axis: up / down
 		// Right Axis: right / left
-		motor[leftMotorPort] = Clamp(-vexRT[Ch3] + vexRT[Ch1]) * (maximumMotorValue / 127.0);
-		motor[rightMotorPort] = Clamp(-vexRT[Ch3] - vexRT[Ch1]) * (maximumMotorValue / 127.0);
+		slewMotor[leftMotorPort] = Clamp(-vexRT[Ch3] + vexRT[Ch1]) * (maximumMotorValue / 127.0);
+		slewMotor[rightMotorPort] = Clamp(-vexRT[Ch3] - vexRT[Ch1]) * (maximumMotorValue / 127.0);
 
 		delay(taskDelay);
 	}
@@ -151,10 +181,10 @@ task GamerControl() {
 void MoveUntil(short encoderValue, short Lpow, short Rpow) {
 	ResetEncoders();
 	while(!BothHasReached(leftEncoderPort, rightEncoderPort, encoderValue)) {
-		motor[leftMotorPort] = Clamp(Lpow);
-		motor[rightMotorPort] = Clamp(Rpow);
+		slewMotor[leftMotorPort] = Clamp(Lpow);
+		slewMotor[rightMotorPort] = Clamp(Rpow);
 		delay(taskDelay);
 	}
-	motor[leftMotorPort] = 0;
-	motor[rightMotorPort] = 0;
+	slewMotor[leftMotorPort] = 0;
+	slewMotor[rightMotorPort] = 0;
 }
