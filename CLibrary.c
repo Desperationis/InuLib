@@ -27,10 +27,8 @@ short taskDelay;
 short slewStep;
 
 // Private
-double leftIntegral = 0.0;
-double rightIntegral = 0.0;
-double leftPastError = 0.0;
-double rightPastError = 0.0;
+PIDInfo leftPID;
+PIDInfo rightPID;
 
 // Setters
 void SetLeftMotor(short port) {
@@ -146,7 +144,8 @@ task Slew() {
 
 	while(true) {
 		for(short i = 0; i < 10; i++) {
-			motor[i] = Clamp(Step(motor[i], slewStep, slewMotor[i]));
+			// Replace with SlewStep for real-life
+			motor[i] = Clamp(SlewStep(motor[i], slewStep, slewMotor[i]));
 		}
 		delay(taskDelay);
 	}
@@ -210,28 +209,39 @@ void MoveUntil(short encoderValue, short Lpow, short Rpow) {
 	slewMotor[rightMotorPort] = 0;
 }
 
-short PIDCalculate(short encoderValue, short target, double* integral, double* pastError ) {
-	double kP = 2.1;
-	double kI = 0.0;
-	double kD = 10;
-
+short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
 	// LEFTMOTOR
-	double difference = target - encoderValue;
-	*integral += difference;
-	double derivative = difference - *pastError;
-	*pastError = difference;
+	info->proportion = target - encoderValue;
 
-	if(abs(difference) < 5) {
-		*integral = 0;
+	info->integral += info->proportion;
+	info->derivative = info->proportion - info->pastError;
+
+	info->pastError = info->proportion;
+
+	if(abs(info->proportion) < 5) {
+		info->integral = 0;
 	}
 
-	return Clamp((difference * kP) + (*integral * kI) + (derivative * kD));
+	return Clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
 
 void PID(short target, short leftReverse, short rightReverse) {
+	double kP = 2.1;
+	double kI = 0.1;
+	double kD = 0;
+
+
+	leftPID.kP = kP;
+	leftPID.kI = kI;
+	leftPID.kD = kD;
+
+	rightPID.kP = kP;
+	rightPID.kI = kI;
+	rightPID.kD = kD;
+
 	while(true) {
-		slewMotor[leftMotorPort] = PIDCalculate(SensorValue[leftEncoderPort], target, &leftIntegral, &leftPastError) * leftReverse;
-		slewMotor[rightMotorPort] = PIDCalculate(-SensorValue[rightEncoderPort], target, &rightIntegral, &rightPastError) * rightReverse;
+		slewMotor[leftMotorPort] = PIDCalculate(SensorValue[leftEncoderPort], target, &leftPID) * leftReverse;
+		slewMotor[rightMotorPort] = PIDCalculate(-SensorValue[rightEncoderPort], target, &rightPID) * rightReverse;
 
 		delay(taskDelay);
 	}

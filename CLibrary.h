@@ -5,6 +5,16 @@
  *
 */
 
+typedef struct {
+	double kP;
+	double kI;
+	double kD;
+	short proportion;
+	short integral;
+	short derivative;
+	short pastError;
+} PIDInfo;
+
 // Setters
 void SetLeftMotor(short port);                      					   // Sets the left motor port
 void SetRightMotor(short port);                                  // Sets the right motor port
@@ -39,5 +49,5 @@ task GamerControl();                                             // Control chas
 
 // Functions
 void MoveUntil(short encoderValue, short Lpow, short Rpow);      // Move chassis based on encoder value
-short PIDCalculate(short encoderValue, short target, double* integral, double* pastError );            // Calculate motor speed using PID
+short PIDCalculate(short encoderValue, short target, PIDInfo* info );           // Calculate motor speed using PID
 void PID(short target, short leftReverse, short rightReverse);
