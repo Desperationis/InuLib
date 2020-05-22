@@ -1,35 +1,34 @@
 #ifndef GLOBALS_SOURCE
-
+#pragma systemFile
 #define GLOBALS_SOURCE
 #include "Globals.h"
 
 
 // Globals
-short leftMotorPort;
-short leftEncoderPort;
-short rightMotorPort;
-short rightEncoderPort;
-double controllerSpeed;
-double maximumMotorValue;
-short taskDelay;
-short slewStep;
+tMotor leftMotorPort;
+tSensors leftEncoderPort;
+tMotor rightMotorPort;
+tSensors rightEncoderPort;
 
+ubyte taskDelay;
+ubyte slewStep;
+double controllerSpeed;
 
 
 // Setters
-void SetLeftMotor(short port) {
+void SetLeftMotor(tMotor port) {
 	leftMotorPort = port;
 }
 
-void SetRightMotor(short port) {
+void SetRightMotor(tMotor port) {
 	rightMotorPort = port;
 }
 
-void SetLeftEncoder(short port) {
+void SetLeftEncoder(tSensors port) {
 	leftEncoderPort = port;
 }
 
-void SetRightEncoder(short port) {
+void SetRightEncoder(tSensors port) {
 	rightEncoderPort = port;
 }
 
@@ -39,36 +38,36 @@ void SetControllerSpeed(double speed) {
 	}
 }
 
-void SetAverageDelay(short delayTime) {
+void SetAverageDelay(ubyte delayTime) {
 	taskDelay = delayTime;
 }
 
-void SetSlewStep(short step) {
+void SetSlewStep(ubyte step) {
 	slewStep = step;
 }
 
 // Getters
-short GetLeftMotor(){
+tMotor GetLeftMotor(){
 	return leftMotorPort;
 }
 
-short GetRightMotor(){
+tMotor GetRightMotor(){
 	return rightMotorPort;
 }
 
-short GetLeftEncoder(){
+tSensors GetLeftEncoder(){
 	return leftEncoderPort;
 }
 
-short GetRightEncoder(){
+tSensors GetRightEncoder(){
 	return rightEncoderPort;
 }
 
-short GetDelay() {
+ubyte GetDelay() {
 	return taskDelay;
 }
 
-short GetSlewStep() {
+ubyte GetSlewStep() {
 	return slewStep;
 }
 

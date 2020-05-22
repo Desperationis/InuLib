@@ -12,6 +12,11 @@ void ResetEncoders() {
 	SensorValue[GetRightEncoder()] = 0;
 }
 
+void SetChassisMotor(byte leftMotorValue, byte rightMotorValue) {
+	motor[GetLeftMotor()] = Clamp(leftMotorValue);
+	motor[GetRightMotor()] = Clamp(rightMotorValue);
+}
+
 short Clamp(short value) {
 	// Clamps integers to maximum motor value; 127
 	if (value > 127) {
