@@ -27,6 +27,6 @@ short GetLeftEncoder();                                          // Gets the lef
 short GetRightEncoder();                                         // Gets the right encoder port
 short GetDelay();                                                // Gets the delay of all tasks
 short GetSlewStep();                                             // Gets the step amount of slew controller
-double GetMaximumMotor();                                        // Gets the maximum motor value
+double GetControllerSpeed();                                     // Gets the controller speed
 
 #endif

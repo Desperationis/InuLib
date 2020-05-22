@@ -36,7 +36,6 @@ void SetRightEncoder(short port) {
 void SetControllerSpeed(double speed) {
 	if(speed <= 1) {
 		controllerSpeed = speed;
-		maximumMotorValue = 127.0 * speed;
 	}
 }
 
@@ -73,8 +72,8 @@ short GetSlewStep() {
 	return slewStep;
 }
 
-double GetMaximumMotor(){
-	return maximumMotorValue;
+double GetControllerSpeed(){
+	return controllerSpeed;
 }
 
 #endif

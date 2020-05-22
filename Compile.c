@@ -1,3 +1,9 @@
-#include "Controllers.c"
-#include "Globals.c"
-#include "Helpers.c"
+#ifndef COMPILER_SOURCE
+
+#define COMPILER_SOURCE
+
+#include "Controllers/Controllers.c"
+#include "Globals/Globals.c"
+#include "Helpers/Helpers.c"
+
+#endif

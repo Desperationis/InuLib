@@ -2,8 +2,8 @@
 
 #define CONTROLLERS_SOURCE
 #include "Controllers.h"
-#include "Globals.h"
-#include "Helpers.h"
+#include "../Globals/Globals.h"
+#include "../Helpers/Helpers.h"
 
 // TODO:
 // 		PID Control
@@ -34,7 +34,7 @@ task Slew() {
 	while(true) {
 		for(short i = 0; i < 10; i++) {
 			// Replace with SlewStep for real-life
-			motor[i] = Clamp(SlewStep(motor[i], GetSlewStep(), slewMotor[i])) * (GetMaximumMotor() / 127.0);
+			motor[i] = Clamp(SlewStep(motor[i], GetSlewStep(), slewMotor[i] * GetControllerSpeed()));
 		}
 		delay(GetDelay());
 	}

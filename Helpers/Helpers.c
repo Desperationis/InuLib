@@ -1,6 +1,6 @@
 #ifndef HELPERS_SOURCE
 
-#include "Globals.h"
+#include "../Globals/Globals.h"
 #include "Helpers.h"
 #define HELPERS_SOURCE
 
