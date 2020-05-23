@@ -1,6 +1,4 @@
 #ifndef CONTROLLERS_HEADER
-
-#pragma systemFile
 #define CONTROLLERS_HEADER
 #include "../Globals/Globals.h"
 

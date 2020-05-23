@@ -7,13 +7,16 @@
 #include "Compile.h"
 
 // Notes:
-// You can download files from cortex using Robot > File Management
+// You can download files from cortex using Robot > Advanced Tools > File Management
+// You can download view joystick values using Robot > Advanced Tools > Joytsick Viewer
 // You can check battery level by using nImmediateBatterLevel; Found in Battery > Variables
+// You can use controller accelerameter values.
 
-task main() {
+
+task main() // The joystick button that controls downward movement
+{
 	ResetEncoders();
 	startTask(Slew);
-
 	SetLeftMotor(leftMotor);
 	SetRightMotor(rightMotor);
 	SetLeftEncoder(leftEncoder);

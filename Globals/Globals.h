@@ -1,5 +1,4 @@
 #ifndef GLOBALS_HEADER
-#pragma systemFile
 #define GLOBALS_HEADER
 
 /*

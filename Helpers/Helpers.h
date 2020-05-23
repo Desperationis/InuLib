@@ -1,5 +1,4 @@
 #ifndef HELPERS_HEADER
-#pragma systemFile
 #define HELPERS_HEADER
 
 /*

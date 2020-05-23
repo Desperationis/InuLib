@@ -1,5 +1,4 @@
 #ifndef GLOBALS_SOURCE
-#pragma systemFile
 #define GLOBALS_SOURCE
 #include "Globals.h"
 
