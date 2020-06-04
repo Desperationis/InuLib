@@ -9,7 +9,7 @@
  * RobotCSimulator (https://github.com/Desperationis/RobotCSimulator)
  *
  * If you don't need to simulate code, RobotC automatically externs all
- * varibales, so it's fine to not use this.
+ * variables, so it's fine to not use this.
 */
 
 typedef struct {
@@ -24,13 +24,13 @@ typedef struct {
 
 
 /*
- * Set the motor port of the left motor. Needed for library to fucntion properly.
+ * Set the motor port of the left motor. Needed for library to function properly.
 */
 void SetLeftMotor(tMotor port);
 
 
 /*
- * Set the motor port of the right motor. Needed for library to fucntion properly.
+ * Set the motor port of the right motor. Needed for library to function properly.
 */
 void SetRightMotor(tMotor port);
 
