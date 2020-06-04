@@ -9,11 +9,6 @@
  *
 */
 
-/*
- * Slew Controller system. Should always be called on task main().
- * Slews all motors.
-*/
-
 task LeftArcadeControl();                                                            // Control chassis with only the left joystick
 task RightArcadeControl();                                                           // Control chassis with only the right joystick
 task CustomTankControl();                                                            // Control chassis with both joysticks like a tank

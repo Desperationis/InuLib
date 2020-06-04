@@ -23,22 +23,75 @@ typedef struct {
 } PIDInfo;
 
 
-// Setters
-void SetLeftMotor(tMotor port);                      					                       // Sets the left motor port
-void SetRightMotor(tMotor port);                                                     // Sets the right motor port
-void SetLeftEncoder(tSensors port);                                                  // Sets the left encoder port
-void SetRightEncoder(tSensors port);                                                 // Sets the right encoder port
-void SetControllerSpeed(double speed);                                               // Sets the controller speed of the robot's wheels
-void SetAverageDelay(ubyte delayTime);                                               // Sets the delay of all tasks
-void SetSlewStep(ubyte step);                                                        // Sets the step amount for slew controller
+/*
+ * Set the motor port of the left motor. Needed for library to fucntion properly.
+*/
+void SetLeftMotor(tMotor port);
 
-// Getters
-tMotor GetLeftMotor();                                                               // Gets the left motor port
-tMotor GetRightMotor();                                                              // Gets the right motor port
-tSensors GetLeftEncoder();                                                           // Gets the left encoder port
-tSensors GetRightEncoder();                                                          // Gets the right encoder port
-ubyte GetDelay();                                                                    // Gets the delay of all tasks
-ubyte GetSlewStep();                                                                 // Gets the step amount of slew controller
-double GetControllerSpeed();                                                         // Gets the controller speed
+
+/*
+ * Set the motor port of the right motor. Needed for library to fucntion properly.
+*/
+void SetRightMotor(tMotor port);
+
+
+/*
+ * Set the sensor port of the left encoder. Needed for PID controller to function properly.
+*/
+void SetLeftEncoder(tSensors port);
+
+/*
+ * Set the sensor port of the right encoder. Needed for PID controller to function properly.
+*/
+void SetRightEncoder(tSensors port);
+
+
+/*
+ * Set the maximum speed of the robot. Only applies to motors that have been slewed.
+*/
+void SetControllerSpeed(double speed);
+
+
+/*
+ * Set the delay of each task in this library. Prevents the Cortex from heating up too much.
+*/
+void SetAverageDelay(ubyte delayTime);
+
+
+/*
+ * Returns the motor port of the left motor.
+*/
+tMotor GetLeftMotor();
+
+
+/*
+ * Returns the motor port of the right motor.
+*/
+tMotor GetRightMotor();
+
+
+
+/*
+ * Returns the sensor port of the left encoder.
+*/
+tSensors GetLeftEncoder();
+
+
+/*
+ * Returns the sensor port of the right encoder.
+*/
+tSensors GetRightEncoder();
+
+
+/*
+ * Returns the delay for all the library's tasks.
+*/
+ubyte GetDelay();
+
+
+/*
+ * Returns the maximum slew speed of the robot.
+*/
+double GetControllerSpeed();
 
 #endif

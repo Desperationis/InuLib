@@ -18,6 +18,7 @@
 
 short slewMotor[10];
 bool slewWhitelist[10];
+ubyte slewStep;
 
 void InitSlew() {
 	for(short i = 0; i < 10; i++) {
@@ -54,6 +55,14 @@ void AllowSlew(tMotor port) {
 
 bool CanSlew(tMotor port) {
 	return slewWhitelist[port];
+}
+
+void SetSlewStep(ubyte step) {
+	slewStep = step;
+}
+
+ubyte GetSlewStep() {
+	return slewStep;
 }
 
 #endif
