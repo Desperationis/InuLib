@@ -4,19 +4,46 @@
 /*
  * Helpers.h
  *
- * Helper functions that can be used throughout the library / program.
- *
+ * General functions that are needed throughout the program.
 */
 
 
-// Helper Functions
-void ResetEncoders();                                                                // Reset chassis' encoder's value to 0.
-void SetChassisMotor(byte leftMotorValue, byte rightMotorValue);                     // Sets the chassis speed.
-short Clamp(short value);                                                            // Clamps values down to -127 and 127
-short Step(short original, short step, short target);                                // Increments a value to a target by maximum fixed amount.
-short SlewStep(short original, short step, short target);                            // Only Increments a value to a target by maximum fixed amount if it's a higher value.
-bool HasReached(short encoderPort, short value);                                     // Returns if an encoder has passed a threshold.
-bool BothHasReached(short enc1, short enc2, short value);                            // Returns if two encoders have passed a threshold.
+/*
+ * Reset chassis' encoder's value to zero. Useful for preventing
+ * integer overflow.
+*/
+void ResetEncoders();
+
+
+/*
+ * Clamps values down to -127 and 127. Used for motor speed.
+*/
+short Clamp(short value);
+
+
+/*
+ * "Steps" towards a value by a maximum amount.
+*/
+short Step(short original, short step, short target);
+
+/*
+ * "Steps" towards a value if the target's value's
+ * is faster  than the original. Used for slew controller.
+*/
+short SlewStep(short original, short step, short target);
+
+
+/*
+ * Tells you whether or not an encoder has reached a threshold.
+*/
+bool HasReached(short encoderPort, short value);
+
+
+/*
+ * Tells you whether or not two encoders have reached a threshold.
+ * Used by PID controller.
+*/
+bool BothHasReached(short encoder1, short encoder2, short value);
 
 
 

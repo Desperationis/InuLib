@@ -5,8 +5,11 @@
  * Globals.h
  *
  * Setter / Getter System for global variables and structs.
- * Used for avoiding the use of extern.
+ * This system was made in order to be compatible with my C++ project
+ * RobotCSimulator (https://github.com/Desperationis/RobotCSimulator)
  *
+ * If you don't need to simulate code, RobotC automatically externs all
+ * varibales, so it's fine to not use this.
 */
 
 typedef struct {

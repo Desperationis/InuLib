@@ -3,6 +3,7 @@
 #include "Controllers.h"
 #include "../Globals/Globals.h"
 #include "../Helpers/Helpers.h"
+#include "Slew/Slew.h"
 
 // TODO:
 // 		PID Control
@@ -16,81 +17,54 @@
 // Right Axle Variables
 // Ch1: X -> Ch2: Y Positive Down
 
-short slewMotor[10];
 PIDInfo leftPID;
 PIDInfo rightPID;
 
-task Slew() {
-	for(short i = 0; i < 10; i++) {
-		slewMotor[i] = 0;
-	}
-
-	while(true) {
-		for(short i = 0; i < 10; i++) {
-			// Replace with SlewStep for real-life
-			motor[i] = Clamp(SlewStep(motor[i], GetSlewStep(), slewMotor[i] * GetControllerSpeed()));
-		}
-		delay(GetDelay());
-	}
-}
 
 task LeftArcadeControl() {
-	// Keep thread alive.
 	while (true) {
 		// Arcade control with left joystick.
-		slewMotor[GetLeftMotor()] = Clamp(-vexRT[Ch3] - vexRT[Ch4]);
-		slewMotor[GetRightMotor()] = Clamp(-vexRT[Ch3] + vexRT[Ch4]);
+		SetMotorSlew( GetLeftMotor(),  Clamp(-vexRT[Ch3] - vexRT[Ch4]) );
+		SetMotorSlew( GetRightMotor(),  Clamp(-vexRT[Ch3] + vexRT[Ch4]) );
 
 		delay(GetDelay());
 	}
 }
 
 task RightArcadeControl() {
-	// Keep thread alive.
 	while (true) {
 		// Arcade control with right joystick.
-		slewMotor[GetLeftMotor()] = Clamp(-vexRT[Ch2] + vexRT[Ch1]);
-		slewMotor[GetRightMotor()] = Clamp(-vexRT[Ch2] - vexRT[Ch1]);
+		SetMotorSlew( GetLeftMotor(),  Clamp(-vexRT[Ch2] + vexRT[Ch1]) );
+		SetMotorSlew( GetRightMotor(),  Clamp(-vexRT[Ch2] - vexRT[Ch1]) );
 
 		delay(GetDelay());
 	}
 }
 
 task CustomTankControl() {
-	// Keep thread alive.
 	while (true) {
 		// Tank control with both joysticks.
-		slewMotor[GetLeftMotor()] = Clamp(-vexRT[Ch3]);
-		slewMotor[GetRightMotor()] = Clamp(-vexRT[Ch2]);
+		SetMotorSlew( GetLeftMotor(),  Clamp(-vexRT[Ch3]) );
+		SetMotorSlew( GetRightMotor(),  Clamp(-vexRT[Ch2]) );
 
 		delay(GetDelay());
 	}
 }
 
 task GamerControl() {
-	// Keep thread alive.
 	while (true) {
 		// Game control (Similar to controls in racing games)
 		// Left Axis: up / down
 		// Right Axis: right / left
-		slewMotor[GetLeftMotor()] = Clamp(-vexRT[Ch3] + vexRT[Ch1]);
-		slewMotor[GetRightMotor()] = Clamp(-vexRT[Ch3] - vexRT[Ch1]);
+		SetMotorSlew( GetLeftMotor(), Clamp(-vexRT[Ch3] + vexRT[Ch1]) );
+		SetMotorSlew( GetRightMotor(), Clamp(-vexRT[Ch3] - vexRT[Ch1]) );
 
 		delay(GetDelay());
 	}
-}
-
-void MoveUntil(short encoderValue, short Lpow, short Rpow) {
-	ResetEncoders();
-	while(!BothHasReached(GetLeftEncoder(), GetRightEncoder(), encoderValue)) {
-		SetChassisMotor(Clamp(Lpow), Clamp(Rpow));
-		delay(GetDelay());
-	}
-	SetChassisMotor(0,0);
 }
 
 short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
-	// LEFTMOTOR
+	// Calculate motor speed with PID info.
 	info->proportion = target - encoderValue;
 
 	info->integral += info->proportion;
@@ -119,8 +93,8 @@ void PID(short target, short leftReverse, short rightReverse) {
 	rightPID.kD = kD;
 
 	while(true) {
-		slewMotor[GetLeftMotor()] = PIDCalculate(SensorValue[GetLeftEncoder()], target, &leftPID) * leftReverse;
-		slewMotor[GetRightMotor()] = PIDCalculate(-SensorValue[GetRightEncoder()], target, &rightPID) * rightReverse;
+		SetMotorSlew( GetLeftMotor(), PIDCalculate(SensorValue[GetLeftEncoder()], target, &leftPID) * leftReverse );
+		SetMotorSlew( GetRightMotor(), PIDCalculate(-SensorValue[GetRightEncoder()], target, &rightPID) * rightReverse );
 
 		delay(GetDelay());
 	}

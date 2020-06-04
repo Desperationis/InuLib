@@ -8,25 +8,28 @@
 
 // Notes:
 // You can download files from cortex using Robot > Advanced Tools > File Management
-// You can download view joystick values using Robot > Advanced Tools > Joytsick Viewer
+// You can download view joystick values using Robot > Advanced Tools > Joystick Viewer
 // You can check battery level by using nImmediateBatterLevel; Found in Battery > Variables
 // You can use controller accelerameter values.
 
-
-task main() // The joystick button that controls downward movement
-{
+task main() {
 	ResetEncoders();
+	InitSlew();
 	startTask(Slew);
+
 	SetLeftMotor(leftMotor);
 	SetRightMotor(rightMotor);
+	AllowSlew(leftMotor);
+	AllowSlew(rightMotor);
+
 	SetLeftEncoder(leftEncoder);
 	SetRightEncoder(rightEncoder);
 	SetAverageDelay(20);
 	SetControllerSpeed(0.9);
 	SetSlewStep(10);
 
-	PID(500, 1, 1);
-	//startTask(GamerControl);
+	//PID(500, 1, 1);
+	startTask(GamerControl);
 	while(true) {
 		// Keep program alive.
 		delay(GetDelay());

@@ -11,9 +11,11 @@
 #include "Globals/Globals.h"
 #include "Helpers/Helpers.h"
 #include "Controllers/Controllers.h"
+#include "Controllers/Slew/Slew.h"
 
 #include "Globals/Globals.c"
 #include "Helpers/Helpers.c"
 #include "Controllers/Controllers.c"
+#include "Controllers/Slew/Slew.c"
 
 #endif
