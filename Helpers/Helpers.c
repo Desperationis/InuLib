@@ -1,8 +1,8 @@
 #ifndef HELPERS_SOURCE
-
+#define HELPERS_SOURCE
 #include "../Globals/Globals.h"
 #include "Helpers.h"
-#define HELPERS_SOURCE
+
 
 
 void ResetEncoders() {
@@ -12,11 +12,8 @@ void ResetEncoders() {
 
 short Clamp(short value) {
 	// Clamps integers to maximum motor value; 127
-	if (value > 127) {
-		return 127;
-	}
-	if (value < -127) {
-		return -127;
+	if (fabs(value) > 127) {
+			return 127 * sgn(value);
 	}
 	return value;
 }
@@ -37,22 +34,14 @@ short Step(short original, short step, short target){
 }
 
 short SlewStep(short original, short step, short target){
-	if(abs(original - target) > step){
-		// Only step towards target if it makes the motors run faster.
-
-		if(abs(target) < abs(original) && target < 0 && original < 0) {
+	if(fabs(target) < fabs(original)) {
 			return target;
-		}
-		if(abs(target) < abs(original) && target > 0 && original > 0) {
-			return target;
-		}
-		return Step(original, step, target);
 	}
-	return target;
+	return Step(original, step, target);
 }
 
 bool HasReached(short encoderPort, short value) {
-	return abs(SensorValue[encoderPort]) > value;
+	return fabs(SensorValue[encoderPort]) > value;
 }
 
 bool BothHasReached(short encoder1, short encoder2, short value) {
