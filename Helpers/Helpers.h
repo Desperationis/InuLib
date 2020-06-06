@@ -10,8 +10,6 @@
 
 
 /*
- * [SETUP]
- *
  * Reset chassis' encoder's value to zero. Useful for preventing
  * integer overflow.
 */

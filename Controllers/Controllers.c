@@ -6,9 +6,6 @@
 #include "../Helpers/Helpers.h"
 #include "Slew/Slew.h"
 
-// TODO:
-// 		PID Control
-
 
 // Positive Power turns left motor clockwise. + Forward - Backward
 

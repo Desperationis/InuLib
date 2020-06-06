@@ -13,27 +13,25 @@
 // You can use controller accelerameter values.
 
 task main() {
-	ResetEncoders();
-	InitSlew();
-	InitPID();
+	InitCustomLibrary();
 
 	SetLeftMotor(leftMotor);
 	SetRightMotor(rightMotor);
-	AllowSlew(leftMotor);
-	AllowSlew(rightMotor);
+	AllowSlew(leftMotor, true);
+	AllowSlew(rightMotor, true);
 
 	SetLeftEncoder(leftEncoder);
 	SetRightEncoder(rightEncoder);
 	SetAverageDelay(20);
-	SetControllerSpeed(0.9);
+	SetControllerSpeed(1);
 	SetSlewStep(10);
 
 	startTask(Slew);
 	startTask(PID);
 
-	AllowPID();
-	SetTarget(LEFT, 300);
-	SetTarget(RIGHT, 400);
+	AllowPID(true);
+	SetPIDTarget(LEFT, 300);
+	SetPIDTarget(RIGHT, 400);
 
 	//startTask(GamerControl);
 	while(true) {

@@ -13,27 +13,14 @@ PIDInfo rightPID;
 short target[2];
 bool canPID;
 
-short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
-	// Calculate motor speed with PID info.
-	info->proportion = target - encoderValue;
-
-	info->integral += info->proportion;
-	info->derivative = info->proportion - info->pastError;
-
-	info->pastError = info->proportion;
-
-	if(abs(info->proportion) < 5) {
-		info->integral = 0;
-	}
-
-	return Clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
-}
 
 void InitPID() {
 	for(short i = 0; i < 2; i++) {
 		target[i] = 0;
 	}
+	canPID = false;
 }
+
 
 task PID() {
 	double kP = 1.1;
@@ -58,16 +45,37 @@ task PID() {
 	}
 }
 
-void AllowPID() {
-	canPID = true;
+
+short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
+	// Calculate motor speed with PID info.
+	info->proportion = target - encoderValue;
+
+	info->integral += info->proportion;
+	info->derivative = info->proportion - info->pastError;
+
+	info->pastError = info->proportion;
+
+	if(abs(info->proportion) < 5) {
+		info->integral = 0;
+	}
+
+	return Clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
+
+
+void SetPIDTarget(MOTOR side, short targetValue) {
+	target[side] = targetValue;
+}
+
+
+void AllowPID(bool active) {
+	canPID = active;
+}
+
 
 bool CanPID() {
 	return canPID;
 }
 
-void SetTarget(MOTOR side, short targetValue) {
-	target[side] = targetValue;
-}
 
 #endif
