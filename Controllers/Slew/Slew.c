@@ -24,7 +24,7 @@ task Slew() {
 	while(true) {
 		for(short i = 0; i < 10; i++) {
 			if(CanSlew(i)) {
-				motor[i] = Clamp(SlewStep(motor[i], GetSlewStep(), slewMotor[i] * GetControllerSpeed()));
+				motor[i] = Clamp(SlewStep(motor[i], GetSlewStep(), slewMotor[i] * GetMaxSpeed()));
 			}
 		}
 		delay(GetDelay());

@@ -11,7 +11,7 @@ tMotor rightMotorPort;
 tSensors rightEncoderPort;
 
 ubyte taskDelay;
-float controllerSpeed;
+float maxSpeed;
 
 
 // Setters
@@ -31,9 +31,9 @@ void SetRightEncoder(tSensors port) {
 	rightEncoderPort = port;
 }
 
-void SetControllerSpeed(float speed) {
+void SetMaxSpeed(float speed) {
 	if(speed <= 1) {
-		controllerSpeed = speed;
+		maxSpeed = speed;
 	}
 }
 
@@ -62,8 +62,8 @@ ubyte GetDelay() {
 	return taskDelay;
 }
 
-double GetControllerSpeed(){
-	return controllerSpeed;
+double GetMaxSpeed(){
+	return maxSpeed;
 }
 
 #endif

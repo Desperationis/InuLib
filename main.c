@@ -23,13 +23,14 @@ task main() {
 	SetLeftEncoder(leftEncoder);
 	SetRightEncoder(rightEncoder);
 	SetAverageDelay(20);
-	SetControllerSpeed(1);
-	SetSlewStep(10);
+	SetMaxSpeed(0.8);
+	SetSlewStep(30);
 
 	startTask(Slew);
 	startTask(PID);
 
 	AllowPID(true);
+	SetK(1.1, 0.0, 0.0);
 	SetPIDTarget(LEFT, 300);
 	SetPIDTarget(RIGHT, 400);
 

@@ -13,6 +13,11 @@
  * variables, so it's fine to not use this.
 */
 
+enum MOTOR {
+	LEFT = 0,
+	RIGHT
+};
+
 
 /*
  * [SETUP]
@@ -48,9 +53,10 @@ void SetRightEncoder(tSensors port);
 /*
  * [SETUP]
  *
- * Set the maximum speed of the robot. Only applies to motors that have been slewed.
+ * Set the maximum speed of slewed motor [0...1].
+ * PID, Slew, and regular controllers automatically use slewed.
 */
-void SetControllerSpeed(float speed);
+void SetMaxSpeed(float speed);
 
 
 /*
@@ -95,6 +101,6 @@ ubyte GetDelay();
 /*
  * Returns the maximum slew speed of the robot.
 */
-double GetControllerSpeed();
+double GetMaxSpeed();
 
 #endif

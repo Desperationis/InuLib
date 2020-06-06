@@ -2,6 +2,8 @@
 #ifndef PID_HEADER
 #define PID_HEADER
 
+#include "../../Globals/Globals.h"
+
 /*
  * PID.h
  *
@@ -19,16 +21,17 @@ typedef struct {
 	short pastError;
 } PIDInfo;
 
-enum MOTOR {
-	LEFT = 0,
-	RIGHT
-};
-
 
 /*
  * Resets PID. Called by InitCustomLibrary() automatically.
 */
 void InitPID();
+
+
+/*
+ * Sets kP, kI, and kD. Used to tune the PID.
+*/
+void SetK(float kP, float kI, float kD);
 
 
 /*
