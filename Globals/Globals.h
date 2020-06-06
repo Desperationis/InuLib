@@ -12,16 +12,6 @@
  * variables, so it's fine to not use this.
 */
 
-typedef struct {
-	double kP;
-	double kI;
-	double kD;
-	short proportion;
-	short integral;
-	short derivative;
-	short pastError;
-} PIDInfo;
-
 
 /*
  * [SETUP]

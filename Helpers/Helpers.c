@@ -34,7 +34,9 @@ short Step(short original, short step, short target){
 }
 
 short SlewStep(short original, short step, short target){
-	if(fabs(target) < fabs(original)) {
+	// Snap to target if the motor is slowing down and
+	// doesn't change direction.
+	if(fabs(target) < fabs(original) && sgn(target) == sgn(original)) {
 			return target;
 	}
 	return Step(original, step, target);

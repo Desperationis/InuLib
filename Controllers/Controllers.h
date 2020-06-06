@@ -1,6 +1,5 @@
 #ifndef CONTROLLERS_HEADER
 #define CONTROLLERS_HEADER
-#include "../Globals/Globals.h"
 
 /*
  * Controllers.h
@@ -32,12 +31,5 @@ task CustomTankControl();
  * Control the chassis like a video game car! Supports slewing motors.
 */
 task GamerControl();
-
-
-/*
- * Calculate the motor speed of a motor given its encoder and information.
-*/
-short PIDCalculate(short encoderValue, short target, PIDInfo* info );
-void PID(short target, short leftReverse, short rightReverse);
 
 #endif
