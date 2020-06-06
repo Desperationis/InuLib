@@ -1,3 +1,4 @@
+#pragma systemFile
 #ifndef GLOBALS_HEADER
 #define GLOBALS_HEADER
 
@@ -49,7 +50,7 @@ void SetRightEncoder(tSensors port);
  *
  * Set the maximum speed of the robot. Only applies to motors that have been slewed.
 */
-void SetControllerSpeed(double speed);
+void SetControllerSpeed(float speed);
 
 
 /*

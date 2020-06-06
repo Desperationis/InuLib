@@ -1,3 +1,4 @@
+#pragma systemFile
 #ifndef SLEW_HEADER
 #define SLEW_HEADER
 

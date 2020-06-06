@@ -1,3 +1,4 @@
+#pragma systemFile
 #ifndef COMPILER_HEADER
 #define COMPILER_HEADER
 

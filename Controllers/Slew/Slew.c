@@ -1,3 +1,4 @@
+#pragma systemFile
 #ifndef SLEW_SOURCE
 #define SLEW_SOURCE
 #include "Slew.h"

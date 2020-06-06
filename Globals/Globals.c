@@ -1,3 +1,4 @@
+#pragma systemFile
 #ifndef GLOBALS_SOURCE
 #define GLOBALS_SOURCE
 #include "Globals.h"
@@ -10,7 +11,7 @@ tMotor rightMotorPort;
 tSensors rightEncoderPort;
 
 ubyte taskDelay;
-double controllerSpeed;
+float controllerSpeed;
 
 
 // Setters
@@ -30,7 +31,7 @@ void SetRightEncoder(tSensors port) {
 	rightEncoderPort = port;
 }
 
-void SetControllerSpeed(double speed) {
+void SetControllerSpeed(float speed) {
 	if(speed <= 1) {
 		controllerSpeed = speed;
 	}

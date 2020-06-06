@@ -1,3 +1,4 @@
+#pragma systemFile
 #ifndef PID_SOURCE
 #define PID_SOURCE
 #include "PID.h"
@@ -27,7 +28,7 @@ short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
 	return Clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
 
-void PID(short target, short leftReverse, short rightReverse) {
+void PID(short target) {
 	double kP = 1.1;
 	double kI = 0.0;
 	double kD = 0;
@@ -41,8 +42,8 @@ void PID(short target, short leftReverse, short rightReverse) {
 	rightPID.kD = kD;
 
 	while(true) {
-		SetMotorSlew( GetLeftMotor(), PIDCalculate(SensorValue[GetLeftEncoder()], target, &leftPID) * leftReverse );
-		SetMotorSlew( GetRightMotor(), PIDCalculate(-SensorValue[GetRightEncoder()], target, &rightPID) * rightReverse );
+		SetMotorSlew( GetLeftMotor(), PIDCalculate(SensorValue[GetLeftEncoder()], target, &leftPID));
+		SetMotorSlew( GetRightMotor(), PIDCalculate(-SensorValue[GetRightEncoder()], target, &rightPID));
 
 		delay(GetDelay());
 	}
