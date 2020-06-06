@@ -15,7 +15,7 @@
 task main() {
 	ResetEncoders();
 	InitSlew();
-	startTask(Slew);
+	InitPID();
 
 	SetLeftMotor(leftMotor);
 	SetRightMotor(rightMotor);
@@ -28,7 +28,13 @@ task main() {
 	SetControllerSpeed(0.9);
 	SetSlewStep(10);
 
-	PID(500);
+	startTask(Slew);
+	startTask(PID);
+
+	AllowPID();
+	SetTarget(LEFT, 300);
+	SetTarget(RIGHT, 400);
+
 	//startTask(GamerControl);
 	while(true) {
 		// Keep program alive.

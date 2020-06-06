@@ -10,7 +10,8 @@
 PIDInfo leftPID;
 PIDInfo rightPID;
 
-
+short target[2];
+bool canPID;
 
 short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
 	// Calculate motor speed with PID info.
@@ -28,7 +29,13 @@ short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
 	return Clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
 
-void PID(short target) {
+void InitPID() {
+	for(short i = 0; i < 2; i++) {
+		target[i] = 0;
+	}
+}
+
+task PID() {
 	double kP = 1.1;
 	double kI = 0.0;
 	double kD = 0;
@@ -42,11 +49,25 @@ void PID(short target) {
 	rightPID.kD = kD;
 
 	while(true) {
-		SetMotorSlew( GetLeftMotor(), PIDCalculate(SensorValue[GetLeftEncoder()], target, &leftPID));
-		SetMotorSlew( GetRightMotor(), PIDCalculate(-SensorValue[GetRightEncoder()], target, &rightPID));
+		if(canPID) {
+			SetMotorSlew( GetLeftMotor(), PIDCalculate(SensorValue[GetLeftEncoder()], target[0], &leftPID));
+			SetMotorSlew( GetRightMotor(), PIDCalculate(-SensorValue[GetRightEncoder()], target[1], &rightPID));
+		}
 
 		delay(GetDelay());
 	}
+}
+
+void AllowPID() {
+	canPID = true;
+}
+
+bool CanPID() {
+	return canPID;
+}
+
+void SetTarget(MOTOR side, short targetValue) {
+	target[side] = targetValue;
 }
 
 #endif
