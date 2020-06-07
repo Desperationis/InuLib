@@ -8,9 +8,6 @@
  * Setter / Getter System for global variables and structs.
  * This system was made in order to be compatible with my C++ project
  * RobotCSimulator (https://github.com/Desperationis/RobotCSimulator)
- *
- * If you don't need to simulate code, RobotC automatically externs all
- * variables, so it's fine to not use this.
 */
 
 enum MOTOR {
@@ -53,7 +50,7 @@ void SetRightEncoder(tSensors port);
 /*
  * [SETUP]
  *
- * Set the maximum speed of slewed motor [0...1].
+ * Set the maximum speed of any slewed motor [0...1].
  * PID, Slew, and regular controllers automatically use slewed.
 */
 void SetMaxSpeed(float speed);

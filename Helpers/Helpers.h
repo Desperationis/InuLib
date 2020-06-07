@@ -35,16 +35,15 @@ short SlewStep(short original, short step, short target);
 
 
 /*
- * Tells you whether or not an encoder has reached a threshold.
+ * Tells you whether or not an encoder has reached an absolute threshold.
 */
-bool HasReached(short encoderPort, short value);
+bool HasReached(short encoderPort, short value, short range);
 
 
 /*
- * Tells you whether or not two encoders have reached a threshold.
- * Used by PID controller.
+ * Tells you whether or not two encoders have reached an absolute threshold.
 */
-bool BothHasReached(short encoder1, short encoder2, short value);
+bool BothHasReached(short encoder1, short encoder2, short value, short range);
 
 
 

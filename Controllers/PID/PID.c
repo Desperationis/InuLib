@@ -66,6 +66,11 @@ short PIDCalculate(short encoderValue, short target, PIDInfo* info ) {
 		info->integral = 0;
 	}
 
+	if(abs(info->proportion) > 12000) {
+		// Needs to be tuned
+		//info->integral = 0;
+	}
+
 	return Clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
 

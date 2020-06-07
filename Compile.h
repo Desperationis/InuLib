@@ -5,8 +5,8 @@
 /*
  * Compile.h
  *
- * ROBOTC doesn't know where definition files are and the order to link them in.
- * This file is made to compile all definition files.
+ * RobotC doesn't know where definition files are and the order to link them in.
+ * This file is made to compile all files.
 */
 
 #include "Globals/Globals.h"

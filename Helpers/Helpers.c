@@ -11,6 +11,7 @@ void ResetEncoders() {
 	SensorValue[GetRightEncoder()] = 0;
 }
 
+
 short Clamp(short value) {
 	// Clamps integers to maximum motor value; 127
 	if (fabs(value) > 127) {
@@ -18,6 +19,7 @@ short Clamp(short value) {
 	}
 	return value;
 }
+
 
 short Step(short original, short step, short target){
 	if(abs(original - target) > step){
@@ -34,21 +36,32 @@ short Step(short original, short step, short target){
 	return target;
 }
 
+
 short SlewStep(short original, short step, short target){
-	// Snap to target if the motor is slowing down and
-	// doesn't change direction.
-	if(fabs(target) < fabs(original) && sgn(target) == sgn(original)) {
-			return target;
-	}
+	// Snap to target if the motor is slowing down.
+	//if(fabs(target) < fabs(original)) {
+			//return target;
+	//}
 	return Step(original, step, target);
 }
 
-bool HasReached(short encoderPort, short value) {
-	return fabs(SensorValue[encoderPort]) > value;
+
+bool HasReached(short encoderPort, short value, short range) {
+
+	// Take the absolute value of EVERYTHING.
+	// This function should take in any encoder, no
+	// matter direction, and tell when its absoulte
+	// value is reached.
+
+	short min = fabs(value) - fabs(range);
+	short max = fabs(value) + fabs(range);
+
+	return fabs(SensorValue[encoderPort]) >= min && fabs(SensorValue[encoderPort]) <= max;
 }
 
-bool BothHasReached(short encoder1, short encoder2, short value) {
-	return HasReached(encoder1, value) && HasReached(encoder2, value);
+
+bool BothHasReached(short encoder1, short encoder2, short value, short range) {
+	return HasReached(encoder1, value, range) && HasReached(encoder2, value, range);
 }
 
 #endif

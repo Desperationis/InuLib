@@ -12,30 +12,50 @@
 // You can check battery level by using nImmediateBatterLevel; Found in Battery > Variables
 // You can use controller accelerameter values.
 
+// Running tasks PID() and Slew() will give you 8 concurrent tassks left.
+
+void GoForward(int amount);
+
 task main() {
 	InitCustomLibrary();
 
+	// Global Settings
+	SetAverageDelay(20);
+	SetMaxSpeed(1);
+
+	// Tell the library our chassis sensors and motors.
 	SetLeftMotor(leftMotor);
 	SetRightMotor(rightMotor);
-	AllowSlew(leftMotor, true);
-	AllowSlew(rightMotor, true);
-
 	SetLeftEncoder(leftEncoder);
 	SetRightEncoder(rightEncoder);
-	SetAverageDelay(20);
-	SetMaxSpeed(0.8);
-	SetSlewStep(30);
 
+	delay(2000); // Delay for RobotCSimulator.
+
+	// Activate Controllers
 	startTask(Slew);
 	startTask(PID);
 
-	AllowPID(true);
-	SetK(1.1, 0.0, 0.0);
-	SetPIDTarget(LEFT, 300);
-	SetPIDTarget(RIGHT, 400);
+	// Slew Settings
+	AllowSlew(leftMotor, true);
+	AllowSlew(rightMotor, true);
+	SetSlewStep(30);
 
-	//startTask(GamerControl);
+	// PID Settings
+	AllowPID(true);
+	SetK(1.1, 0.5, 0.0);
+	GoForward(300);
+
 	while(true) {
+		// Keep program alive.
+		delay(GetDelay());
+	}
+}
+
+void GoForward(int amount) {
+	SetPIDTarget(LEFT, amount);
+	SetPIDTarget(RIGHT, amount);
+
+	while(!BothHasReached(leftEncoder, rightEncoder, -amount, 10)) {
 		// Keep program alive.
 		delay(GetDelay());
 	}
