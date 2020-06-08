@@ -138,4 +138,4 @@ A specilized PID controller is included in this library. This controller is mean
 
 
 ### RobotCSimulator / RobotCDocs Compatibility
-This library is compatible with RobotCSimulator and RobotDocs. You can simulate `main.c` in RobotCSimulator, and make the code more easily accessible with RobotCDocs!
+This library is compatible with [RobotCSimulator](https://github.com/Desperationis/RobotCSimulator) and [RobotDocs](https://github.com/Desperationis/RobotCDocs). You can simulate `main.c` in [RobotCSimulator](https://github.com/Desperationis/RobotCSimulator), and make the code more easily accessible with [RobotCDocs](https://github.com/Desperationis/RobotCDocs)!
