@@ -1,5 +1,5 @@
 # RobotCLibrary
-A RobotC custom library meant for use with the VEX Cortex. Meant to integrate basic PID, Slew, and Driver control with any Cortex-Powered Vex Robot.
+A RobotC library built with multi-tasking in mind. Meant to integrate basic PID, Slew, and Driver control with any Cortex-Powered Vex Robot.
 
 ## Features
 ### Custom Drivers
