@@ -4,17 +4,18 @@
 
 #include "Helpers.h"
 
-/**
- * Blacklist of motors to not be slewed. Organized by motor
- * port, any ports set to true will not be slewed.
-*/
-bool slewBlacklist[10];
+
+typedef struct {
+	bool active;
+	byte target;
+} SlewInfo;
+
 
 /**
- * Array denoting motor speed, arranged by motor port.
+ * Array denoting slewing info, arranged by motor port.
  * Will not work until StartSlewTask(_slewStep)is called.
 */
-short slewMotor[10];
+SlewInfo slewMotor[10];
 
 
 /**
@@ -22,7 +23,7 @@ short slewMotor[10];
  * Will not work until StartSlewTask(_slewStep)is called.
 */
 void DisableSlew(tMotor port) {
-	slewBlacklist[port] = true;
+	slewMotor[port].active = false;
 }
 
 
@@ -31,7 +32,7 @@ void DisableSlew(tMotor port) {
  * Will not work until StartSlewTask(_slewStep)is called.
 */
 bool CanSlew(tMotor port) {
-	return !slewBlacklist[port];
+	return slewMotor[port].active;
 }
 
 
@@ -41,7 +42,7 @@ bool CanSlew(tMotor port) {
 */
 void SetSlewMotor(tMotor port, byte speed) {
 	if(CanSlew(port)){
-		slewMotor[port] = speed;
+		slewMotor[port].target = speed;
 	}
 	else {
 		motor[port] = speed;
@@ -57,7 +58,7 @@ task Slew() {
 	while(true) {
 		for(short port = 0; port < 10; port++) {
 			if(CanSlew(port)) {
-				motor[port] = Step(motor[port], SLEW_STEP, slewMotor[port]);
+				motor[port] = Step(motor[port], SLEW_STEP, slewMotor[port].target);
 			}
 		}
 		delay(TASK_DELAY);
@@ -73,8 +74,8 @@ task Slew() {
 */
 void StartSlewTask() {
 	for(short port = 0; port < 10; port++) {
-		slewMotor[port] = 0;
-		slewBlacklist[port] = false;
+		slewMotor[port].active = true;
+		slewMotor[port].target = 0;
 	}
 
 	startTask(Slew);

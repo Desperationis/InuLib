@@ -32,9 +32,9 @@ task main() {
 	delay(1000);
 
 	StartSlewTask();
-	startTask(PID);
-	InitPID(leftMotor, leftEncoder, 1);
-	InitPID(rightMotor, rightEncoder, -1);
+	StartPIDTask();
+	LinkPID(leftMotor, leftEncoder);
+	LinkPID(rightMotor, rightEncoder, true);
 
 	SetPIDConstants(leftMotor, 1, 0, 0);
 	SetPIDConstants(rightMotor, 1, 0, 0);
