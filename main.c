@@ -33,6 +33,7 @@ task main() {
 
 	StartSlewTask();
 	StartPIDTask();
+
 	LinkPID(leftMotor, leftEncoder);
 	LinkPID(rightMotor, rightEncoder, true);
 
