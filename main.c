@@ -15,8 +15,6 @@
 	Global variables are automaticalled extern'ed, so long as they aren't defined in main.c
 
 	All sensor and motor ports are automatically extern'ed.
-
-	Running tasks PID() and Slew() will give you 17 concurrent tasks left.
 */
 
 #include "Setup.h"
@@ -28,7 +26,7 @@
 task main() {
 	delay(1000);
 
-	startSlewTask();
+	startTask(Slew);
 	configurePort();
 
 	//StartPIDTask();

@@ -9,7 +9,7 @@ typedef struct {
 
 /**
  * Array denoting slewing info, arranged by motor port.
- * Will not work until StartSlewTask(_slewStep)is called.
+ * Will not work until Slew() is started.
 */
 SlewInfo slewMotor[10];
 
@@ -21,7 +21,6 @@ bool isSlewed(tMotor port) {
 	return slewMotor[port].active;
 }
 
-
 void setSlewMotor(tMotor port, byte speed) {
 	if(isSlewed(port)){
 		slewMotor[port].target = speed;
@@ -31,24 +30,32 @@ void setSlewMotor(tMotor port, byte speed) {
 	}
 }
 
-task Slew() {
-	while(true) {
-		for(short port = 0; port < 10; port++) {
-			if(isSlewed(port)) {
-				motor[port] = Step(motor[port], SLEW_STEP, slewMotor[port].target);
-			}
-		}
-		delay(TASK_DELAY);
+/**
+ * Linearly interpolates between two values by a
+ * maximum amount.
+*/
+short Step(short original, short step, short target){
+	if(abs(original - target) > step){
+		return original + (sgn(target - original) * step);
 	}
+	return target;
 }
 
-void startSlewTask() {
+task Slew() {
 	for(short port = 0; port < 10; port++) {
 		slewMotor[port].active = true;
 		slewMotor[port].target = 0;
 	}
 
-	startTask(Slew);
+	while(true) {
+		for(short port = 0; port < 10; port++) {
+			if(isSlewed(port)) {
+				// For each motor, step toward its target
+				motor[port] = Step(motor[port], SLEW_STEP, slewMotor[port].target);
+			}
+		}
+		delay(TASK_DELAY);
+	}
 }
 
 

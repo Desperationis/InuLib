@@ -37,18 +37,6 @@ short MotorClamp(short value) {
 
 
 /**
- * Linearly interpolates between two values by a
- * maximum value.
-*/
-short Step(short original, short step, short target){
-	if(abs(original - target) > step){
-		return original + (sgn(target - original) * step);
-	}
-	return target;
-}
-
-
-/**
  * Determines if a value has reached a target within
  * a specified range.
 */
