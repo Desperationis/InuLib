@@ -13,17 +13,17 @@ typedef struct {
 */
 SlewInfo slewMotor[10];
 
-void DisableSlew(tMotor port) {
-	slewMotor[port].active = false;
+void setSlew(tMotor port, bool active) {
+	slewMotor[port].active = active;
 }
 
-bool CanSlew(tMotor port) {
+bool isSlewed(tMotor port) {
 	return slewMotor[port].active;
 }
 
 
-void SetSlewMotor(tMotor port, byte speed) {
-	if(CanSlew(port)){
+void setSlewMotor(tMotor port, byte speed) {
+	if(isSlewed(port)){
 		slewMotor[port].target = speed;
 	}
 	else {
@@ -34,7 +34,7 @@ void SetSlewMotor(tMotor port, byte speed) {
 task Slew() {
 	while(true) {
 		for(short port = 0; port < 10; port++) {
-			if(CanSlew(port)) {
+			if(isSlewed(port)) {
 				motor[port] = Step(motor[port], SLEW_STEP, slewMotor[port].target);
 			}
 		}
@@ -42,7 +42,7 @@ task Slew() {
 	}
 }
 
-void StartSlewTask() {
+void startSlewTask() {
 	for(short port = 0; port < 10; port++) {
 		slewMotor[port].active = true;
 		slewMotor[port].target = 0;

@@ -8,10 +8,6 @@
 /*
 	Diego's General Programming Tips:
 
-	You can download files from the Cortex using Robot > Advanced Tools > File Management
-
-	You can view joystick values during runtime using Robot > Advanced Tools > Joystick Viewer
-
 	You can check battery level by using nImmediateBatteryLevel; Found in Battery > Variables
 
 	Controllers have accelerometers.
@@ -32,7 +28,7 @@
 task main() {
 	delay(1000);
 
-	StartSlewTask();
+	startSlewTask();
 	configurePort();
 
 	//StartPIDTask();
@@ -50,7 +46,7 @@ task main() {
 
 	while(true) {
 		updatePacket(controllerPacket);
-		SetSlewMotor(claw, controllerPacket.data[AXISX] - 126);
+		setSlewMotor(claw, controllerPacket.data[AXISX] - 126);
 
 		// Keep the program alive.
 		delay(TASK_DELAY);

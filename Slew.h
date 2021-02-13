@@ -6,37 +6,40 @@
 
 
 /**
- * Permanently disable a motor from being able to slew.
- * Will not work until StartSlewTask(_slewStep)is called.
+ * Set whether or not a motor will be slewed by setSlewMotor();
+ * All motors are slewed by default.
+ * Will not work until startSlewTask()is called.
 */
-void DisableSlew(tMotor port);
+void setSlew(tMotor port, bool active);
 
 
 /**
- * Determine if a motor is slewed or not.
- * Will not work until StartSlewTask(_slewStep)is called.
+ * Whether or not a motor is being slewed or not.
+ * Will not work until startSlewTask()is called.
 */
-bool CanSlew(tMotor port);
+bool isSlewed(tMotor port);
+
 
 /**
- * Set the slew target of a motor, if possible. If not,
+ * Set the slew target of a motor if the port is activated. If not,
  * speed will be set using motor[].
+ * Will not work until startSlewTask()is called.
 */
-void SetSlewMotor(tMotor port, byte speed);
+void setSlewMotor(tMotor port, byte speed);
 
 
 /**
  * The background task responsible for slewing motors.
- * It is recommended to start this with StartSlewTask().
+ * It is recommended to start this with startSlewTask().
 */
 task Slew();
 
 
 /**
  * Starts up the Slew() task and resets internal variables. By default,
- * motors are slewed. This can be changed using DisableSlew(port).
+ * motors are slewed. This can be changed using setSlew(port, active).
 */
-void StartSlewTask();
+void startSlewTask();
 
 #include "src/Slew.c"
 #endif
