@@ -31,5 +31,5 @@ void configurePort();
 */
 void updatePacket(Packet* packet);
 
-#include "Serial.c"
+#include "src/Serial.c"
 #endif
