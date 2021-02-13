@@ -33,6 +33,9 @@ void updatePacket(Packet* packet) {
 			count++;
 		}
 	}
+
+	packet->data[AXISX] -= 126; // Sign Axes
+	packet->data[AXISY] -= 126;
 }
 
 #endif

@@ -44,7 +44,7 @@ task main() {
 
 	while(true) {
 		updatePacket(controllerPacket);
-		setSlewMotor(claw, controllerPacket.data[AXISX] - 126);
+		setSlewMotor(claw, controllerPacket.data[AXISX]);
 
 		// Keep the program alive.
 		delay(TASK_DELAY);
