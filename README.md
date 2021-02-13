@@ -1,5 +1,5 @@
-# RobotCLibrary
-This library was meant for use with RobotC, and can be converted with RobotCConverter with no issue. It provides a task-based PID controller, Slew controller, general helper functions, and more.
+# CortexLib (In Development)
+This library was meant for use with RobotC~~, and can be converted with RobotCConverter with no issue~~. It provides a task-based PID controller, Slew controller, general helper functions, and more.
 
 ## Features
 ### PID Controller
@@ -36,5 +36,5 @@ Due to RobotCLibrary's custom slew controller, some basic chassis controllers ne
 * `CustomTankControl()` - Slewed tank control.
 * `GamerControl()` - Controls the robot like a racecar. Left axis moves the robot up and down while the right axis makes it turn.
 
-## RobotCSimulator Compatible
-You can run RobotCConverter on this directory and see the results in RobotCSimulator!
+~## RobotCSimulator Compatible~
+~You can run RobotCConverter on this directory and see the results in RobotCSimulator!~
