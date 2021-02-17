@@ -28,7 +28,7 @@ def serverResponse():
         return Response(status=200)
 
 def startServer():
-    webServer.run(host='192.168.1.26', port=8008)
+    webServer.run(host='192.168.43.169', port=8008)
 
 webServerThread = threading.Thread(target=startServer)
 webServerThread.start()
