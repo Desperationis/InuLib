@@ -37,6 +37,7 @@ webServerThread.start()
 # Start main loop to send serial data to the Cortex
 serialInterface = serial.Serial('/dev/ttyS0',115200,timeout = 1)
 
+clock = pygame.time.Clock()
 while True:
     if serialInterface.isOpen:
         serialInterface.write([254]) # Header Byte
@@ -44,6 +45,6 @@ while True:
     else:
         print("Error: UART Serial interface is not open.")
 
-    time.sleep(20 / 1000) # Don't send packets when the cortex is on delay() to avoid buffer overload
+    clock.tick(50)
 
 webServer.join()
