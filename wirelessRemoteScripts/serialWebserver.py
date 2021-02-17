@@ -31,6 +31,7 @@ def startServer():
     webServer.run(host='192.168.43.169', port=8008)
 
 webServerThread = threading.Thread(target=startServer)
+webServerThread.daemon = True
 webServerThread.start()
 
 # Start main loop to send serial data to the Cortex
