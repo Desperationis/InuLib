@@ -24,7 +24,7 @@ while(True):
     pygame.event.get()
 
     if joystick_count != 0:
-        r = requests.post("http://192.168.1.26:8008/", None, json =  {
+        r = requests.post("http://192.168.43.242:8008/", None, json =  {
             "X": floor(joystick.get_axis(0) * 126.0) + 126,
             "Y": floor(joystick.get_axis(1) * 126) + 126,
             "BTN1": 0,
