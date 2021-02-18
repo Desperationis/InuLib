@@ -1,1 +1,1 @@
-killall python3
+sudo killall python3
