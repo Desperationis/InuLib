@@ -19,17 +19,17 @@ else:
     joystick.init() # We don't need this reference later
 
 
-
+clock = pygame.time.Clock()
 while(True):
     pygame.event.get()
 
     if joystick_count != 0:
-        r = requests.post("http://192.168.1.26:8008/", None, json =  {
-            "X": floor(joystick.get_axis(0) * 126.0) + 126,
-            "Y": floor(joystick.get_axis(1) * 126) + 126,
+        r = requests.post("http://192.168.1.2:8008/", None, json =  {
+            "X": floor(joystick.get_axis(2) * 126.0) + 126,
+            "Y": floor(joystick.get_axis(1) * 126.0) + 126,
             "BTN1": 0,
             "BTN2": 0
         })
 
 
-    time.sleep(0.016) # Send packets 60 times a second
+    clock.tick(60) # Send packets 60 times a second
