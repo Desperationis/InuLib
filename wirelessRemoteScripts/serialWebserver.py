@@ -28,14 +28,16 @@ def serverResponse():
         return Response(status=200)
 
 def startServer():
-    webServer.run(host='192.168.1.26', port=8008)
+    webServer.run(host='192.168.43.169', port=8008)
 
 webServerThread = threading.Thread(target=startServer)
+webServerThread.daemon = True
 webServerThread.start()
 
 # Start main loop to send serial data to the Cortex
 serialInterface = serial.Serial('/dev/ttyS0',115200,timeout = 1)
 
+clock = pygame.time.Clock()
 while True:
     if serialInterface.isOpen:
         serialInterface.write([254]) # Header Byte
@@ -43,6 +45,6 @@ while True:
     else:
         print("Error: UART Serial interface is not open.")
 
-    time.sleep(20 / 1000) # Don't send packets when the cortex is on delay() to avoid buffer overload
+    clock.tick(50)
 
 webServer.join()
