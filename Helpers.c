@@ -6,7 +6,7 @@
 /**
  * Returns the maximum of two values.
 */
-short Max(short a, short b) {
+short max(short a, short b) {
 	return a > b ? a: b;
 }
 
@@ -14,7 +14,7 @@ short Max(short a, short b) {
 /**
  * Returns the minimum of two values.
 */
-short Min(short a, short b) {
+short min(short a, short b) {
 	return a < b ? a: b;
 }
 
@@ -22,25 +22,23 @@ short Min(short a, short b) {
 /**
  * Constrains a value into a range.
 */
-short Clamp(short value, short min, short max) {
-	return Max(Min(value, max), min);
+short clamp(short value, short min_val, short max_val) {
+	return max(min(value, max_val), min_val);
 }
 
 
 /**
- * Ensures a value never surpasses the motor
- * speed limit.
+ * Ensures a value never surpasses the motor speed limit.
 */
-short MotorClamp(short value) {
-	return Clamp(value, -127, 127);
+short motor_clamp(short value) {
+	return clamp(value, -127, 127);
 }
 
 
 /**
- * Determines if a value has reached a target within
- * a specified range.
+ * Determines if a value has reached a target within a specified range.
 */
-bool HasReached(short original, short target, short range) {
+bool has_reached(short original, short target, short range) {
 	return abs(abs(original) - abs(target)) <= range;
 }
 

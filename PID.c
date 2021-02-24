@@ -84,7 +84,7 @@ short pid_update(pid_info_t* info) {
 		//info->integral = 0;
 	}
 
-	return MotorClamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
+	return motor_clamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
 
 
