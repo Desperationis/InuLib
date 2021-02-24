@@ -21,10 +21,10 @@
 */
 
 #include "Setup.c"
+#include "Serial.c"
 #include "Controllers.c"
 #include "Slew.c"
 #include "PID.c"
-#include "Serial.c"
 
 task main() {
 	while(true) {
