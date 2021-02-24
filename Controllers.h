@@ -11,19 +11,19 @@
 	Positive Power turns left motor clockwise. + Forward - Backward
 
 	Left Axle Variables
-	Ch4: X <- Ch3: Y Positive Down
+	Ch4: X Positive Left
+	Ch3: Y Positive Down
 
 	Right Axle Variables
-	Ch1: X -> Ch2: Y Positive Down
-
+	Ch1: X Positive Right
+	Ch2: Y Positive Down
 */
 
 
 /**
- * Arcade control on the left joystick.
- * Tries to slew if possible.
+ * Arcade control on the left joystick, slewing if possible.
 */
-task LeftArcadeControl() {
+task controller_l_arcade() {
 	while (true) {
 		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3] - vexRT[Ch4]));
 		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch3] + vexRT[Ch4]));
@@ -33,10 +33,9 @@ task LeftArcadeControl() {
 
 
 /**
- * Arcade control on the right joystick.
- * Tries to slew if possible.
+ * Arcade control on the right joystick, slewing if possible.
 */
-task RightArcadeControl() {
+task controller_r_arcade() {
 	while (true) {
 		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(vexRT[Ch2] + vexRT[Ch1]));
 		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch2] - vexRT[Ch1]));
@@ -47,10 +46,9 @@ task RightArcadeControl() {
 
 
 /**
- * Tank control!
- * Tries to slew if possible.
+ * Tank control on both joysticks, slewing if possible.
 */
-task CustomTankControl() {
+task controller_tank() {
 	while (true) {
 		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3]));
 		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch2]));
@@ -61,10 +59,9 @@ task CustomTankControl() {
 
 
 /**
- * Racecar-like controls.
- * Tries to slew if possible.
+ * Racecar-like controls, slewing if possible.
 */
-task GamerControl() {
+task controller_gamer() {
 	while (true) {
 		// Left Axis: up / down
 		// Right Axis: right / left
