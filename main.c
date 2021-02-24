@@ -26,32 +26,6 @@
 #include "PID.c"
 #include "Serial.c"
 
-/**
- * Racecar-like controls. BRUHHHHHHHH
- * Tries to slew if possible.
-*/
-task GamerControlTest() {
-	serial_configure();
-	packet_t controllerPacket;
-
-	while (true) {
-		serial_update(controllerPacket);
-		// Left Axis: up / down
-		// Right Axis: right / left
-		//clearDebugStream();
-		//writeDebugStreamLine("X: %d", controllerPacket.data[AXISX]);
-		//writeDebugStreamLine("Y: %d", controllerPacket.data[AXISY]);
-
-
-		slew_set_motor(left1,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		slew_set_motor(left2,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		slew_set_motor(right1, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
-		slew_set_motor(right2, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
-
-		delay(TASK_DELAY);
-	}
-}
-
 task main() {
 	while(true) {
 		motor[left1] = vexRT[Ch2Xmtr2];

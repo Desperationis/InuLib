@@ -72,5 +72,22 @@ task controller_gamer() {
 	}
 }
 
+/**
+ * Racecar-like controls, slewing if possible, using a PS4 controller.
+*/
+task controller_serial_gamer() {
+	serial_configure();
+	packet_t controllerPacket;
+
+	while (true) {
+		serial_update(controllerPacket);
+		slew_set_motor(left1,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
+		slew_set_motor(left2,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
+		slew_set_motor(right1, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
+		slew_set_motor(right2, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
+		delay(TASK_DELAY);
+	}
+}
+
 
 #endif
