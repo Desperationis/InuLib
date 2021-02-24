@@ -20,11 +20,11 @@
 	All sensor and motor ports are automatically extern'ed.
 */
 
-#include "Setup.h"
-#include "Controllers.h"
-#include "Slew.h"
-#include "PID.h"
-#include "Serial.h"
+#include "Setup.c"
+#include "Controllers.c"
+#include "Slew.c"
+#include "PID.c"
+#include "Serial.c"
 
 /**
  * Racecar-like controls. BRUHHHHHHHH

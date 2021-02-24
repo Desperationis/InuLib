@@ -2,8 +2,8 @@
 #ifndef CONTROLLERS_SOURCE
 #define CONTROLLERS_SOURCE
 
-#include "Helpers.h"
-#include "Slew.h"
+#include "Helpers.c"
+#include "Slew.c"
 
 /*
 	Diego's Controller Tips:
