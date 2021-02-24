@@ -10,13 +10,13 @@ typedef struct {
 	short proportion;
 	short integral;
 	short derivative;
-	short pastError;
+	short past_error;
 	short target;
-	tMotor motorPort;
-	tSensors encoderPort;
-	bool encoderReversed;
+	tMotor motor_port;
+	tSensors encoder_port;
+	bool encoder_reversed;
 	bool active;
-} PIDInfo;
+} pid_info_t;
 
 
 
@@ -24,115 +24,99 @@ typedef struct {
  * Array of PIDInfos responsible for retaining
  * PID information.
 */
-PIDInfo PIDmotor[10];
+pid_info_t pid_motor[10];
 
 
 /**
- * Links a motor to an encoder, therefore allowing
- * it to be controlled by PID. By default, the PID constants
- * kP, kI, and kD are all set to 0.0 . This can be changed via
- * SetPIDConstants(motorPort, kP, kI, kD).
+ * Links a motor to an encoder, therefore allowing it to be controlled by PID;
+ * Multiple motors can be connected to a single encoder.  By default, the PID
+ * constants kP, kI, and kD are all set to 0.0.
 */
-void LinkPID(tMotor motorPort, tSensors encoderPort, bool encoderReversed = false) {
-	PIDInfo& info = PIDmotor[motorPort];
+void pid_link(tMotor motor_port, tSensors encoder_port, bool encoder_reversed = false) {
+	pid_info_t* info = pid_motor[motor_port];
 
-	info.motorPort = motorPort;
-	info.encoderPort = encoderPort;
-	info.encoderReversed = encoderReversed;
-	info.active = true;
+	info->motor_port = motor_port;
+	info->encoder_port = encoder_port;
+	info->encoder_reversed = encoder_reversed;
+	info->active = true;
 }
 
 
 /**
- * Changes the kP, kI, and kD constants of a motor.
- * Will have no effect if either StartPIDTask() or
- * LinkPID(motorPort, sensorPort, reversed) are not called.
+ * Changes the kP, kI, and kD constants of a LINKED motor.
 */
-void SetPIDConstants(tMotor motorPort, float kP, float kI, float kD) {
-	PIDmotor[motorPort].kP = kP;
-	PIDmotor[motorPort].kI = kI;
-	PIDmotor[motorPort].kD = kD;
+void pid_set_constants(tMotor motor_port, float kP, float kI, float kD) {
+	pid_motor[motor_port].kP = kP;
+	pid_motor[motor_port].kI = kI;
+	pid_motor[motor_port].kD = kD;
 }
 
 
 /**
- * Set the encoder's target for a motor controlled by
- * PID. Will have no effect if either StartPIDTask() or
- * LinkPID(motorPort, sensorPort, reversed) are not called.
+ * Set the target value for an encoder from a LINKED motor.
  */
-void SetPIDTarget(tMotor motorPort, short target) {
-	PIDmotor[motorPort].target = target;
+void pid_set_motor(tMotor motor_port, short target) {
+	pid_motor[motor_port].target = target;
 }
 
 
 /**
- * Given a reference to a PIDInfo, calculate its
- * internal variables and spit out the resulting
- * motor speed.
+ * Updates PID in a single tick.
 */
-short PIDCalculate(PIDInfo& info ) {
-	short encoderValue = SensorValue[info.encoderPort] * (info.encoderReversed ? -1 : 1);
-	short target = info.target;
+short pid_update(pid_info_t* info) {
+	short encoderValue = SensorValue[info->encoder_port] * (info->encoder_reversed ? -1 : 1);
+	short target = info->target;
 
 	// Calculate motor speed with PID info.
-	info.proportion = target - encoderValue;
+	info->proportion = target - encoderValue;
 
-	info.integral += info.proportion;
-	info.derivative = info.proportion - info.pastError;
+	info->integral += info->proportion;
+	info->derivative = info->proportion - info->past_error;
 
-	info.pastError = info.proportion;
+	info->past_error = info->proportion;
 
-	if(abs(info.proportion) < 5) {
-		info.integral = 0;
+	if(abs(info->proportion) < 5) {
+		info->integral = 0;
 	}
 
-	if(abs(info.proportion) > 12000) {
+	if(abs(info->proportion) > 12000) {
 		// Needs to be tuned
 		//info->integral = 0;
 	}
 
-	return MotorClamp((info.proportion * info.kP) + (info.integral * info.kI) + (info.derivative * info.kD));
+	return MotorClamp((info->proportion * info->kP) + (info->integral * info->kI) + (info->derivative * info->kD));
 }
 
 
 /**
- * The task responsible for controlling motors via PID.
- * It is recommended to start this via StartPIDTask().
+ * Start the PID task. By default, motors are NOT controlled by PID unless
+ * explicitly said so. Changes will only take into effect after this starts.
 */
-task PID() {
+task pid_task() {
+	for(short i = 0; i < 10; i++) {
+		pid_info_t* info = pid_motor[i];
+
+		info->active = false;
+		info->kP = 0;
+		info->kI = 0;
+		info->kD = 0;
+		info->proportion = 0;
+		info->integral = 0;
+		info->derivative = 0;
+		info->past_error = 0;
+		info->target = 0;
+	}
+
 	while(true) {
 
 		for(int i = 0; i< 10; i++) {
-			if(PIDmotor[i].active) {
-				slew_set_motor(PIDmotor[i].motorPort, PIDCalculate(PIDmotor[i]));
+			if(pid_motor[i].active) {
+				slew_set_motor(pid_motor[i].motor_port, pid_update(pid_motor[i]));
 			}
 		}
 
 		delay(TASK_DELAY);
 	}
-}
-
-
-/**
- * Starts up the PID() task while resetting internal variables.
- * Motors will not be slewed until an encoder is assigned to it
- * via LinkPID(motorPort, sensorPort, reversed).
-*/
-void StartPIDTask() {
-	for(short i = 0; i < 10; i++) {
-		PIDInfo& info = PIDmotor[i];
-
-		info.active = false;
-		info.kP = 0;
-		info.kI = 0;
-		info.kD = 0;
-		info.proportion = 0;
-		info.integral = 0;
-		info.derivative = 0;
-		info.pastError = 0;
-		info.target = 0;
-	}
-	startTask(PID);
 }
 
 #endif
