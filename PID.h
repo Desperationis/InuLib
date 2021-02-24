@@ -104,7 +104,7 @@ task PID() {
 
 		for(int i = 0; i< 10; i++) {
 			if(PIDmotor[i].active) {
-				SetSlewMotor(PIDmotor[i].motorPort, PIDCalculate(PIDmotor[i]));
+				slew_set_motor(PIDmotor[i].motorPort, PIDCalculate(PIDmotor[i]));
 			}
 		}
 
@@ -114,8 +114,6 @@ task PID() {
 
 
 /**
- * @setup
- *
  * Starts up the PID() task while resetting internal variables.
  * Motors will not be slewed until an encoder is assigned to it
  * via LinkPID(motorPort, sensorPort, reversed).

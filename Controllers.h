@@ -25,8 +25,8 @@
 */
 task LeftArcadeControl() {
 	while (true) {
-		SetSlewMotor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3] - vexRT[Ch4]));
-		SetSlewMotor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch3] + vexRT[Ch4]));
+		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3] - vexRT[Ch4]));
+		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch3] + vexRT[Ch4]));
 		delay(TASK_DELAY);
 	}
 }
@@ -38,8 +38,8 @@ task LeftArcadeControl() {
 */
 task RightArcadeControl() {
 	while (true) {
-		SetSlewMotor(LEFT_MOTOR_PORT,  MotorClamp(vexRT[Ch2] + vexRT[Ch1]));
-		SetSlewMotor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch2] - vexRT[Ch1]));
+		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(vexRT[Ch2] + vexRT[Ch1]));
+		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch2] - vexRT[Ch1]));
 
 		delay(TASK_DELAY);
 	}
@@ -52,8 +52,8 @@ task RightArcadeControl() {
 */
 task CustomTankControl() {
 	while (true) {
-		SetSlewMotor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3]));
-		SetSlewMotor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch2]));
+		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3]));
+		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch2]));
 
 		delay(TASK_DELAY);
 	}
@@ -68,8 +68,8 @@ task GamerControl() {
 	while (true) {
 		// Left Axis: up / down
 		// Right Axis: right / left
-		SetSlewMotor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3] + vexRT[Ch1]));
-		SetSlewMotor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch3] - vexRT[Ch1]));
+		slew_set_motor(LEFT_MOTOR_PORT,  MotorClamp(-vexRT[Ch3] + vexRT[Ch1]));
+		slew_set_motor(RIGHT_MOTOR_PORT, MotorClamp(-vexRT[Ch3] - vexRT[Ch1]));
 
 		delay(TASK_DELAY);
 	}

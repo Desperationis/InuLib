@@ -43,10 +43,10 @@ task GamerControlTest() {
 		//writeDebugStreamLine("Y: %d", controllerPacket.data[AXISY]);
 
 
-		setSlewMotor(left1,  MotorClamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		setSlewMotor(left2, MotorClamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		setSlewMotor(right1, MotorClamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
-		setSlewMotor(right2, MotorClamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
+		slew_set_motor(left1,  MotorClamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
+		slew_set_motor(left2, MotorClamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
+		slew_set_motor(right1, MotorClamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
+		slew_set_motor(right2, MotorClamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
 
 		delay(TASK_DELAY);
 	}

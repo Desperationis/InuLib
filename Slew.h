@@ -3,84 +3,85 @@
 #define SLEW_HEADER
 
 #ifndef SLEW_STEP
-	// The maximum amount of motor speed difference per tick.
-	// Lower values are better.
-	#define SLEW_STEP 15
+	#define SLEW_STEP 15 // The maximum amount of motor speed difference per tick.
 #endif
 
+
+// Struct reserved for each motor port
 typedef struct {
 	bool active;
 	byte target;
-} SlewInfo;
+} slewInfo;
+
 
 /**
  * Array denoting slewing info, arranged by motor port.
- * Will not work until Slew() is started.
 */
-SlewInfo slewMotor[10];
+slewInfo _slew_ports[10];
+
 
 /**
- * Set whether or not a motor will be slewed by setSlewMotor();
- * All motors are slewed by default.
- * Will not work until Slew() is started.
+ * Set whether or not a motor will be slewed; I.e. whether it's motor[] value
+ * will be overriden. All motors are slewed by default.
 */
-void setSlew(tMotor port, bool active) {
-	slewMotor[port].active = active;
+void slew_set_slew(tMotor port, bool active) {
+	_slew_ports[port].active = active;
 }
 
 
 /**
- * Whether or not a motor is being slewed or not.
- * Will not work until Slew() is started.
+ * Returns whether or not a motor is being slewed or not.
 */
-bool isSlewed(tMotor port) {
-	return slewMotor[port].active;
+bool slew_is_slewed(tMotor port) {
+	return _slew_ports[port].active;
 }
 
 
 /**
- * Set the slew target of a motor if the port is activated. If not,
- * speed will be set using motor[].
- * Will not work until Slew() is started.
+ * Set the slew target of a motor if the port is activated. If not, speed will
+ * be set using motor[].
 */
-void setSlewMotor(tMotor port, byte speed) {
-	if(isSlewed(port)){
-		slewMotor[port].target = speed;
+void slew_set_motor(tMotor port, byte speed) {
+	if(slew_is_slewed(port)){
+		_slew_ports[port].target = speed;
 	}
 	else {
 		motor[port] = speed;
 	}
 }
 
-/**
- * Linearly interpolates between two values by a
- * maximum amount.
+
+/*
+ * Linearly interpolate between two values by a maximum amount.
 */
-short Step(short original, short step, short target){
+short _slew_step(short original, short step, short target){
 	if(abs(original - target) > step){
 		return original + (sgn(target - original) * step);
 	}
 	return target;
 }
 
+
 /**
- * Starts slewing all motor ports. If not deactivated by setSlewMotor(),
- * every single motor port in motor[] will, by default, not be able to be controlled through
- * the array, but only by setSlewMotor().
+ * Start slewing all motor ports. If not activated by startTask(), slewing will
+ * not occur on all motor ports, meaning they won't be able to be controlled by
+ * motor[].
 */
-task Slew() {
+task slew_task() {
+	// Initialize internal variables
 	for(short port = 0; port < 10; port++) {
-		slewMotor[port].active = true;
-		slewMotor[port].target = 0;
+		_slew_ports[port].active = true;
+		_slew_ports[port].target = 0;
 	}
 
 	while(true) {
+		// For each motor, step toward its target if activated.
 		for(short port = 0; port < 10; port++) {
-			if(isSlewed(port)) {
-				// For each motor, step toward its target
-				motor[port] = Step(motor[port], SLEW_STEP, slewMotor[port].target);
+			if(slew_is_slewed(port)) {
+				motor[port] = _slew_step(motor[port], SLEW_STEP, _slew_ports[port].target);
 			}
 		}
+		
 		delay(TASK_DELAY);
 	}
 }
