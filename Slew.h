@@ -11,13 +11,13 @@
 typedef struct {
 	bool active;
 	byte target;
-} slewInfo;
+} slewInfo_t;
 
 
 /**
  * Array denoting slewing info, arranged by motor port.
 */
-slewInfo _slew_ports[10];
+slewInfo_t _slew_ports[10];
 
 
 /**
@@ -81,7 +81,7 @@ task slew_task() {
 				motor[port] = _slew_step(motor[port], SLEW_STEP, _slew_ports[port].target);
 			}
 		}
-		
+
 		delay(TASK_DELAY);
 	}
 }
