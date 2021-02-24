@@ -41,7 +41,7 @@ short MotorClamp(short value) {
  * a specified range.
 */
 bool HasReached(short original, short target, short range) {
-	return abs(original) - abs(target) <= range;
+	return abs(abs(original) - abs(target)) <= range;
 }
 
 #endif
