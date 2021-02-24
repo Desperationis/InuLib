@@ -3,11 +3,12 @@
 #define SERIAL_HEADER
 
 #define SERIAL_PORT UART1
-#define NO_PACKET 0xFF			//255
-#define HEADER_PACKET 0xFE	//254
+#define NO_PACKET 0xFF			// 255
+#define HEADER_PACKET 0xFE	// 254
 #define PACKET_SIZE 4				// # of packets after head
 
-// Data Packet indexes
+// Data Packet indexes for incoming Raspberry Pi packets. Add or remove as you
+// please.
 #define AXISX 0
 #define AXISY 1
 #define BUTTON1 2
@@ -16,22 +17,23 @@
 
 typedef struct _packet {
   short data[PACKET_SIZE];
-} Packet;
+} packet_t;
 
 
 /**
  * Configures the UART serial port specified in SERIAL_PORT for input.
 */
-void configurePort() {
+void serial_configure() {
 	// Configure serial port for user use
 	configureSerialPort(SERIAL_PORT, uartUserControl);
 	setBaudRate(SERIAL_PORT, baudRate115200);
 }
 
 /**
- * Updates a packet struct with the latest packet.
+ * Update a packet struct with the latest packet. This will halt the current
+ * task until PACKET_SIZE number of packets are collected successfully.
 */
-void updatePacket(Packet* packet) {
+void serial_update(packet_t* packet) {
 	int count = 0;
 
 	// Only exit if an entire packet is received.

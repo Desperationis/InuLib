@@ -31,11 +31,11 @@
  * Tries to slew if possible.
 */
 task GamerControlTest() {
-
-	Packet controllerPacket;
+	serial_configure();
+	packet_t controllerPacket;
 
 	while (true) {
-		updatePacket(controllerPacket);
+		serial_update(controllerPacket);
 		// Left Axis: up / down
 		// Right Axis: right / left
 		//clearDebugStream();
