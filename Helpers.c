@@ -2,6 +2,9 @@
 #ifndef HELPERS_SOURCE
 #define HELPERS_SOURCE
 
+#ifndef TASK_DELAY
+	#define TASK_DELAY 20
+#endif
 
 /**
  * Returns the maximum of two values.

@@ -3,6 +3,10 @@
 #define PID_SOURCE
 
 
+#ifndef TASK_DELAY
+	#define TASK_DELAY 20
+#endif
+
 typedef struct {
 	float kP;
 	float kI;

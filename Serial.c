@@ -14,6 +14,9 @@
 #define BUTTON1 2
 #define BUTTON2 3
 
+#ifndef TASK_DELAY
+	#define TASK_DELAY 20
+#endif
 
 typedef struct _packet {
   short data[PACKET_SIZE];

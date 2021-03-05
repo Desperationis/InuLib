@@ -22,7 +22,6 @@
 
 #define SLEW_STEP 1
 
-#include "Setup.c"
 #include "Serial.c"
 #include "Controllers.c"
 #include "Slew.c"
@@ -30,10 +29,6 @@
 
 
 task main() {
-
-
-
-
 	while(true) {
 		// Keep the program alive.
 		delay(TASK_DELAY);

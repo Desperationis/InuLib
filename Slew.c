@@ -6,6 +6,10 @@
 	#define SLEW_STEP 15 // The maximum amount of motor speed difference per tick.
 #endif
 
+#ifndef TASK_DELAY
+	#define TASK_DELAY 20
+#endif
+
 
 // Struct reserved for each motor port
 typedef struct {

@@ -2,6 +2,10 @@
 #ifndef CONTROLLERS_SOURCE
 #define CONTROLLERS_SOURCE
 
+#ifndef TASK_DELAY
+	#define TASK_DELAY 20
+#endif
+
 #include "Helpers.c"
 #include "Slew.c"
 
@@ -19,6 +23,13 @@
 	Ch2: Y Positive Down
 */
 
+#ifndef LEFT_MOTOR_PORT
+	#define LEFT_MOTOR_PORT port1
+#endif
+
+#ifndef RIGHT_MOTOR_PORT
+	#define RIGHT_MOTOR_PORT port1
+#endif
 
 /**
  * Arcade control on the left joystick, slewing if possible.
