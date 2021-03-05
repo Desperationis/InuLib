@@ -24,21 +24,37 @@
 	Ch2: Y Positive Down
 */
 
-#ifndef LEFT_MOTOR_PORT
-	#define LEFT_MOTOR_PORT port1
-#endif
+/*
+ NOTE:
+ The side a motor is on must be declared in Motor and Sensor
+ Setup in the Drive Motor Side Section.
+*/
 
-#ifndef RIGHT_MOTOR_PORT
-	#define RIGHT_MOTOR_PORT port1
-#endif
+
+void _controller_set_left(byte speed) {
+	for(byte i = 0; i < 10; i++) {
+		if(nMotorDriveSide[i] == driveLeft) {
+			motor[i] = speed;
+		}
+	}
+}
+
+void _controller_set_right(byte speed) {
+	for(byte i = 0; i < 10; i++) {
+		if(nMotorDriveSide[i] == driveRight) {
+			motor[i] = speed;
+		}
+	}
+}
+
 
 /**
  * Arcade control on the left joystick, slewing if possible.
 */
 task controller_l_arcade() {
 	while (true) {
-		slew_set_motor(LEFT_MOTOR_PORT,  motor_clamp(-vexRT[Ch3] - vexRT[Ch4]));
-		slew_set_motor(RIGHT_MOTOR_PORT, motor_clamp(-vexRT[Ch3] + vexRT[Ch4]));
+		_controller_set_left(motor_clamp(-vexRT[Ch3] * 1.3 - vexRT[Ch4])); // One will ALWAYS be slightly slower than the other due to the stick being slightly left / right
+		_controller_set_right(motor_clamp(-vexRT[Ch3] * 1.3 + vexRT[Ch4]));
 		delay(TASK_DELAY);
 	}
 }
@@ -49,8 +65,8 @@ task controller_l_arcade() {
 */
 task controller_r_arcade() {
 	while (true) {
-		slew_set_motor(LEFT_MOTOR_PORT,  motor_clamp(vexRT[Ch2] + vexRT[Ch1]));
-		slew_set_motor(RIGHT_MOTOR_PORT, motor_clamp(-vexRT[Ch2] - vexRT[Ch1]));
+		_controller_set_left(motor_clamp(vexRT[Ch2] * 1.3 + vexRT[Ch1]));
+		_controller_set_right(motor_clamp(-vexRT[Ch2] * 1.3 - vexRT[Ch1]));
 
 		delay(TASK_DELAY);
 	}
@@ -62,8 +78,8 @@ task controller_r_arcade() {
 */
 task controller_tank() {
 	while (true) {
-		slew_set_motor(LEFT_MOTOR_PORT,  -vexRT[Ch3]);
-		slew_set_motor(RIGHT_MOTOR_PORT, -vexRT[Ch2]);
+		_controller_set_left(-vexRT[Ch3] * 1.3);
+		_controller_set_right(-vexRT[Ch2] * 1.3);
 
 		delay(TASK_DELAY);
 	}
@@ -77,8 +93,8 @@ task controller_gamer() {
 	while (true) {
 		// Left Axis: up / down
 		// Right Axis: right / left
-		slew_set_motor(LEFT_MOTOR_PORT,  motor_clamp(-vexRT[Ch3] + vexRT[Ch1]));
-		slew_set_motor(RIGHT_MOTOR_PORT, motor_clamp(-vexRT[Ch3] - vexRT[Ch1]));
+		_controller_set_left(motor_clamp(-vexRT[Ch3] * 1.3 + vexRT[Ch1]));
+		_controller_set_right(motor_clamp(-vexRT[Ch3] * 1.3 - vexRT[Ch1]));
 
 		delay(TASK_DELAY);
 	}
@@ -93,8 +109,8 @@ task controller_serial_gamer() {
 
 	while (true) {
 		serial_update(controllerPacket);
-		slew_set_motor(LEFT_MOTOR_PORT,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		slew_set_motor(RIGHT_MOTOR_PORT, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
+		_controller_set_left(motor_clamp(-controllerPacket.data[AXISY] * 1.3 + controllerPacket.data[AXISX]));
+		_controller_set_right(motor_clamp(-controllerPacket.data[AXISY] * 1.3 - controllerPacket.data[AXISX]));
 		delay(TASK_DELAY);
 	}
 }
