@@ -34,7 +34,7 @@
 void _controller_set_left(byte speed) {
 	for(byte i = 0; i < 10; i++) {
 		if(nMotorDriveSide[i] == driveLeft) {
-			motor[i] = speed;
+			slew_set_motor(i, speed);
 		}
 	}
 }
@@ -42,7 +42,7 @@ void _controller_set_left(byte speed) {
 void _controller_set_right(byte speed) {
 	for(byte i = 0; i < 10; i++) {
 		if(nMotorDriveSide[i] == driveRight) {
-			motor[i] = speed;
+			slew_set_motor(i, speed);
 		}
 	}
 }
