@@ -8,6 +8,7 @@
 
 #include "Helpers.c"
 #include "Slew.c"
+#include "Serial.c"
 
 /*
 	Diego's Controller Tips:
@@ -92,10 +93,8 @@ task controller_serial_gamer() {
 
 	while (true) {
 		serial_update(controllerPacket);
-		slew_set_motor(left1,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		slew_set_motor(left2,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
-		slew_set_motor(right1, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
-		slew_set_motor(right2, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
+		slew_set_motor(LEFT_MOTOR_PORT,  motor_clamp(-controllerPacket.data[AXISY] + controllerPacket.data[AXISX]));
+		slew_set_motor(RIGHT_MOTOR_PORT, motor_clamp(-controllerPacket.data[AXISY] - controllerPacket.data[AXISX]));
 		delay(TASK_DELAY);
 	}
 }

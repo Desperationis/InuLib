@@ -2,6 +2,8 @@
 #ifndef PID_SOURCE
 #define PID_SOURCE
 
+#include "Slew.c"
+#include "Helpers.c"
 
 #ifndef TASK_DELAY
 	#define TASK_DELAY 20
