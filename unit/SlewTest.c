@@ -9,6 +9,15 @@
 
 #include "../Slew.c"
 
+task plotValues() {
+	while(true) {
+		datalogDataGroupStart();
+		datalogAddValue(0, motor[test_motor]);
+		datalogDataGroupEnd();
+		delay(TASK_DELAY);
+	}
+}
+
 void speedCheck(byte speed) {
 	slew_set_motor(test_motor, speed);
 	delay(3000);
@@ -18,6 +27,12 @@ void speedCheck(byte speed) {
 
 task main() {
 
+	startTask(slew_task);
+
+	// No motors need to be attached! You can just view the datalog
+	datalogClear();
+
+	startTask(plotValues);
 	startTask(slew_task);
 
 	// You should see the motor ramping up to a slow pace in two directions.
