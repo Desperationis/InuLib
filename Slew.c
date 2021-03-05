@@ -11,6 +11,8 @@
 #endif
 
 
+bool slew_task_started = false;
+
 // Struct reserved for each motor port
 typedef struct {
 	bool active;
@@ -37,7 +39,7 @@ void slew_set_slew(tMotor port, bool active) {
  * Returns whether or not a motor is being slewed or not.
 */
 bool slew_is_slewed(tMotor port) {
-	return _slew_ports[port].active;
+	return _slew_ports[port].active && slew_task_started;
 }
 
 
@@ -77,6 +79,8 @@ task slew_task() {
 		_slew_ports[port].active = true;
 		_slew_ports[port].target = 0;
 	}
+
+	slew_task_started = true;
 
 	while(true) {
 		// For each motor, step toward its target if activated.
