@@ -2,13 +2,15 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <API.h>
-
-
 /*
-  Reverses a motor port; This information is kept in an internal array.
+  Reverses a motor port; This information is kept in an internal bitmask.
 */
 void setMotorSign(int port, bool reversed);
+
+/*
+  Returns -1 if a port is reversed, 1 otherwise.
+*/
+int getSign(int port);
 
 /*
   Sets the speed of a motor port taking into consideration whether it's

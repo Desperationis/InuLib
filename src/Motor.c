@@ -1,17 +1,26 @@
+#include <API.h>
 #include "Motor.h"
 
-int motorSign[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+int16_t motorSign = 0;
 
 void setMotorSign(int port, bool reversed) {
-	motorSign[port - 1] = reversed ? -1 : 1;
+	motorSign &= ~(1 << (port - 1));
+
+	if(reversed) {
+		motorSign += (1 << (port - 1));
+	}
+}
+
+int getSign(int port) {
+	return motorSign >> (port - 1) == 1 ? -1 : 1;
 }
 
 void setMotor(int port, int speed) {
-	motorSet(port, speed * motorSign[port - 1]);
+	motorSet(port, speed * getSign(port));
 }
 
 int getMotor(int port) {
-	return motorGet(port) * motorSign[port - 1];
+	return motorGet(port) * getSign(port);
 }
 
 int motorCap(int value) {
