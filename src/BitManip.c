@@ -9,5 +9,5 @@ void bit_clear(int16_t* mask, byte position) {
 }
 
 bool bit_read(int16_t* mask, byte position) {
-  return (*mask >> position) == 1;
+  return (*mask >> position) % 2 == 1;
 }

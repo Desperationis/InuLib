@@ -7,9 +7,12 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
+#define SLEW_RATE 20
+
 #include "main.h"
 #include "Controllers.h"
 #include "Slew.h"
+
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -31,6 +34,13 @@
 void operatorControl() {
 	TaskHandle task2 = taskCreate(slew_task, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
 	TaskHandle task = taskCreate(control_xdrivecorner, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+
+	motor_set_sign(0, true);
+	motor_set_sign(1, true);
+	motor_set_sign(2, true);
+	motor_set_sign(3, true);
+	motor_set_sign(10, true);
+	motor_set_sign(11, true);
 
 	while(1) {
 		delay(20);

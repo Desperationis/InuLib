@@ -1,7 +1,9 @@
 #ifndef SLEW_H
 #define SLEW_H
 
-#define SLEW_RATE 5
+#ifndef SLEW_RATE
+	#define SLEW_RATE 5
+#endif
 
 #include <API.h>
 #include "Motor.h"
