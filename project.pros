@@ -1,0 +1,38 @@
+{
+    "py/object": "pros.conductor.project.Project",
+    "py/state": {
+        "project_name": "CortexLib",
+        "target": "cortex",
+        "templates": {
+            "kernel": {
+                "location": "C:\\Users\\PC\\AppData\\Roaming\\PROS\\templates\\kernel@2.12.2",
+                "metadata": {
+                    "origin": "pros-mainline",
+                    "output": "bin/output.bin"
+                },
+                "name": "kernel",
+                "py/object": "pros.conductor.templates.local_template.LocalTemplate",
+                "supported_kernels": null,
+                "system_files": [
+                    "src/init.c",
+                    "common.mk",
+                    "firmware/libpros.a",
+                    "firmware/STM32F10x.ld",
+                    "include/API.h",
+                    "src/auto.c",
+                    "firmware/cortex.ld",
+                    "firmware/uniflash.jar"
+                ],
+                "target": "cortex",
+                "user_files": [
+                    "Makefile",
+                    "include/main.h",
+                    "src/opcontrol.c",
+                    "src/autonomous.c"
+                ],
+                "version": "2.12.2"
+            }
+        },
+        "upload_options": {}
+    }
+}
