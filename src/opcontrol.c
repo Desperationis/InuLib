@@ -29,17 +29,8 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-	//TaskHandle task2 = taskCreate(slew_task, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
-	//TaskHandle task = taskCreate(control_xdriveedge, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-
-	motor_set_sign(1, true);
-
-	motor_set(1, 10);
-
-	delay(3000);
-	motor_set_sign(1, false);
-
-	motor_set(1, 10);
+	TaskHandle task2 = taskCreate(slew_task, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
+	TaskHandle task = taskCreate(control_xdrivecorner, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 
 	while(1) {
 		delay(20);
