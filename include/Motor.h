@@ -17,6 +17,12 @@ void setMotorSign(int port, bool reversed);
 void setMotor(int port, int speed);
 
 /*
+  Gets the speed of the motor. The speed returned takes into account whether
+  it's reversed or not.
+*/
+int getMotor(int port);
+
+/*
   Caps a value to the range accepted by the motors [-127, 127].
 */
 int motorCap(int value);

@@ -10,6 +10,10 @@ void setMotor(int port, int speed) {
 	motorSet(port, speed * motorSign[port - 1]);
 }
 
+int getMotor(int port) {
+	return motorGet(port) * motorSign[port - 1];
+}
+
 int motorCap(int value) {
 	return value > 127 ? 127 : (value < -127 ? -127 : value);
 }

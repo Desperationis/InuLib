@@ -3,6 +3,7 @@
 
 #include <API.h>
 #include "Motor.h"
+#include "Slew.h"
 
 /*
 	Control chassis via an xdrive configuration where the corners are the wheels.
