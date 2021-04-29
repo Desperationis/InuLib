@@ -2,8 +2,12 @@
 
 int motorSign[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-void setMotor(int motor, int speed) {
-	motorSet(motor, speed * motorSign[motor - 1]);
+void setMotorSign(int port, bool reversed) {
+	motorSign[port - 1] = reversed ? -1 : 1;
+}
+
+void setMotor(int port, int speed) {
+	motorSet(port, speed * motorSign[port - 1]);
 }
 
 int motorCap(int value) {
