@@ -23,7 +23,7 @@ void slew_set_motor(int port, int speed) {
 		_slew_ports[port - 1].target = speed;
 	}
 	else {
-		setMotor(port, speed);
+		motor_set(port, speed);
 	}
 }
 
@@ -52,7 +52,7 @@ void slew_task() {
 		// For each motor, step toward its target if activated.
 		for(short port = 0; port < 10; port++) {
 			if(slew_is_slewed(port)) {
-				setMotor(port + 1, _slew_step(getMotor(port + 1), SLEW_RATE, _slew_ports[port].target));
+				motor_set(port + 1, _slew_step(motor_get(port + 1), SLEW_RATE, _slew_ports[port].target));
 			}
 		}
 

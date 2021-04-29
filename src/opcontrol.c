@@ -32,14 +32,14 @@ void operatorControl() {
 	//TaskHandle task2 = taskCreate(slew_task, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
 	//TaskHandle task = taskCreate(control_xdriveedge, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 
-	setMotorSign(1, true);
+	motor_set_sign(1, true);
 
-	setMotor(1, 10);
+	motor_set(1, 10);
 
 	delay(3000);
-	setMotorSign(1, false);
+	motor_set_sign(1, false);
 
-	setMotor(1, 10);
+	motor_set(1, 10);
 
 	while(1) {
 		delay(20);

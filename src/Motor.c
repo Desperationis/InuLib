@@ -3,7 +3,7 @@
 
 int16_t motorSign = 0;
 
-void setMotorSign(int port, bool reversed) {
+void motor_set_sign(int port, bool reversed) {
 	motorSign &= ~(1 << (port - 1));
 
 	if(reversed) {
@@ -11,18 +11,18 @@ void setMotorSign(int port, bool reversed) {
 	}
 }
 
-int getSign(int port) {
+int motor_get_sign(int port) {
 	return motorSign >> (port - 1) == 1 ? -1 : 1;
 }
 
-void setMotor(int port, int speed) {
-	motorSet(port, speed * getSign(port));
+void motor_set(int port, int speed) {
+	motorSet(port, speed * motor_get_sign(port));
 }
 
-int getMotor(int port) {
-	return motorGet(port) * getSign(port);
+int motor_get(int port) {
+	return motorGet(port) * motor_get_sign(port);
 }
 
-int motorCap(int value) {
+int motor_cap(int value) {
 	return value > 127 ? 127 : (value < -127 ? -127 : value);
 }
