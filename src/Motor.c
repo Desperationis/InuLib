@@ -1,17 +1,18 @@
 #include "Motor.h"
+#include "BitManip.h"
 
-int16_t motorSign = 0;
+int16_t reversedMask = 0;
 
 void motor_set_sign(tMotor port, bool reversed) {
-	motorSign &= ~(1 << (port - 1));
+	bit_clear(&reversedMask, port - 1);
 
 	if(reversed) {
-		motorSign += (1 << (port - 1));
+		bit_set(&reversedMask, port - 1);
 	}
 }
 
 byte motor_get_sign(tMotor port) {
-	return motorSign >> (port - 1) == 1 ? -1 : 1;
+	return bit_read(&reversedMask, port - 1) ? -1 : 1;
 }
 
 void motor_set(tMotor port, byte speed) {
