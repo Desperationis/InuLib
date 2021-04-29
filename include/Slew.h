@@ -10,7 +10,7 @@
 // Struct reserved for each motor port
 typedef struct {
 	bool active;
-	int target;
+	char target;
 } slewInfo_t;
 
 
@@ -18,20 +18,20 @@ typedef struct {
  * Set whether or not a motor will be slewed; I.e. whether it's motor[] value
  * will be overriden. All motors are slewed by default.
 */
-void slew_set_slew(int port, bool active);
+void slew_set_slew(tMotor port, bool active);
 
 
 /**
  * Returns whether or not a motor is being slewed or not.
 */
-bool slew_is_slewed(int port);
+bool slew_is_slewed(unsigned char port);
 
 
 /**
  * Set the slew target of a motor if the port is activated. If not, speed will
  * be set using motor[].
 */
-void slew_set_motor(int port, int speed);
+void slew_set_motor(unsigned char port, int speed);
 
 
 /*
