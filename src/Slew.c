@@ -27,7 +27,7 @@ bool slew_get_active(tMotor port) {
 }
 
 void slew_set(tMotor port, int speed) {
-	if(slew_get_active(port)){
+	if(slew_get_active(port) && slew_handle != NULL){
 		slew_target[port - 1] = speed;
 	}
 	else {
@@ -78,6 +78,7 @@ void slew_stop() {
 	if(slew_handle != NULL) {
 		if(taskGetState(slew_handle) == TASK_RUNNING) {
 			taskDelete(slew_handle);
+			slew_handle = NULL;
 		}
 	}
 }
