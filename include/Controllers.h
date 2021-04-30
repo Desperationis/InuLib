@@ -30,7 +30,8 @@ void control_switch(controller_t task_code);
 
 /*
 	Sets the delay of all controllers; By default, this is set to 20. Lowering it
-  won't do you any good.
+  is pointless as motors update at this frequency. Higher delays don't actually
+  have that much of a difference if slewing is on.
 */
 void control_set_delay(ubyte delay);
 
@@ -43,9 +44,14 @@ void control_set_scale(float scale);
 
 /*
   Returns a function pointer to the current controller for comparison
-  operations.
+  operations; Returns NULL if there is no controller / was stopped.
 */
 controller_t control_get_controller();
+
+/*
+  Whether or not there is a controller currently running.
+*/
+bool control_is_running();
 
 /*
 	Stops the task for the current controller.

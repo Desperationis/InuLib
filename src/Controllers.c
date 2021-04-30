@@ -22,6 +22,10 @@ controller_t control_get_controller() {
   return current_controller_pointer;
 }
 
+bool control_is_running() {
+  return current_controller != NULL;
+}
+
 /*
   Sets the speed of a motor controlled by a controller; This tries to take
   advantage of slewing and scales the input
@@ -31,18 +35,16 @@ void _control_set_motor(tMotor port, int speed) {
 }
 
 void control_stop() {
-  if(current_controller != NULL) {
-    if(taskGetState(current_controller) == TASK_RUNNING) {
-      taskDelete(current_controller);
-      current_controller = NULL;
-      current_controller_pointer = NULL;
-    }
+  if(control_is_running()) {
+    taskDelete(current_controller);
+    current_controller = NULL;
+    current_controller_pointer = NULL;
   }
 }
 
 void control_switch(controller_t task_code) {
   control_stop();
-  current_controller = taskRunLoop(task_code, control_scale);
+  current_controller = taskRunLoop(task_code, control_delay);
   current_controller_pointer = task_code;
 }
 
