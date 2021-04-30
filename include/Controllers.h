@@ -20,11 +20,13 @@
 enum XDRIVECORNER_PORTS {XDC_BOTTOMLEFT = 1, XDC_TOPRIGHT, XDC_TOPLEFT, XDC_BOTTOMRIGHT = 10};
 enum XDRIVEEDGE_PORTS {XDR_LEFT = 1, XDR_RIGHT, XDR_UP, XDR_DOWN = 10};
 
+typedef void (*controller_t)(void);
+
 /*
 Safely switches to another controller. If a controller is not currently
 running, this starts one. The thread handle for this is managed internally.
 */
-void control_switch(void(*task_code)(void));
+void control_switch(controller_t task_code);
 
 /*
 	Sets the delay of all controllers; By default, this is set to 20. Lowering it
@@ -38,6 +40,12 @@ void control_set_delay(ubyte delay);
   set to 1.0.
 */
 void control_set_scale(float scale);
+
+/*
+  Returns a function pointer to the current controller for comparison
+  operations.
+*/
+controller_t control_get_controller();
 
 /*
 	Stops the task for the current controller.

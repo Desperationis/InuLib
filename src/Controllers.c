@@ -7,6 +7,7 @@
 TaskHandle current_controller = NULL;
 ubyte control_delay = 20;
 float control_scale = 1.0;
+controller_t current_controller_pointer = NULL;
 
 
 void control_set_delay(ubyte delay) {
@@ -15,6 +16,10 @@ void control_set_delay(ubyte delay) {
 
 void control_set_scale(float scale) {
   control_scale = scale;
+}
+
+controller_t control_get_controller() {
+  return current_controller_pointer;
 }
 
 /*
@@ -30,13 +35,15 @@ void control_stop() {
     if(taskGetState(current_controller) == TASK_RUNNING) {
       taskDelete(current_controller);
       current_controller = NULL;
+      current_controller_pointer = NULL;
     }
   }
 }
 
-void control_switch(void(*task_code)(void)) {
+void control_switch(controller_t task_code) {
   control_stop();
   current_controller = taskRunLoop(task_code, control_scale);
+  current_controller_pointer = task_code;
 }
 
 void control_xdrivecorner() {
