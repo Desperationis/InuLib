@@ -34,6 +34,19 @@ void _control_set_motor(tMotor port, int speed) {
   slew_set(port, motor_cap(speed * control_scale));
 }
 
+/*
+  Task that continuously calls the current controller, spaced out by
+  control_delay.
+*/
+void _control_loop_task() {
+  unsigned long time = 0;
+
+  while(1) {
+    current_controller_pointer();
+    taskDelayUntil(&time, control_delay);
+  }
+}
+
 void control_stop() {
   if(control_is_running()) {
     taskDelete(current_controller);
@@ -44,7 +57,7 @@ void control_stop() {
 
 void control_switch(controller_t task_code) {
   control_stop();
-  current_controller = taskRunLoop(task_code, control_delay);
+  current_controller = taskCreate(_control_loop_task, 64, NULL, TASK_PRIORITY_DEFAULT);
   current_controller_pointer = task_code;
 }
 
