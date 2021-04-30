@@ -6,16 +6,30 @@
 */
 TaskHandle current_controller = NULL;
 ubyte control_delay = 20;
+float control_scale = 1.0;
 
 
 void control_set_delay(ubyte delay) {
   control_delay = delay;
 }
 
+void control_set_scale(float scale) {
+  control_scale = scale;
+}
+
+/*
+  Sets the speed of a motor controlled by a controller; This tries to take
+  advantage of slewing and scales the input
+*/
+void _control_set_motor(tMotor port, int speed) {
+  slew_set(port, motor_cap(speed * control_scale));
+}
+
 void control_stop() {
   if(current_controller != NULL) {
     if(taskGetState(current_controller) == TASK_RUNNING) {
       taskDelete(current_controller);
+      current_controller = NULL;
     }
   }
 }
@@ -30,20 +44,20 @@ void control_xdrivecorner() {
 	int y = joystickGetAnalog(1, 3);
   int theta = joystickGetAnalog(1, 1);
 
-  slew_set(XDC_TOPLEFT, motor_cap(y + x + theta));
-  slew_set(XDC_TOPRIGHT, motor_cap(-y + x + theta));
-  slew_set(XDC_BOTTOMLEFT, motor_cap(y - x + theta));
-  slew_set(XDC_BOTTOMRIGHT, motor_cap(-y - x + theta));
+  _control_set_motor(XDC_TOPLEFT, y + x + theta);
+  _control_set_motor(XDC_TOPRIGHT, -y + x + theta);
+  _control_set_motor(XDC_BOTTOMLEFT, y - x + theta);
+  _control_set_motor(XDC_BOTTOMRIGHT, -y - x + theta);
 }
 
 void control_xdrivecorner_gamer() {
 	int y = joystickGetAnalog(1, 3);
   int theta = joystickGetAnalog(1, 1);
 
-  slew_set(XDC_TOPLEFT, motor_cap(y + theta));
-  slew_set(XDC_TOPRIGHT, motor_cap(-y + theta));
-  slew_set(XDC_BOTTOMLEFT, motor_cap(y + theta));
-  slew_set(XDC_BOTTOMRIGHT, motor_cap(-y + theta));
+  _control_set_motor(XDC_TOPLEFT, y + theta);
+  _control_set_motor(XDC_TOPRIGHT, -y + theta);
+  _control_set_motor(XDC_BOTTOMLEFT, y + theta);
+  _control_set_motor(XDC_BOTTOMRIGHT, -y + theta);
 }
 
 void control_xdriveedge() {
@@ -51,8 +65,8 @@ void control_xdriveedge() {
 	int y = joystickGetAnalog(1, 3);
   int delta = joystickGetAnalog(1, 1);
 
-  slew_set(XDR_LEFT, motor_cap(y + delta));
-  slew_set(XDR_RIGHT, motor_cap(-y + delta));
-  slew_set(XDR_UP, motor_cap(x + delta));
-  slew_set(XDR_DOWN, motor_cap(-x + delta));
+  _control_set_motor(XDR_LEFT, y + delta);
+  _control_set_motor(XDR_RIGHT, -y + delta);
+  _control_set_motor(XDR_UP, x + delta);
+  _control_set_motor(XDR_DOWN, -x + delta);
 }

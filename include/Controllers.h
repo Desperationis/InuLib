@@ -33,9 +33,21 @@ void control_switch(void(*task_code)(void));
 void control_set_delay(ubyte delay);
 
 /*
+	Set the scale for all axes of the controllers, limited by the motor cap. This
+  can be used to cap maximum speed and change acceleration. By default, this is
+  set to 1.0.
+*/
+void control_set_scale(float scale);
+
+/*
 	Stops the task for the current controller.
 */
 void control_stop();
+
+
+
+// CONTROLLERS:
+
 
 /*
 	Control chassis via an xdrive configuration where the corners are the wheels.
