@@ -27,9 +27,14 @@ void slew_set_rate(ubyte rate);
 
 /*
 	Sets the delay of the slew task; By default, this is set to 20. Big delays
-	increase slew, and lower values decreases slew. 
+	increase slew, and lower values decreases slew.
 */
 void slew_set_delay(ubyte delay);
+
+/*
+	Whether or not the slew task is running.
+*/
+bool slew_is_running();
 
 /*
  	Stops the task for slewing if it's currently running.

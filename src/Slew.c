@@ -22,6 +22,10 @@ void slew_set_active(tMotor port, bool active) {
 	}
 }
 
+bool slew_is_running() {
+	return slew_handle != NULL;
+}
+
 bool slew_get_active(tMotor port) {
 	return bit_read(&active_mask, port - 1);
 }
@@ -78,9 +82,7 @@ void slew_start() {
 
 void slew_stop() {
 	if(slew_handle != NULL) {
-		if(taskGetState(slew_handle) == TASK_RUNNING) {
-			taskDelete(slew_handle);
-			slew_handle = NULL;
-		}
+		taskDelete(slew_handle);
+		slew_handle = NULL;
 	}
 }
