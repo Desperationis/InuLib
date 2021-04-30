@@ -21,15 +21,21 @@ enum XDRIVECORNER_PORTS {XDC_BOTTOMLEFT = 1, XDC_TOPRIGHT, XDC_TOPLEFT, XDC_BOTT
 enum XDRIVEEDGE_PORTS {XDR_LEFT = 1, XDR_RIGHT, XDR_UP, XDR_DOWN = 10};
 
 /*
+Safely switches to another controller. If a controller is not currently
+running, this starts one. The thread handle for this is managed internally.
+*/
+void control_switch(void(*task_code)(void));
+
+/*
+	Sets the delay of all controllers; By default, this is set to 20. Lowering it
+  won't do you any good.
+*/
+void control_set_delay(ubyte delay);
+
+/*
 	Stops the task for the current controller.
 */
 void control_stop();
-
-/*
-	Safely switches to another controller. If a controller is not currently
-  running, this starts one. The thread handle for this is managed internally.
-*/
-void control_switch(void(*task_code)(void));
 
 /*
 	Control chassis via an xdrive configuration where the corners are the wheels.

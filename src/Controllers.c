@@ -5,6 +5,12 @@
   internally in here.
 */
 TaskHandle current_controller = NULL;
+ubyte control_delay = 20;
+
+
+void control_set_delay(ubyte delay) {
+  control_delay = delay;
+}
 
 void control_stop() {
   if(current_controller != NULL) {
