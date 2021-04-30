@@ -24,20 +24,20 @@ void control_xdrivecorner() {
 	int y = joystickGetAnalog(1, 3);
   int theta = joystickGetAnalog(1, 1);
 
-  slew_set_motor(XDC_TOPLEFT, motor_cap(y + x + theta));
-  slew_set_motor(XDC_TOPRIGHT, motor_cap(-y + x + theta));
-  slew_set_motor(XDC_BOTTOMLEFT, motor_cap(y - x + theta));
-  slew_set_motor(XDC_BOTTOMRIGHT, motor_cap(-y - x + theta));
+  slew_set(XDC_TOPLEFT, motor_cap(y + x + theta));
+  slew_set(XDC_TOPRIGHT, motor_cap(-y + x + theta));
+  slew_set(XDC_BOTTOMLEFT, motor_cap(y - x + theta));
+  slew_set(XDC_BOTTOMRIGHT, motor_cap(-y - x + theta));
 }
 
 void control_xdrivecorner_gamer() {
 	int y = joystickGetAnalog(1, 3);
   int theta = joystickGetAnalog(1, 1);
 
-  slew_set_motor(XDC_TOPLEFT, motor_cap(y + theta));
-  slew_set_motor(XDC_TOPRIGHT, motor_cap(-y + theta));
-  slew_set_motor(XDC_BOTTOMLEFT, motor_cap(y + theta));
-  slew_set_motor(XDC_BOTTOMRIGHT, motor_cap(-y + theta));
+  slew_set(XDC_TOPLEFT, motor_cap(y + theta));
+  slew_set(XDC_TOPRIGHT, motor_cap(-y + theta));
+  slew_set(XDC_BOTTOMLEFT, motor_cap(y + theta));
+  slew_set(XDC_BOTTOMRIGHT, motor_cap(-y + theta));
 }
 
 void control_xdriveedge() {
@@ -45,8 +45,8 @@ void control_xdriveedge() {
 	int y = joystickGetAnalog(1, 3);
   int delta = joystickGetAnalog(1, 1);
 
-  slew_set_motor(XDR_LEFT, motor_cap(y + delta));
-  slew_set_motor(XDR_RIGHT, motor_cap(-y + delta));
-  slew_set_motor(XDR_UP, motor_cap(x + delta));
-  slew_set_motor(XDR_DOWN, motor_cap(-x + delta));
+  slew_set(XDR_LEFT, motor_cap(y + delta));
+  slew_set(XDR_RIGHT, motor_cap(-y + delta));
+  slew_set(XDR_UP, motor_cap(x + delta));
+  slew_set(XDR_DOWN, motor_cap(-x + delta));
 }

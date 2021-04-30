@@ -7,46 +7,38 @@
 
 #include <API.h>
 #include "Motor.h"
-
-
-// Struct reserved for each motor port
-typedef struct {
-	bool active;
-	char target;
-} slewInfo_t;
-
-
-/**
- * Set whether or not a motor will be slewed; I.e. whether it's motor[] value
- * will be overriden. All motors are slewed by default.
-*/
-void slew_set_slew(tMotor port, bool active);
-
-
-/**
- * Returns whether or not a motor is being slewed or not.
-*/
-bool slew_is_slewed(unsigned char port);
-
-
-/**
- * Set the slew target of a motor if the port is activated. If not, speed will
- * be set using motor[].
-*/
-void slew_set_motor(unsigned char port, int speed);
+#include "BitManip.h"
 
 
 /*
- * Linearly interpolate between two values by a maximum amount.
+ 	Starts slewing all motors (taking into account if the motors are reversed),
+	if not started already. This overrides both motor_set and setMotor with
+	slew_set unless slew is deactivated on those ports. In addition to this,
+	starting this task clears all the settings that were configured before it, so
+	be sure to activate and use motors after starting this task.
 */
-short _slew_step(short original, short step, short target);
+void slew_start();
 
-/**
- * Start slewing all motor ports. If not activated by startTask(), slewing will
- * not occur on all motor ports, meaning they won't be able to be controlled by
- * motor[].
+/*
+ 	Stops the task for slewing if it's currently running.
 */
-void slew_task();
+void slew_stop();
 
+/*
+ 	Set whether or not a motor will be slewed; I.e. whether it's motor[] value
+ 	will be overriden by slew_set. All motors are slewed by default.
+*/
+void slew_set_active(tMotor port, bool active);
+
+/*
+ 	Returns whether or not a motor is being slewed or not.
+*/
+bool slew_get_active(unsigned char port);
+
+/*
+	Set the slew target of a motor if the port is activated. If not, speed will
+ 	be set using motor_set.
+*/
+void slew_set(unsigned char port, int speed);
 
 #endif

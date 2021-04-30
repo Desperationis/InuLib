@@ -32,7 +32,7 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-	TaskHandle task2 = taskCreate(slew_task, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
+	slew_start();
 	control_switch(control_xdrivecorner_gamer);
 
 	while(1) {
