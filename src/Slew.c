@@ -39,8 +39,10 @@ void slew_set(tMotor port, int speed) {
 	Linearly interpolates between two values via a maximum amount.
 */
 short _interpolate(byte original, byte step, byte target){
-	short difference = original - target;
+    // Calculate remaining speed necessary
+	short difference = target - original;
 
+    // Cap out speed difference
 	if(abs(difference) > step){
 		int sign = difference > 0 ? 1 : (difference < 0 ? -1 : 0);
 		return original + (sign * step);
