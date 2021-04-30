@@ -36,7 +36,7 @@ void control_stop() {
 
 void control_switch(void(*task_code)(void)) {
   control_stop();
-  current_controller = taskRunLoop(task_code, 20);
+  current_controller = taskRunLoop(task_code, control_scale);
 }
 
 void control_xdrivecorner() {

@@ -33,6 +33,12 @@ void operatorControl() {
 	slew_start();
 	control_switch(control_xdrivecorner_gamer);
 
+	//Test Slew activation
+	//Test controller swapping and stopping.
+	//Test controller dleay and scale
+	//Test slew delay
+	//Test slew stop and start
+
 	while(1) {
 		delay(20);
 	}
