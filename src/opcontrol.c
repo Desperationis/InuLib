@@ -33,7 +33,7 @@
  */
 void operatorControl() {
 	TaskHandle task2 = taskCreate(slew_task, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);
-	TaskHandle task = taskCreate(control_xdrivecorner_gamer, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	control_switch(control_xdrivecorner_gamer);
 
 	while(1) {
 		delay(20);
