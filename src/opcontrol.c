@@ -7,8 +7,6 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
-#define SLEW_RATE 50
-
 #include "main.h"
 #include "Controllers.h"
 #include "Slew.h"

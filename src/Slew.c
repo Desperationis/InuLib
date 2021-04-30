@@ -1,8 +1,18 @@
 #include "Slew.h"
 
+ubyte slew_rate = 20;
+ubyte slew_delay = 20;
 int16_t active_mask = 0;
 byte slew_target[10];
 TaskHandle slew_handle = NULL;
+
+void slew_set_rate(ubyte rate) {
+	slew_rate = rate;
+}
+
+void slew_set_delay(ubyte delay) {
+	slew_delay = delay;
+}
 
 void slew_set_active(tMotor port, bool active) {
 	bit_clear(&active_mask, port - 1);
@@ -44,11 +54,11 @@ void _slew_task() {
 		// For each motor, step toward its target if activated.
 		for(size_t port = 1; port <= 10; port++) {
 			if(slew_get_active(port)) {
-				motor_set(port, _interpolate(motor_get(port), SLEW_RATE, slew_target[port - 1]));
+				motor_set(port, _interpolate(motor_get(port), slew_rate, slew_target[port - 1]));
 			}
 		}
 
-		delay(20);
+		delay(slew_delay);
 	}
 }
 

@@ -5,6 +5,7 @@
 
 typedef unsigned char tMotor;
 typedef char byte;
+typedef unsigned char ubyte;
 
 /*
   Reverses a motor port; This information is kept in an internal bitmask.

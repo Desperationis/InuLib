@@ -20,6 +20,18 @@
 void slew_start();
 
 /*
+	Sets the maximum motor speed change per tick; The "slew". Lower values
+	increase slew, and higher values decrease it. By default, this is set to 20.
+*/
+void slew_set_rate(ubyte rate);
+
+/*
+	Sets the delay of the slew task; By default, this is set to 20. Big delays
+	increase slew, and lower values decreases slew. 
+*/
+void slew_set_delay(ubyte delay);
+
+/*
  	Stops the task for slewing if it's currently running.
 */
 void slew_stop();
