@@ -17,6 +17,19 @@ void control_xdrivecorner() {
   }
 }
 
+void control_xdrivecorner_gamer() {
+  while(1) {
+		int y = joystickGetAnalog(1, 3);
+    int theta = joystickGetAnalog(1, 1);
+
+    slew_set_motor(TOPLEFT, motor_cap(y + theta));
+    slew_set_motor(TOPRIGHT, motor_cap(-y + theta));
+    slew_set_motor(BOTTOMLEFT, motor_cap(y + theta));
+    slew_set_motor(BOTTOMRIGHT, motor_cap(-y + theta));
+    delay(20);
+  }
+}
+
 void control_xdriveedge() {
   while(1) {
 		int x = joystickGetAnalog(1, 4);
