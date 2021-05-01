@@ -35,7 +35,12 @@ void operatorControl() {
 	//control_switch(control_xdrivecorner_gamer);
 
 	while(1) {
-		serial_write("iusadyf shf shfsof");
+		packet_t packet;
+		serial_get_packet(&packet, 1);
+
+		serial_write(packet.data_arr);
+
+		serial_free_packet(&packet);
 		delay(20);
 	}
 }

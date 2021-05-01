@@ -2,10 +2,7 @@
 #define MOTOR_H
 
 #include <API.h>
-
-typedef unsigned char tMotor;
-typedef char byte;
-typedef unsigned char ubyte;
+#include "Types.h"
 
 /*
   Reverses a motor port; This information is kept in an internal bitmask.

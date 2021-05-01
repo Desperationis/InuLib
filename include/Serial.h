@@ -2,6 +2,7 @@
 #define SERIAL_H
 
 #include <API.h>
+#include "Types.h"
 
 /*
   NOTE: On your Raspberry Pi, make extra sure you turn on serial communication
@@ -16,6 +17,9 @@
   to the Raspberry Pi.
 */
 
+typedef struct _packet {
+  char* data_arr; // Data packets ONLY; No header
+} packet_t;
 
 /*
   Initializes uart1 for 8 data bits and 1 stop bit at 9600 Baud; Call this
@@ -30,5 +34,17 @@ void serial_init();
 */
 void serial_write(const char* string);
 
+/*
+  Loads the latest packet to a pointer; This halts the current thread until an
+  entire packet is received. The data received is dynamically allocated and
+  must be freed using serial_destroy_packet before getting any more.
+*/
+void serial_get_packet(packet_t* packet, ubyte num_data_packets);
 
-#endif SERIAL_H
+/*
+  Frees the allocated data of a packet.
+*/
+void serial_free_packet(packet_t* packet);
+
+
+#endif
