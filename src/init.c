@@ -8,6 +8,7 @@
  */
 
 #include "main.h"
+#include "Serial.h"
 
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
@@ -18,6 +19,7 @@
  * configure a UART port (usartOpen()) but cannot set up an LCD (lcdInit()).
  */
 void initializeIO() {
+  serial_init();
 }
 
 /*

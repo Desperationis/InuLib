@@ -10,6 +10,7 @@
 #include "main.h"
 #include "Controllers.h"
 #include "Slew.h"
+#include "Serial.h"
 
 
 /*
@@ -31,15 +32,10 @@
  */
 void operatorControl() {
 	slew_start();
-	control_switch(control_xdrivecorner_gamer);
-
-	//Test Slew activation
-	//Test controller swapping and stopping.
-	//Test controller dleay and scale
-	//Test slew delay
-	//Test slew stop and start
+	//control_switch(control_xdrivecorner_gamer);
 
 	while(1) {
+		serial_write("To be fair,");
 		delay(20);
 	}
 }
