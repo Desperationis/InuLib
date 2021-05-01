@@ -35,7 +35,7 @@ void operatorControl() {
 	//control_switch(control_xdrivecorner_gamer);
 
 	while(1) {
-		serial_write("To be fair,");
+		serial_write("iusadyf shf shfsof");
 		delay(20);
 	}
 }

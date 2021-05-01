@@ -24,7 +24,9 @@
 void serial_init();
 
 /*
-  Sends an unformatted string to uart1; Used for debugging.
+  Sends an unformatted string to uart1; Used for debugging. A \n character is
+  automatically inserted at the end before being sent off to the RPI, allowing
+  it to know when the string ends.
 */
 void serial_write(const char* string);
 

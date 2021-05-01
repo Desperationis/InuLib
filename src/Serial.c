@@ -1,15 +1,20 @@
 #include "Serial.h"
+#include <string.h>
 
-/*
-  Initializes uart1 for 8 data bits and 1 stop bit.
-*/
 void serial_init() {
   usartInit(uart1, 9600, SERIAL_DATABITS_8 | SERIAL_STOPBITS_1);
 }
 
-/*
-  Sends an unformatted string to uart1.
-*/
 void serial_write(const char* string) {
-  fprint(string, uart1);
+  size_t len = strlen(string);
+
+  // One for extra char, one for trailing zero
+  char *str2 = malloc(len + 1 + 1);
+
+  strcpy(str2, string);
+  str2[len] = '\n';
+  str2[len + 1] = '\0';
+
+  fprint(str2, uart1);
+  free(str2);
 }
