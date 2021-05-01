@@ -40,6 +40,13 @@ void operatorControl() {
 
 		serial_write(packet.data_arr);
 
+		int i = (signed char)packet.data_arr[0];
+
+		char* buffer = malloc(sizeof(char)* 10);
+		sprintf(buffer, "%d", i);
+		serial_write(buffer);
+		free(buffer);
+
 		serial_free_packet(&packet);
 		delay(20);
 	}

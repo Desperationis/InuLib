@@ -25,6 +25,7 @@ void serial_write(const char* string) {
 
 void serial_get_packet(packet_t* packet, ubyte num_data_packets) {
   packet->data_arr = malloc(sizeof(char) * num_data_packets);
+  packet->data_num = num_data_packets;
   int count = 0;
 
 	// Exit once entire packet is received
@@ -50,4 +51,5 @@ void serial_get_packet(packet_t* packet, ubyte num_data_packets) {
 void serial_free_packet(packet_t* packet) {
   free(packet->data_arr);
   packet->data_arr = NULL;
+  packet->data_num = 0;
 }
