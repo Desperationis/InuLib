@@ -12,7 +12,9 @@ while True:
     if serialInterface.isOpen:
         #serialInterface.write([254]) # Header Byte
         #serialInterface.write([69])
-        print(serialInterface.readline().decode('ascii'),end='')
+        serialInterface.write([255])
+        serialInterface.write(b'h')
+        print(serialInterface.readline().decode('ascii'), end='')
     else:
         print("Error: UART Serial interface is not open.")
 
