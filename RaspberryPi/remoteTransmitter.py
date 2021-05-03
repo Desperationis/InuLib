@@ -1,12 +1,11 @@
-import requests
 import pygame
 import time
 from math import floor
+from socket import *
 
 """
     Sends JSON data about controller input to the Raspberry Pi
 """
-
 
 pygame.init() # Init controller library
 
@@ -18,18 +17,17 @@ else:
     joystick = pygame.joystick.Joystick(0)
     joystick.init() # We don't need this reference later
 
-
+s = socket(type=SOCK_DGRAM)
 clock = pygame.time.Clock()
 while(True):
     pygame.event.get()
 
     if joystick_count != 0:
-        r = requests.post("http://192.168.1.2:8008/", None, json =  {
-            "X": floor(joystick.get_axis(2) * 126.0) + 126,
-            "Y": floor(joystick.get_axis(1) * 126.0) + 126,
-            "BTN1": 0,
-            "BTN2": 0
-        })
+        x = [str(floor(joystick.get_axis(0) * 126.0) + 126),
+                str(floor(joystick.get_axis(1) * 126.0) + 126),
+                "0",
+                "0"]
+        s.sendto(",".join(x).encode('utf-8'), ('192.168.1.4', 5000))
 
 
-    clock.tick(60) # Send packets 60 times a second
+    clock.tick(30) # Send packets 60 times a second
