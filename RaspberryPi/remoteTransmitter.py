@@ -4,7 +4,8 @@ from math import floor
 from socket import *
 
 """
-    Sends JSON data about controller input to the Raspberry Pi
+    Sends JSON data about controller input to the Raspberry Pi, specifically
+    server.py
 """
 
 pygame.init() # Init controller library

@@ -1,9 +1,11 @@
 from socket import *
 import serial
 
+"""
+    Given input from remoteTransmitter.py, relay it into the Cortex.
+"""
 
 serialInterface = serial.Serial('/dev/ttyS0', 9600, timeout=1,stopbits=1,bytesize=8)
-
 
 s = socket(type=SOCK_DGRAM)
 s.bind(('192.168.1.4', 5000))
@@ -23,4 +25,3 @@ while True:
                 int(data[5])
             ])
         #s.sendto(data,addr)
-
