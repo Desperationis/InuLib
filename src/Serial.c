@@ -1,5 +1,6 @@
 #include "Serial.h"
 #include <string.h>
+#include "Types.h"
 
 // Internal stuff for categorizing values.
 #define NO_PACKET -1
@@ -24,7 +25,7 @@ void serial_write(const char* string) {
 }
 
 void serial_get_packet(packet_t* packet, ubyte num_data_packets) {
-  packet->data_arr = malloc(sizeof(char) * num_data_packets);
+  packet->data_arr = malloc(sizeof(ubyte) * num_data_packets);
   packet->data_num = num_data_packets;
   int count = 0;
 
@@ -42,7 +43,7 @@ void serial_get_packet(packet_t* packet, ubyte num_data_packets) {
 
 		// Record the data that comes in
 		else if(data != NO_PACKET && startReceiving) {
-			packet->data_arr[count] = (char)data;
+			packet->data_arr[count] = (ubyte)data;
 			count++;
 		}
 	}

@@ -18,7 +18,7 @@
 */
 
 typedef struct _packet {
-  char* data_arr; // Data packets ONLY; No header
+  ubyte* data_arr; // Data packets ONLY; No header
   ubyte data_num;
 } packet_t;
 
