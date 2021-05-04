@@ -31,11 +31,12 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
+	// Note: This will ONLY run if a VEXnet controller is connected
 	slew_start();
-	//control_switch(control_xdrivecorner_gamer);
+	control_switch(control_xdrivecorner_serial);
 
 	while(1) {
-		packet_t packet;
+		/*packet_t packet;
 		serial_get_packet(&packet, 1);
 
 		serial_write(packet.data_arr);
@@ -47,7 +48,7 @@ void operatorControl() {
 		serial_write(buffer);
 		free(buffer);
 
-		serial_free_packet(&packet);
+		serial_free_packet(&packet);*/
 		delay(20);
 	}
 }

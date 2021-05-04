@@ -88,5 +88,13 @@ void control_xdrivecorner_gamer();
 */
 void control_xdriveedge();
 
+/*
+	Control chassis via an xdrive configuration where the corners are the wheels.
+	Left joystick is for movement, right for turning. This uses serial input via
+  the serial module and assumes that the controller input of remoteTransmitter.py
+  matches that of the VEXnet controller. 
+*/
+void control_xdrivecorner_serial();
+
 
 #endif

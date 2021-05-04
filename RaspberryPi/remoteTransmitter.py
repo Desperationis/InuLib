@@ -23,8 +23,10 @@ while(True):
     pygame.event.get()
 
     if joystick_count != 0:
-        x = [str(floor(joystick.get_axis(0) * 126.0) + 126),
-                str(floor(joystick.get_axis(1) * 126.0) + 126),
+        x = [	str(floor(joystick.get_axis(0) * 126.0) + 126),
+                str(floor(-joystick.get_axis(1) * 126.0) + 126),
+		str(floor(joystick.get_axis(2) * 126.0) + 126),
+		str(floor(-joystick.get_axis(3) * 126.0) + 126),
                 "0",
                 "0"]
         s.sendto(",".join(x).encode('utf-8'), ('192.168.1.4', 5000))

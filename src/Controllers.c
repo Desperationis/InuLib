@@ -1,4 +1,5 @@
 #include "Controllers.h"
+#include "Serial.h"
 
 /*
   Task handle to the current_controller; This is automatically managered
@@ -91,4 +92,21 @@ void control_xdriveedge() {
   _control_set_motor(XDR_RIGHT, -y + delta);
   _control_set_motor(XDR_UP, x + delta);
   _control_set_motor(XDR_DOWN, -x + delta);
+}
+
+
+void control_xdrivecorner_serial() {
+  packet_t packet;
+
+  serial_get_packet(&packet, 4);
+
+  // Sign values
+  int x = packet.data_arr[0] - 127;
+  int y = packet.data_arr[1] - 127;
+  int theta = packet.data_arr[2] - 127;
+
+  _control_set_motor(XDC_TOPLEFT, y + x + theta);
+  _control_set_motor(XDC_TOPRIGHT, -y + x + theta);
+  _control_set_motor(XDC_BOTTOMLEFT, y - x + theta);
+  _control_set_motor(XDC_BOTTOMRIGHT, -y - x + theta);
 }
