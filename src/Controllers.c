@@ -12,23 +12,23 @@ controller_t current_controller_pointer = NULL;
 
 
 void control_set_delay(ubyte delay) {
-        control_delay = delay;
+    control_delay = delay;
 }
 
 void control_set_scale(float scale) {
-        control_scale = scale;
+    control_scale = scale;
 }
 
 float control_get_scale() {
-        return control_scale;
+    return control_scale;
 }
 
 controller_t control_get_controller() {
-        return current_controller_pointer;
+    return current_controller_pointer;
 }
 
 bool control_is_running() {
-        return current_controller != NULL;
+    return current_controller != NULL;
 }
 
 /*
