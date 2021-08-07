@@ -30,7 +30,7 @@ bool slew_get_active(tMotor port) {
 	return bit_read(&active_mask, port - 1);
 }
 
-void slew_set(tMotor port, int speed) {
+void slew_set(tMotor port, byte speed) {
 	if(slew_get_active(port) && slew_handle != NULL){
 		slew_target[port - 1] = speed;
 	}

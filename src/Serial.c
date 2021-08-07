@@ -2,10 +2,6 @@
 #include <string.h>
 #include "Types.h"
 
-// Internal stuff for categorizing values.
-#define NO_PACKET -1
-#define HEADER_VALUE 255
-
 void serial_init() {
     usartInit(uart1, 9600, SERIAL_DATABITS_8 | SERIAL_STOPBITS_1);
 }
