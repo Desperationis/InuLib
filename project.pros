@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "CortexLib",
+        "project_name": "InuLib",
         "target": "cortex",
         "templates": {
             "kernel": {
