@@ -1,8 +1,8 @@
 /** @file Controllers.h
  * @brief Provides a modular state machine used to control the robot.
  *
- * Provides a modular state machine used to control the robot. Feed in functions
- * that control your robot and switch them out.
+ * Provides a modular state machine used to control the robot. Feed in
+ * functions that control your robot and switch them out.
  */
 
 #ifndef CONTROLLERS_H
@@ -51,8 +51,8 @@ void control_switch(controller_t task_code);
  * Lowering it is pointless as motors update at this frequency. Higher delays
  * don't actually have that much of a difference if slewing is on.
  *
- * @param delay Delay, in milliseconds, between each call of the controller. Set
- * to 20 ms by default.
+ * @param delay Delay, in milliseconds, between each call of the controller.
+ * Set to 20 ms by default.
 */
 void control_set_delay(ubyte delay);
 

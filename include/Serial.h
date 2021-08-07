@@ -31,9 +31,9 @@
 
 /*
   NOTE: On your Raspberry Pi, make extra sure you turn on serial communication
-  and disable the log in screen. This can be done if you type "sudo raspi-config"
-  in the terminal and go to Interfaces > Serial. In there, MAKE SURE you disable
-  the login shell and turn on the serial port, then reboot.
+  and disable the log in screen. This can be done if you type "sudo
+  raspi-config" in the terminal and go to Interfaces > Serial. In there, MAKE
+  SURE you disable the login shell and turn on the serial port, then reboot.
 
   The reason this must be done is because the Raspberry Pi automatically
   switches off UART ports, so you need to turn them on. Sometimes, it will be
@@ -44,7 +44,8 @@
 
 /**
  * Struct that holds serial packet info of any length. The first element is
- * guaranteed to never be HEADER_VALUE. All data stored must be a unsigned byte.
+ * guaranteed to never be HEADER_VALUE. All data stored must be a unsigned
+ * byte.
 */
 typedef struct _packet {
   ubyte* data_arr;
@@ -67,9 +68,10 @@ void serial_init();
 void serial_write(const char* string);
 
 /**
- * Loads the latest received packet to a pointer; This halts the current thread until an
- * entire packet is received. The data received is dynamically allocated and
- * must be freed using serial_destroy_packet before getting any more.
+ * Loads the latest received packet to a pointer; This halts the current thread
+ * until an entire packet is received. The data received is dynamically
+ * allocated and must be freed using serial_destroy_packet before getting any
+ * more.
  *
  * @see #serial_free_packet(packet_t* packet)
  * @param packet Pointer to the packet you want to overwrite.
@@ -82,7 +84,7 @@ void serial_get_packet(packet_t* packet, ubyte num_data_packets);
  * Frees the allocated data of a packet.
  *
  * @see #serial_get_packet(packet_t* packet, ubyte num_data_packets)
- * @param packete Pointer to the packet you want to free.
+ * @param packet Pointer to the packet you want to free.
 */
 void serial_free_packet(packet_t* packet);
 

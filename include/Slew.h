@@ -1,9 +1,9 @@
 /** @file Slew.h
  * @brief Provides functions for slewing motors.
  *
- * Provides functions for slewing motors. Warning: if you initialize this module,
- * you cannot use Motor.h to control motors unless you disable the slewing for it
- * manually.
+ * Provides functions for slewing motors. Warning: if you initialize this
+ * module, you cannot use Motor.h to control motors unless you disable the
+ * slewing for it manually.
  */
 
 #ifndef SLEW_H
@@ -23,9 +23,9 @@
 void slew_start();
 
 /**
- * Set the maximum motor speed change per delay.
- * Lower values increase the amount of time for motors to ramp up or down to
- * target speed, and higher values decrease it.
+ * Set the maximum motor speed change per delay.  Lower values increase the
+ * amount of time for motors to ramp up or down to target speed, and higher
+ * values decrease it.
  *
  * @param rate Unsigned byte representing maximum amount of change in a slewed
  * motor per delay.
@@ -33,9 +33,9 @@ void slew_start();
 void slew_set_rate(ubyte rate);
 
 /**
- * Set the delay the background slew task needs to wait until it
- * updates. It is not recommended to mess around with this
- * unless you know what you're doing, as motors themselves update every 20ms.
+ * Set the delay the background slew task needs to wait until it updates. It is
+ * not recommended to mess around with this unless you know what you're doing,
+ * as motors themselves update every 20ms.
  *
  * @param delay Time, in milliseconds, the background slew task will be delayed
  * by.
