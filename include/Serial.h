@@ -10,7 +10,20 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
+/**
+ * Value of a fgetc of "no packet received" when casted to a int.
+*/
 #define NO_PACKET -1
+
+/**
+ * Header attached to the start of every incoming packet used to signify the
+ * start of a new packet, e.x.
+ *
+ * Packet 1 + 2: 255 234 43 0 4 255 230 43 0
+ *
+ * In this example, there are two distinct packets. When converted to packet_t,
+ * one struct will contain 234 43 0 and another 230 43 0.
+*/
 #define HEADER_VALUE 255
 
 #include <API.h>
@@ -58,6 +71,7 @@ void serial_write(const char* string);
  * entire packet is received. The data received is dynamically allocated and
  * must be freed using serial_destroy_packet before getting any more.
  *
+ * @see #serial_free_packet(packet_t* packet)
  * @param packet Pointer to the packet you want to overwrite.
  * @param num_data_packets Number of data packets you want to receive before
  * freeing program control.
@@ -67,6 +81,7 @@ void serial_get_packet(packet_t* packet, ubyte num_data_packets);
 /**
  * Frees the allocated data of a packet.
  *
+ * @see #serial_get_packet(packet_t* packet, ubyte num_data_packets)
  * @param packete Pointer to the packet you want to free.
 */
 void serial_free_packet(packet_t* packet);

@@ -30,6 +30,7 @@ byte motor_get_sign(tMotor port);
  * Set speed of a motor port. This takes into account motor direction, so a
  * positive value might not always turn the motor clockwise.
  *
+ * @see #motor_set_sign(tMotor port, bool reversed)
  * @param port Port of the motor.
  * @param speed Speed of the motor; Can be negative.
 */
@@ -39,6 +40,7 @@ void motor_set(tMotor port, byte speed);
  * Get speed of the motor. The speed returned is multiplied by -1 if the motor
  * if reversed.
  *
+ * @see #motor_set(tMotor port, byte speed)
  * @param port Port of the motor.
  * @return Speed of the motor.
 */

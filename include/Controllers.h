@@ -41,6 +41,7 @@ typedef void (*controller_t)(void);
  * running, this will immediately start the function. The thread handle for
  * this is managed internally.
  *
+ * @see #control_get_controller()
  * @param task_code Pointer to a void function with no parameters.
 */
 void control_switch(controller_t task_code);
@@ -59,6 +60,7 @@ void control_set_delay(ubyte delay);
  * Set a float that multiplies the input used for a controller to make it more
  * or less sensitive. By default, this is set to 1.0.
  *
+ * @see #control_get_scale()
  * @param scale Float representing the scale applied to controller. Can be set
  * to negative to get inverse controls.
 */
@@ -68,6 +70,7 @@ void control_set_scale(float scale);
  * Get the current scale that is used to multiply input. This is handy if you
  * are creating your own controllers.
  *
+ * @see #control_set_scale(float scale)
  * @returns float representing the scale applied to controllers.
 */
 float control_get_scale();
@@ -77,6 +80,7 @@ float control_get_scale();
  * no controller or it was stopped. This is intended to be used for comparison
  * operations.
  *
+ * @see #control_switch()
  * @return A function pointer of type controller_t pointing to a void
  * func(void). If there is no controller, return NULL.
 */

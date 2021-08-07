@@ -56,6 +56,7 @@ void slew_stop();
  * Set whether or not a motor will be slewed. All motors are slewed by default.
  * If a motor is activated, motor_set and motorSet will have no effect.
  *
+ * @see #slew_get_active(tMotor port)
  * @param port Port of the motor you want to toggle.
  * @param active Whether or not this motor will be slewed.
 */
@@ -64,6 +65,7 @@ void slew_set_active(tMotor port, bool active);
 /**
  * Whether or not a motor is controlled by the background slew task.
  *
+ * @see #slew_set_active
  * @param port Port of the motor you want to check.
  * @return True if the motor is slewed.
 */
