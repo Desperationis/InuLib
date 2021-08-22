@@ -8,6 +8,7 @@
 #ifndef BITMANIP_H
 #define BITMANIP_H
 
+#include "main.h"
 #include "Motor.h"
 
 /**

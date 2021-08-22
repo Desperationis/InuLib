@@ -8,7 +8,7 @@
 #ifndef CONTROLLERS_H
 #define CONTROLLERS_H
 
-#include <API.h>
+#include "main.h"
 #include "Motor.h"
 #include "Slew.h"
 
@@ -31,9 +31,9 @@ enum XDRIVEEDGE_PORTS {XDR_LEFT = 1, XDR_RIGHT, XDR_UP, XDR_DOWN = 10};
 
 /**
  * Type of the function used to control a robot; a function pointer to a void
- * function with no parameters.
+ * function with void* parameter.
 */
-typedef void (*controller_t)(void);
+typedef void (*controller_t)(void*);
 
 /**
  * Switch to a controller that is a parameter-less function of type void. This

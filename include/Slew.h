@@ -9,7 +9,7 @@
 #ifndef SLEW_H
 #define SLEW_H
 
-#include <API.h>
+#include "main.h"
 #include "Motor.h"
 #include "BitManip.h"
 
