@@ -30,8 +30,7 @@ public:
 	unsigned int GetTargetSpeed();
 
 private:
-	unsigned int port;
-	unsigned int rate;
+	unsigned int port, rate, targetSpeed;
 };
 
 
