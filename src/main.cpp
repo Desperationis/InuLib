@@ -1,8 +1,6 @@
 #include "main.h"
-#include "pros/adi.h"
-#include "pros/adi.hpp"
-#include "pros/misc.h"
-#include "pros/motors.hpp"
+#include "SlewMotor.h"
+#include "SlewSystem.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
