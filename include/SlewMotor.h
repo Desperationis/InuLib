@@ -7,6 +7,10 @@
 class SlewSystem;
 
 
+// TODO: Turn this into a struct as it
+// only holds data
+
+
 /**
  * Slews a motor.
 */
@@ -19,10 +23,15 @@ public:
 
 	void SetRate(unsigned int rate);
 
+	unsigned int GetPort();
+
+	unsigned int GetRate();
+
+	unsigned int GetTargetSpeed();
+
 private:
-	// Interpolates between two values by a maximum amount
-	unsigned int Interpolate(unsigned int start, unsigned int end, 
-					unsigned int maximum);
+	unsigned int port;
+	unsigned int rate;
 };
 
 

@@ -32,6 +32,10 @@ public:
 private:
 	static void SlewTask(void* parameters);
 
+	// Interpolates between two values by a maximum amount
+	static unsigned int Interpolate(unsigned int start, unsigned int end, 
+					unsigned int maximum);
+
 private:
 	static pros::Task* slewTask;
 	static std::vector<SlewMotor*> motorVector;
