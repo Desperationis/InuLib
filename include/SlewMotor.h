@@ -14,7 +14,7 @@ class SlewSystem;
 /**
  * Slews a motor.
 */
-class SlewMotor {
+struct SlewMotor {
 public:
 	// TODO: Add doxygen compliant comments
 	SlewMotor(unsigned int port);

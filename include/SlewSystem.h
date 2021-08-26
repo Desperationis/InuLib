@@ -10,7 +10,7 @@
 #include "main.h"
 #include <map>
 
-class SlewMotor;
+struct SlewMotor;
 
 /**
  * Static class that runs the slew task in the background. Use Start() to start
