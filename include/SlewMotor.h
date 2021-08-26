@@ -19,6 +19,8 @@ public:
 	// TODO: Add doxygen compliant comments
 	SlewMotor(unsigned int port);
 
+	~SlewMotor();
+
 	void Set(unsigned int speed);
 
 	void SetRate(unsigned int rate);

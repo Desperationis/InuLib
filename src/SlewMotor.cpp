@@ -7,6 +7,11 @@ SlewMotor::SlewMotor(unsigned int port) {
 	this->port = port;
 	rate = 20;
 	targetSpeed = 0;
+	SlewSystem::EnrollMotor(this);
+}
+
+SlewMotor::~SlewMotor() {
+	SlewSystem::RemoveMotor(this);
 }
 
 void SlewMotor::Set(unsigned int speed) {

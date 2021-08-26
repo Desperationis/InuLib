@@ -8,7 +8,7 @@
 #define SLEWSYSTEM_H
 
 #include "main.h"
-#include <vector>
+#include <map>
 
 class SlewMotor;
 
@@ -38,7 +38,7 @@ private:
 
 private:
 	static pros::Task* slewTask;
-	static std::vector<SlewMotor*> motorVector;
+	static std::map<unsigned int, SlewMotor*> motorMap;
 
 	static unsigned int delay;
 	static bool running;

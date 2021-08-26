@@ -22,25 +22,20 @@ void initialize() {
  */
 void opcontrol() {
 	SlewSystem::Start();
-	SlewMotor testMotor(2);
-
-	SlewSystem::EnrollMotor(&testMotor);
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	testMotor.SetRate(4);
-
-	while (true) {
-		int x = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);	
-		testMotor.Set(x);
-		pros::delay(20);
-	}
-
-
-	pros::Motor topleft_mtr(2);
-	pros::Motor topright_mtr(9);
-	pros::Motor bottomleft_mtr(1);
-	pros::Motor bottomright_mtr(10);
-	pros::Motor arm_mtr(8);
+	SlewMotor topleft_mtr(2);
+	SlewMotor topright_mtr(9);
+	SlewMotor bottomleft_mtr(1);
+	SlewMotor bottomright_mtr(10);
+	SlewMotor arm_mtr(8);
 	pros::ADIMotor claw_mtr(8);
+	pros::Controller master(pros::E_CONTROLLER_MASTER);
+
+	topleft_mtr.SetRate(4);
+	topright_mtr.SetRate(4);
+	bottomleft_mtr.SetRate(4);
+	bottomright_mtr.SetRate(4);
+	arm_mtr.SetRate(4);
+
 
 	while (true) {
 		// X-Drive controller code
@@ -48,21 +43,21 @@ void opcontrol() {
 		int y = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 		int turn = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-		topleft_mtr.move(-y - x + turn);
-		topright_mtr.move(y + x + turn);
-		bottomleft_mtr.move(-y + x + turn);
-		bottomright_mtr.move(y - x + turn);
+		topleft_mtr.Set(-y - x + turn);
+		topright_mtr.Set(y + x + turn);
+		bottomleft_mtr.Set(-y + x + turn);
+		bottomright_mtr.Set(y - x + turn);
 
 		// Reset arm and claw motor every frame
-		arm_mtr.move(0);
+		arm_mtr.Set(0);
 		claw_mtr.set_value(0);
 
 		// Pair L1 and R1 to moving the arm up and down.
 		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			arm_mtr.move(50);
+			arm_mtr.Set(50);
 		}
 		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-			arm_mtr.move(-50);
+			arm_mtr.Set(-50);
 		}
 
 		// Pair L2 and R2 to claw opening / closing

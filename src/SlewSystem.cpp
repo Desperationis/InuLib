@@ -4,7 +4,7 @@
 
 using namespace pros;
 
-std::vector<SlewMotor*> SlewSystem::motorVector;
+std::map<unsigned int, SlewMotor*> SlewSystem::motorMap;
 Task* SlewSystem::slewTask = nullptr;
 unsigned int SlewSystem::delay = 20;
 bool SlewSystem::running = false;
@@ -13,26 +13,24 @@ void SlewSystem::Start() {
 	// Start slew task if not started yet
 	if(!IsRunning()) {
 		running = true;
-		motorVector.reserve(10);
 		slewTask = new Task(SlewTask, NULL, "SlewTask");
 	}
 }
 
 void SlewSystem::SlewTask(void* parameters) {
 	while(IsRunning()) {
-		for(int i = 0; i < motorVector.size(); i++) {
-			SlewMotor* motor = motorVector[i];
+		for(auto it : motorMap) {
+			SlewMotor* motor = it.second;
 
-			// TODO: interpolate between values
 			Motor temp(motor->GetPort());
 			int currentSpeed = (temp.get_voltage() / 12000.0) * 127;
 			int targetSpeed = motor->GetTargetSpeed();
 			int maximumDif = motor->GetRate();
 
-			pros::lcd::print(0, "Current speed: %f", temp.get_voltage() / 12000.0);
 			temp.move(Interpolate(currentSpeed, targetSpeed, maximumDif));
 		}
 
+		pros::lcd::print(0, "motorMap size: %i", motorMap.size());
 		pros::delay(SlewSystem::delay);
 	}
 }
@@ -42,14 +40,13 @@ void SlewSystem::SetDelay(unsigned int delay) {
 }
 
 void SlewSystem::EnrollMotor(SlewMotor* motor) {
-	// TODO: Turn motorVector into a map to prevent
-	// same motor being used twice
-	motorVector.push_back(motor);
+	if(motorMap.find(motor->GetPort()) == motorMap.end()) {
+		motorMap[motor->GetPort()] = motor;
+	}
 }
 
 void SlewSystem::RemoveMotor(SlewMotor* motor) {
-	// if motor exists
-	//		remove
+	motorMap.erase(motor->GetPort());	
 }
 
 bool SlewSystem::IsRunning() {
@@ -57,7 +54,7 @@ bool SlewSystem::IsRunning() {
 }
 
 void SlewSystem::Stop() {
-	motorVector.clear();
+	motorMap.clear();
 	running = false;
 }
 
