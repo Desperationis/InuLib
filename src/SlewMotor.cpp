@@ -5,6 +5,8 @@ using namespace pros;
 
 SlewMotor::SlewMotor(unsigned int port) {
 	this->port = port;
+	rate = 20;
+	targetSpeed = 0;
 }
 
 void SlewMotor::Set(unsigned int speed) {

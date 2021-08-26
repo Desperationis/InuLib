@@ -1,6 +1,7 @@
 #include "main.h"
 #include "SlewMotor.h"
 #include "SlewSystem.h"
+#include "pros/misc.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -20,7 +21,20 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	SlewSystem::Start();
+	SlewMotor testMotor(2);
+
+	SlewSystem::EnrollMotor(&testMotor);
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	testMotor.SetRate(4);
+
+	while (true) {
+		int x = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);	
+		testMotor.Set(x);
+		pros::delay(20);
+	}
+
+
 	pros::Motor topleft_mtr(2);
 	pros::Motor topright_mtr(9);
 	pros::Motor bottomleft_mtr(1);

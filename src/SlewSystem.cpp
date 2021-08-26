@@ -1,5 +1,6 @@
 #include "SlewSystem.h"
 #include "SlewMotor.h"
+#include "pros/llemu.hpp"
 
 using namespace pros;
 
@@ -24,10 +25,11 @@ void SlewSystem::SlewTask(void* parameters) {
 
 			// TODO: interpolate between values
 			Motor temp(motor->GetPort());
-			int currentSpeed = temp.get_voltage();
+			int currentSpeed = (temp.get_voltage() / 12000.0) * 127;
 			int targetSpeed = motor->GetTargetSpeed();
 			int maximumDif = motor->GetRate();
 
+			pros::lcd::print(0, "Current speed: %f", temp.get_voltage() / 12000.0);
 			temp.move(Interpolate(currentSpeed, targetSpeed, maximumDif));
 		}
 
@@ -59,7 +61,7 @@ void SlewSystem::Stop() {
 	running = false;
 }
 
-unsigned int Interpolate(unsigned int start, unsigned int end,
+unsigned int SlewSystem::Interpolate(unsigned int start, unsigned int end,
 		unsigned int maximum) {
 
 	// Calculate remaining speed to interpolate
