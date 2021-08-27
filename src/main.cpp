@@ -30,10 +30,10 @@ void opcontrol() {
 	pros::ADIMotor claw_mtr(8);
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-	topleft_mtr.SetRate(4);
-	topright_mtr.SetRate(4);
-	bottomleft_mtr.SetRate(4);
-	bottomright_mtr.SetRate(4);
+	topleft_mtr.SetRate(20);
+	topright_mtr.SetRate(20);
+	bottomleft_mtr.SetRate(20);
+	bottomright_mtr.SetRate(20);
 	arm_mtr.SetRate(4);
 
 
@@ -58,6 +58,13 @@ void opcontrol() {
 		}
 		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 			arm_mtr.Set(-50);
+		}
+
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+			topleft_mtr.Set(100);
+			topright_mtr.Set(-100);
+			bottomright_mtr.Set(-100);
+			bottomleft_mtr.Set(100);
 		}
 
 		// Pair L2 and R2 to claw opening / closing
