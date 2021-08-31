@@ -11,7 +11,7 @@ class PIDSystem {
 public:
 	static void Start();
 
-	static void SetDelay();
+	static void SetDelay(unsigned int delay);
 
 	static void EnrollMotor(PIDMotor* motor);
 
@@ -23,20 +23,13 @@ public:
 private:
 	static void PIDTask(void* parameters);
 
-
-
 private:
 	static pros::Task* PIDtask;
-
 	static std::map<unsigned int, PIDMotor*> motorMap;
 
 	static unsigned int delay;
 	static bool running;
 };
-
-
-
-
 
 
 #endif
