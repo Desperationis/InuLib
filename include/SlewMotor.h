@@ -7,10 +7,6 @@
 class SlewSystem;
 
 
-// TODO: Turn this into a struct as it
-// only holds data
-
-
 /**
  * Slews a motor.
 */

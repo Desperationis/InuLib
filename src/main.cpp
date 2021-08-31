@@ -75,6 +75,6 @@ void opcontrol() {
 			claw_mtr.set_value(-127);
 		}
 
-		pros::delay(2);
+		pros::delay(20);
 	}
 }
