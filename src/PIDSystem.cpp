@@ -1,11 +1,12 @@
 #include "PIDSystem.h"
 #include "PIDMotor.h"
+#include "pros/llemu.hpp"
 
 using namespace pros;
 
 std::map<unsigned int, PIDMotor*> PIDSystem::motorMap;
 Task* PIDSystem::PIDtask = nullptr;
-unsigned int PIDSystem::delay = 20;
+unsigned int PIDSystem::delay = 10;
 bool PIDSystem::running = false;
 
 void PIDSystem::Start() {
@@ -20,7 +21,12 @@ void PIDSystem::PIDTask(void* parameters) {
 	while(IsRunning()) {
 		for(auto it : motorMap) {
 			int port = it.first;
-			PIDMotor* motor = it.second;
+			PIDMotor* PIDmotor = it.second;
+			Motor motor(PIDmotor->GetPort());
+
+			double encoderValue = motor.get_position();
+
+			pros::lcd::print(0, "%f", encoderValue);
 		}
 
 		pros::delay(PIDSystem::delay);
