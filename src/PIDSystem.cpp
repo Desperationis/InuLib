@@ -20,13 +20,8 @@ void PIDSystem::Start() {
 void PIDSystem::PIDTask(void* parameters) {
 	while(IsRunning()) {
 		for(auto it : motorMap) {
-			int port = it.first;
-			PIDMotor* PIDmotor = it.second;
-			Motor motor(PIDmotor->GetPort());
-
-			double encoderValue = motor.get_position();
-
-			pros::lcd::print(0, "%f", encoderValue);
+			PIDMotor* motor = it.second;
+			motor->_UpdatePID();
 		}
 
 		pros::delay(PIDSystem::delay);

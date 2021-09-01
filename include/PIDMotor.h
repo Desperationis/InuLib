@@ -29,10 +29,16 @@ struct PIDMotor {
 
 	float GetD();
 
+	void _UpdatePID();
+
 private:
 	unsigned int target;
 	unsigned int port;
 	float p, i, d;
+	float proportion;
+	float integral;
+	float derivative;
+	float pastError;
 };
 
 
