@@ -11,7 +11,7 @@ struct PIDMotor {
 
 	~PIDMotor();
 
-	void Set(unsigned int speed);
+	void Set(unsigned int target);
 
 	void SetP(float p);
 
@@ -21,7 +21,7 @@ struct PIDMotor {
 
 	unsigned int GetPort();
 
-	unsigned int GetTargetSpeed();
+	unsigned int GetTarget();
 
 	float GetP();
 
@@ -29,6 +29,10 @@ struct PIDMotor {
 
 	float GetD();
 
+private:
+	unsigned int target;
+	unsigned int port;
+	float p, i, d;
 };
 
 
