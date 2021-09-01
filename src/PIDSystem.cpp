@@ -19,7 +19,8 @@ void PIDSystem::Start() {
 void PIDSystem::PIDTask(void* parameters) {
 	while(IsRunning()) {
 		for(auto it : motorMap) {
-
+			int port = it.first;
+			PIDMotor* motor = it.second;
 		}
 
 		pros::delay(PIDSystem::delay);
