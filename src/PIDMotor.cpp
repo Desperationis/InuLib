@@ -75,15 +75,8 @@ void PIDMotor::_UpdatePID() {
 		integral = 0;
 	}
 
-
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
-
-	pros::lcd::print(0, "Encoder Value: %f", encoderValue);
-	pros::lcd::print(1, "Motor speed: %f", motorSpeed);
-	pros::lcd::print(2, "Target: %f", (float)target);
-	pros::lcd::print(3, "P: %f", p);
-	pros::lcd::print(4, "I: %f", i);
-	pros::lcd::print(5, "D: %f", d);
+	motor.move(motorSpeed);
 }
 
 
