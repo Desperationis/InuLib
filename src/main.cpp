@@ -4,6 +4,7 @@
 #include "PIDMotor.h"
 #include "PIDSystem.h"
 #include "pros/misc.h"
+#include "pros/motors.hpp"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -24,12 +25,13 @@ void initialize() {
  */
 void opcontrol() {
 	PIDSystem::Start();
-	PIDMotor topleft(2);
-	PIDMotor topright(9);
-	PIDMotor bottomleft(1);
-	PIDMotor bottomright(10);
+	PIDMotor topleft(9);
+	PIDMotor topright(10);
+	PIDMotor bottomleft(2);
+	PIDMotor bottomright(9);
 
-	float p = 1;
+
+	float p = 0.4;
 	float i = 0.001f;
 	float d = 0.01f;
 
@@ -49,13 +51,12 @@ void opcontrol() {
 	bottomright.SetI(i);
 	bottomright.SetD(d);
 
-	topleft.Set(1000);
-	topright.Set(-1000);
-	bottomleft.Set(-1000);
-	bottomright.Set(1000);
+	//topleft.Set(100);
+	topright.Set(-100);
+	//bottomleft.Set(-100);
+	//bottomright.Set(100);
 
 	while(true) {
 		pros::delay(20);
 	}
-
 }

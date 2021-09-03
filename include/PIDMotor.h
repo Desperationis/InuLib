@@ -32,8 +32,8 @@ struct PIDMotor {
 	void _UpdatePID();
 
 private:
-	unsigned int target;
 	unsigned int port;
+	int target;
 	float p, i, d;
 	float proportion;
 	float integral;
