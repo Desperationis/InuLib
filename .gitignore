@@ -6,6 +6,9 @@
 *.bin
 *.elf
 
+# VIM
+*.swp
+
 # PROS
 bin/
 .vscode/
@@ -15,3 +18,4 @@ temp.errors
 *.ini
 .d/
 .cache/
+
