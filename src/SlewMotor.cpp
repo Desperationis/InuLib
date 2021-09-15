@@ -14,7 +14,7 @@ SlewMotor::~SlewMotor() {
 	SlewSystem::RemoveMotor(this);
 }
 
-void SlewMotor::Set(unsigned int speed) {
+void SlewMotor::Set(int speed) {
 	this->targetSpeed = speed;
 }
 
@@ -30,7 +30,7 @@ unsigned int SlewMotor::GetRate() {
 	return rate;
 }
 
-unsigned int SlewMotor::GetTargetSpeed() {
+int SlewMotor::GetTargetSpeed() {
 	return targetSpeed;
 }
 
