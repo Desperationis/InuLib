@@ -25,32 +25,23 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	PIDSystem::Start();
-	PIDMotor topleft(9);
-	PIDMotor topright(10);
-	PIDMotor bottomleft(2);
-	PIDMotor bottomright(9);
-
-
-	float p = 0.4;
-	float i = 0.001f;
-	float d = 0.01f;
-
-	PIDProfile profile;
-	profile.p = 0.4f;
-	profile.i = 0.001f;
-	profile.d = 0.01f;
-
-	topleft.SetPID(profile);
-
-	topright.SetPID(profile);
-
-	bottomleft.SetPID(profile);
-
-	bottomright.SetPID(profile);
-
+	SlewSystem::Start();
+	SlewMotor topleft(20);
+	SlewMotor topright(19);
+	SlewMotor bottomright(18);
+	SlewMotor bottomleft(17);
 
 	while(true) {
+		pros::Controller controller(pros::E_CONTROLLER_MASTER);
+		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+		topleft.Set(x + y + turn);
+		topright.Set(x - y + turn);
+		bottomleft.Set(-x + y + turn);
+		bottomright.Set(-x - y + turn);
+
 		pros::delay(20);
 	}
 }
