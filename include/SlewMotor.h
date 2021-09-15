@@ -51,18 +51,18 @@ public:
 	/**
 	 * @return The port that this instance is referring to.
 	*/ 
-	unsigned int GetPort();
+	unsigned int GetPort() const;
 
 	/**
 	 * @return The current maximum rate of change of motor speed this motor is
 	 * configured for.
 	*/ 
-	unsigned int GetRate();
+	unsigned int GetRate() const;
 
 	/**
 	 * @return The target speed of the motor.
 	*/ 
-	int GetTargetSpeed();
+	int GetTargetSpeed() const;
 
 private:
 	unsigned int port, rate;

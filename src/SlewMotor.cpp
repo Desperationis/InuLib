@@ -22,15 +22,15 @@ void SlewMotor::SetRate(unsigned int rate) {
 	this->rate = rate;
 }
 
-unsigned int SlewMotor::GetPort() {
+unsigned int SlewMotor::GetPort() const {
 	return port;
 }
 
-unsigned int SlewMotor::GetRate() {
+unsigned int SlewMotor::GetRate() const {
 	return rate;
 }
 
-int SlewMotor::GetTargetSpeed() {
+int SlewMotor::GetTargetSpeed() const {
 	return targetSpeed;
 }
 
