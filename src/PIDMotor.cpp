@@ -7,7 +7,6 @@ PIDMotor::PIDMotor(unsigned int port) {
 	this->port = port;
 	PIDSystem::EnrollMotor(this);
 
-	p = i = d = 0;
 	proportion = 0;
 	integral = 0;
 	derivative = 0;
@@ -18,23 +17,13 @@ PIDMotor::~PIDMotor() {
 	PIDSystem::RemoveMotor(this);
 }
 
-void PIDMotor::Set(unsigned int target) {
+void PIDMotor::Set(int target) {
 	this->target = target;
 }
 
 
-void PIDMotor::SetP(float p) {
-	this->p = p;
-}
-
-
-void PIDMotor::SetI(float i) {
-	this->i = i;
-}
-
-
-void PIDMotor::SetD(float d) {
-	this->d = d;
+void PIDMotor::SetPID(const PIDProfile pidProfile) {
+	this->pidProfile = pidProfile;
 }
 
 unsigned int PIDMotor::GetPort() {
@@ -45,16 +34,8 @@ unsigned int PIDMotor::GetTarget() {
 	return target;
 }
 
-float PIDMotor::GetP() {
-	return p;
-}
-
-float PIDMotor::GetI() {
-	return i;
-}
-
-float PIDMotor::GetD() {
-	return d;
+const PIDProfile PIDMotor::GetPID() {
+	return pidProfile;
 }
 
 void PIDMotor::_UpdatePID() {
@@ -74,6 +55,10 @@ void PIDMotor::_UpdatePID() {
 		// Tune this
 		integral = 0;
 	}
+
+	float p = pidProfile.p;
+	float i = pidProfile.i;
+	float d = pidProfile.d;
 
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
 	motor.move(motorSpeed);
