@@ -3,6 +3,7 @@
 #include "SlewSystem.h"
 #include "PIDMotor.h"
 #include "PIDSystem.h"
+#include "PIDProfile.hpp"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -35,26 +36,19 @@ void opcontrol() {
 	float i = 0.001f;
 	float d = 0.01f;
 
-	topleft.SetP(p);
-	topleft.SetI(i);
-	topleft.SetD(d);
+	PIDProfile profile;
+	profile.p = 0.4f;
+	profile.i = 0.001f;
+	profile.d = 0.01f;
 
-	topright.SetP(p);
-	topright.SetI(i);
-	topright.SetD(d);
+	topleft.SetPID(profile);
 
-	bottomleft.SetP(p);
-	bottomleft.SetI(i);
-	bottomleft.SetD(d);
+	topright.SetPID(profile);
 
-	bottomright.SetP(p);
-	bottomright.SetI(i);
-	bottomright.SetD(d);
+	bottomleft.SetPID(profile);
 
-	//topleft.Set(100);
-	topright.Set(-100);
-	//bottomleft.Set(-100);
-	//bottomright.Set(100);
+	bottomright.SetPID(profile);
+
 
 	while(true) {
 		pros::delay(20);
