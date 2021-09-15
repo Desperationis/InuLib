@@ -44,7 +44,7 @@ struct PIDMotor {
 	 *
 	 * @param PIDProfile Constant copy of a PIDProfile.
 	*/ 
-	void SetPID(const PIDProfile pidProfile);
+	void SetPID(PIDProfile pidProfile);
 
 	/**
 	 * @returns The port that this motor is referring to.

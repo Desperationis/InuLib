@@ -22,7 +22,7 @@ void PIDMotor::Set(int target) {
 }
 
 
-void PIDMotor::SetPID(const PIDProfile pidProfile) {
+void PIDMotor::SetPID(PIDProfile pidProfile) {
 	this->pidProfile = pidProfile;
 }
 
