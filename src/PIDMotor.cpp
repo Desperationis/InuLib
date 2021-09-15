@@ -26,15 +26,15 @@ void PIDMotor::SetPID(PIDProfile pidProfile) {
 	this->pidProfile = pidProfile;
 }
 
-unsigned int PIDMotor::GetPort() {
+unsigned int PIDMotor::GetPort() const {
 	return port;
 }
 
-unsigned int PIDMotor::GetTarget() {
+unsigned int PIDMotor::GetTarget() const {
 	return target;
 }
 
-const PIDProfile PIDMotor::GetPID() {
+const PIDProfile PIDMotor::GetPID() const {
 	return pidProfile;
 }
 

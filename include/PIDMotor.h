@@ -49,17 +49,17 @@ struct PIDMotor {
 	/**
 	 * @returns The port that this motor is referring to.
 	*/ 
-	unsigned int GetPort();
+	unsigned int GetPort() const;
 
 	/**
 	 * @returns The target encoder value for this motor.
 	*/ 
-	unsigned int GetTarget();
+	unsigned int GetTarget() const;
 
 	/**
 	 * @returns A copy of the PIDProfile currently in use.
 	*/ 
-	const PIDProfile GetPID();
+	const PIDProfile GetPID() const;
 
 	/**
 	 * Internal function called by PIDSystem; Updates p, i, and d once.
