@@ -30,6 +30,9 @@ void opcontrol() {
 	SlewMotor topright(19);
 	SlewMotor bottomright(18);
 	SlewMotor bottomleft(17);
+	SlewMotor basket(11);
+	SlewMotor arm(1);
+	pros::ADIMotor claw(1);
 
 	while(true) {
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -41,6 +44,34 @@ void opcontrol() {
 		topright.Set(x - y + turn);
 		bottomleft.Set(-x + y + turn);
 		bottomright.Set(-x - y + turn);
+
+		basket.Set(0);
+		arm.Set(0);
+		claw.set_value(0);
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+			basket.Set(40);
+		}
+	
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+			basket.Set(-40);
+		}
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+			arm.Set(80);
+		}
+	
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+			arm.Set(-80);
+		}
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+			claw.set_value(80);
+		}
+	
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+			claw.set_value(-80);
+		}
 
 		pros::delay(20);
 	}
