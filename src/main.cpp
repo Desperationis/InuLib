@@ -3,7 +3,9 @@
 #include "SlewSystem.h"
 #include "PIDMotor.h"
 #include "PIDSystem.h"
+#include "ControllerCallback.h"
 #include "PIDProfile.hpp"
+#include "pros/adi.hpp"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -16,6 +18,29 @@ void initialize() {
 	pros::lcd::initialize();
 }
 
+void clawTurn(void* param) {
+	SlewMotor arm(1);
+	pros::ADIMotor claw(1);
+	pros::ADIDigitalIn sensor(2);
+	pros::Controller controller(pros::E_CONTROLLER_MASTER);
+	while(true) {
+		arm.Set(70);
+
+		if(sensor.get_value() != 0) {
+			arm.Set(0);
+			pros::delay(400);
+			claw.set_value(80);
+			pros::delay(900);
+			claw.set_value(0);
+			break;
+		}
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) 
+			break;
+
+		pros::delay(5);
+	}
+}
+
 /**
  * If no competition control is connected, this function will run immediately
  * following initialize().
@@ -26,15 +51,19 @@ void initialize() {
  */
 void opcontrol() {
 	SlewSystem::Start();
-	SlewMotor topleft(20);
-	SlewMotor topright(19);
-	SlewMotor bottomright(18);
-	SlewMotor bottomleft(17);
-	SlewMotor basket(11);
-	SlewMotor arm(1);
+	ControllerCallback callback(pros::E_CONTROLLER_MASTER);
+	callback.SyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
 	pros::ADIMotor claw(1);
 
 	while(true) {
+		callback.PollController();
+
+		SlewMotor topleft(20);
+		SlewMotor topright(19);
+		SlewMotor bottomright(18);
+		SlewMotor bottomleft(17);
+		SlewMotor basket(11);
+		SlewMotor arm(1);
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
 		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -58,11 +87,11 @@ void opcontrol() {
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			arm.Set(80);
+			arm.Set(40);
 		}
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			arm.Set(-80);
+			arm.Set(-40);
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
