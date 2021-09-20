@@ -4,6 +4,7 @@
 #include "PIDMotor.h"
 #include "PIDSystem.h"
 #include "PIDProfile.hpp"
+#include "ControllerCallback.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
