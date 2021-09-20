@@ -1,5 +1,6 @@
 #include "ControllerCallback.h"
 #include "pros/misc.h"
+#include "pros/rtos.h"
 
 using namespace pros;
 
@@ -42,8 +43,10 @@ void ControllerCallback::PollController() {
 				}
 
 				// Async Case
-				else {
-					Task asyncTask(cInfo.func, nullptr, "");
+				else if (GetTask(cInfo.func) == nullptr) {
+					DeleteTask(cInfo.func);
+					Task* asyncTask = new Task(cInfo.func, nullptr, "");
+					daemonMap[cInfo.func] = asyncTask;
 				}
 			}
 
@@ -51,4 +54,28 @@ void ControllerCallback::PollController() {
 		}
 	}
 
+}
+
+pros::Task* ControllerCallback::GetTask(pros::task_fn_t func) {
+	if(daemonMap.find(func) == daemonMap.end()) {
+		return nullptr;
+	}
+
+	task_state_e_t taskState = (task_state_e_t)daemonMap[func]->get_state();
+
+	if(taskState != E_TASK_STATE_READY && taskState != E_TASK_STATE_RUNNING) {
+		return nullptr;
+	}
+
+	return daemonMap[func];
+}
+
+
+
+void ControllerCallback::DeleteTask(pros::task_fn_t func) {
+	if(daemonMap.find(func) != daemonMap.end()) {
+		daemonMap[func]->remove();
+		delete daemonMap[func];
+		daemonMap[func] = nullptr;
+	}
 }
