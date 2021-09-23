@@ -18,6 +18,10 @@ void initialize() {
 	pros::lcd::initialize();
 }
 
+/**
+ * Automatically retract claw until it hits a limit switch. Once it does, open
+ * up the claw.
+*/ 
 void clawTurn(void* param) {
 	SlewMotor arm(1);
 	pros::ADIMotor claw(1);
@@ -58,12 +62,17 @@ void opcontrol() {
 	while(true) {
 		callback.PollController();
 
+		// Current workaround for using controller callbacks since only once
+		// instance of SlewMotor may exist for a given port; Simply declare the
+		// instances after checking the controller.
 		SlewMotor topleft(20);
 		SlewMotor topright(19);
 		SlewMotor bottomright(18);
 		SlewMotor bottomleft(17);
 		SlewMotor basket(11);
 		SlewMotor arm(1);
+
+		// X-Drive Controller Code
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
 		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -74,6 +83,7 @@ void opcontrol() {
 		bottomleft.Set(-x + y + turn);
 		bottomright.Set(-x - y + turn);
 
+		// Arm, claw, and basket code.
 		basket.Set(0);
 		arm.Set(0);
 		claw.set_value(0);
