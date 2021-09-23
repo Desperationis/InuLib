@@ -9,7 +9,7 @@ ControllerCallback::ControllerCallback(controller_id_e_t id) : controller(id) {
 
 
 void ControllerCallback::AsyncCallback(controller_digital_e_t button, task_fn_t func) {
-	if(callbackButtonMap.find(button) != callbackButtonMap.end()) {
+	if(callbackButtonMap.find(button) == callbackButtonMap.end()) {
 		CallbackInfo callbackInfo;
 		callbackInfo.async = true;
 		callbackInfo.func = func;
@@ -19,7 +19,7 @@ void ControllerCallback::AsyncCallback(controller_digital_e_t button, task_fn_t 
 }
 
 void ControllerCallback::SyncCallback(controller_digital_e_t button, task_fn_t func) {
-	if(callbackButtonMap.find(button) != callbackButtonMap.end()) {
+	if(callbackButtonMap.find(button) == callbackButtonMap.end()) {
 		CallbackInfo callbackInfo;
 		callbackInfo.async = false;
 		callbackInfo.func = func;
