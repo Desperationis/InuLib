@@ -5,7 +5,7 @@
 #include "PIDSystem.h"
 #include "ControllerCallback.h"
 #include "PIDProfile.hpp"
-#include "ControllerCallback.h"
+#include "ControllerStream.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -29,12 +29,14 @@ void clawTurn(void* param) {
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
 	while(true) {
 		arm.Set(70);
+		ControllerStream::Print(pros::E_CONTROLLER_MASTER, "Lifting arm; Wait");
 
 		if(sensor.get_value() != 0) {
 			arm.Set(0);
 			pros::delay(400);
 			claw.set_value(80);
 			pros::delay(900);
+			ControllerStream::Print(pros::E_CONTROLLER_MASTER, "");
 			claw.set_value(0);
 			break;
 		}
@@ -54,6 +56,7 @@ void clawTurn(void* param) {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	ControllerStream::Start();
 	SlewSystem::Start();
 	ControllerCallback callback(pros::E_CONTROLLER_MASTER);
 	callback.SyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
