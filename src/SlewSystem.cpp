@@ -30,7 +30,6 @@ void SlewSystem::SlewTask(void* parameters) {
 			temp.move(Interpolate(currentSpeed, targetSpeed, maximumDif));
 		}
 
-		pros::lcd::print(0, "motorMap size: %i", motorMap.size());
 		pros::delay(SlewSystem::delay);
 	}
 }
