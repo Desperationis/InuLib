@@ -3,8 +3,8 @@
 
 using namespace pros;
 
-std::map<controller_id_e_t, const char*> ControllerStream::printMap;
-std::map<controller_id_e_t, bool> ControllerStream::changeMap;
+std::map<controller_id_e_t, const char*> ControllerStream::requestMap;
+std::map<controller_id_e_t, const char*> ControllerStream::printedMap;
 Task* ControllerStream::printTask = nullptr;
 unsigned int ControllerStream::delay = 60;
 bool ControllerStream::running = false;
@@ -18,25 +18,22 @@ void ControllerStream::Start() {
 }
 
 void ControllerStream::Print(controller_id_e_t controllerID, const char* content) {
-	if(changeMap.find(controllerID) == changeMap.end()) {
-		changeMap[controllerID] = true;
+	requestMap[controllerID] = content;
+	if(printedMap.find(controllerID) == printedMap.end()) {
+		printedMap[controllerID] = "";
 	}
-	else {
-		changeMap[controllerID] = content != printMap[controllerID];
-	}
-	printMap[controllerID] = content;
 }
 
 void ControllerStream::PrintTask(void* parameters) {
 	while(IsRunning()) {
-		for(auto it : printMap) {
+		for(auto it : requestMap) {
 			controller_id_e_t controllerID = it.first;
 			const char* message = it.second;
 			Controller controller(controllerID);
 
-			if(message != nullptr && changeMap[controllerID]) {
+			if(message != nullptr && message != printedMap[controllerID]) {
 				controller.print(0,0, message);
-				changeMap[controllerID] = false;
+				printedMap[controllerID] = message;
 			}
 		}
 		pros::delay(ControllerStream::delay);

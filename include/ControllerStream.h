@@ -61,8 +61,8 @@ private:
 
 private:
 	static pros::Task* printTask;
-	static std::map<pros::controller_id_e_t, const char*> printMap;
-	static std::map<pros::controller_id_e_t, bool> changeMap;
+	static std::map<pros::controller_id_e_t, const char*> requestMap;
+	static std::map<pros::controller_id_e_t, const char*> printedMap;
 
 	static unsigned int delay;
 	static bool running;
