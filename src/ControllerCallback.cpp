@@ -43,8 +43,10 @@ void ControllerCallback::PollController() {
 				}
 
 				// Async Case
-				else if (GetTask(cInfo.func) == nullptr) {
-					DeleteTask(cInfo.func);
+				else {
+					if(GetTask(cInfo.func) != nullptr) {
+						DeleteTask(cInfo.func);
+					}
 					Task* asyncTask = new Task(cInfo.func, nullptr, "");
 					daemonMap[cInfo.func] = asyncTask;
 				}
