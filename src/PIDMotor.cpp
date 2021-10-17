@@ -30,7 +30,7 @@ unsigned int PIDMotor::GetPort() const {
 	return port;
 }
 
-unsigned int PIDMotor::GetTarget() const {
+int PIDMotor::GetTarget() const {
 	return target;
 }
 
