@@ -108,11 +108,11 @@ void opcontrol() {
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-			claw.set_value(-80);
+			claw.set_value(100);
 		}
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-			claw.set_value(80);
+			claw.set_value(-100);
 		}
 
 		pros::delay(20);
