@@ -18,18 +18,11 @@ void initialize() {
 	pros::lcd::initialize();
 }
 
-// Severely unelegant solution to determine if clawTurn is running but I'm 
-// a) Short on time
-// b) fixing bugs without the robot
-// c) Having headaches on ambigious documentation of PROS tasks
-bool clawTurnRunning = false;
-
 /**
  * Automatically retract claw until it hits a limit switch. Once it does, open
  * up the claw.
 */ 
 void clawTurn(void* param) {
-	clawTurnRunning = true;
 	SlewMotor arm(1);
 	pros::ADIMotor claw(1);
 	pros::ADIDigitalIn sensor(2);
@@ -52,8 +45,6 @@ void clawTurn(void* param) {
 
 		pros::delay(5);
 	}
-
-	clawTurnRunning = false;
 }
 
 /**
@@ -70,10 +61,10 @@ void opcontrol() {
 	ControllerCallback callback(pros::E_CONTROLLER_MASTER);
 	callback.SyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
 	pros::ADIMotor claw(1);
-	pros::Motor armOG(1); // Don't move arm with this
+	pros::Motor armOG(1); // Don't move arm with this; Only for absolute position
 
 	// Do not ever use or run this statement because this is a very special
-	// case (multithreading) where it interferes.
+	// case where it interferes; PID has to be single-threaded
 	// PIDSystem::Start();
 
 	while(true) {
@@ -135,11 +126,7 @@ void opcontrol() {
 			claw.set_value(-100);
 		}
 
-		if(!clawTurnRunning) {
-			// Manually update it instead of using PIDSystem so that it 
-			// doesn't interfere with the automatic claw retraction
-			arm._UpdatePID();
-		}
+		arm._UpdatePID();
 
 		pros::delay(20);
 	}
