@@ -59,7 +59,7 @@ void opcontrol() {
 	ControllerStream::Start();
 	SlewSystem::Start();
 	ControllerCallback callback(pros::E_CONTROLLER_MASTER);
-	callback.AsyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
+	callback.SyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
 	pros::ADIMotor claw(1);
 
 	while(true) {
@@ -73,7 +73,7 @@ void opcontrol() {
 		SlewMotor bottomright(18);
 		SlewMotor bottomleft(17);
 		SlewMotor basket(11);
-		pros::Motor arm(1);
+		SlewMotor arm(1);
 
 		// X-Drive Controller Code
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -88,7 +88,7 @@ void opcontrol() {
 
 		// Arm, claw, and basket code.
 		basket.Set(0);
-		arm.move(0);
+		arm.Set(0);
 		claw.set_value(0);
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
@@ -100,11 +100,11 @@ void opcontrol() {
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			arm.move(40);
+			arm.Set(40);
 		}
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			arm.move(-40);
+			arm.Set(-40);
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
