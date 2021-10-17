@@ -18,11 +18,18 @@ void initialize() {
 	pros::lcd::initialize();
 }
 
+// Severely unelegant solution to determine if clawTurn is running but I'm 
+// a) Short on time
+// b) fixing bugs without the robot
+// c) Having headaches on ambigious documentation of PROS tasks
+bool clawTurnRunning = false;
+
 /**
  * Automatically retract claw until it hits a limit switch. Once it does, open
  * up the claw.
 */ 
 void clawTurn(void* param) {
+	clawTurnRunning = true;
 	SlewMotor arm(1);
 	pros::ADIMotor claw(1);
 	pros::ADIDigitalIn sensor(2);
@@ -45,6 +52,8 @@ void clawTurn(void* param) {
 
 		pros::delay(5);
 	}
+
+	clawTurnRunning = false;
 }
 
 /**
@@ -61,6 +70,11 @@ void opcontrol() {
 	ControllerCallback callback(pros::E_CONTROLLER_MASTER);
 	callback.SyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
 	pros::ADIMotor claw(1);
+	pros::Motor armOG(1); // Don't move arm with this
+
+	// Do not ever use or run this statement because this is a very special
+	// case (multithreading) where it interferes.
+	// PIDSystem::Start();
 
 	while(true) {
 		callback.PollController();
@@ -73,7 +87,7 @@ void opcontrol() {
 		SlewMotor bottomright(18);
 		SlewMotor bottomleft(17);
 		SlewMotor basket(11);
-		SlewMotor arm(1);
+		PIDMotor arm(1);
 
 		// X-Drive Controller Code
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -99,12 +113,18 @@ void opcontrol() {
 			basket.Set(-40);
 		}
 
+		// Don't use arm.GetTarget() as it's set to 0 every iteration
+		// of this loop; Dangerous
+		double armTarget = armOG.get_position();
+
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			arm.Set(80);
+			// Modify this at school; This changes the target of the PID arm 
+			// By an amount that might be too slow for our gear ratio
+			arm.Set(armTarget + 80);
 		}
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			arm.Set(-80);
+			arm.Set(armTarget - 80);
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
@@ -113,6 +133,12 @@ void opcontrol() {
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 			claw.set_value(-100);
+		}
+
+		if(!clawTurnRunning) {
+			// Manually update it instead of using PIDSystem so that it 
+			// doesn't interfere with the automatic claw retraction
+			arm._UpdatePID();
 		}
 
 		pros::delay(20);
