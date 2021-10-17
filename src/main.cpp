@@ -100,11 +100,11 @@ void opcontrol() {
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			arm.Set(40);
+			arm.Set(80);
 		}
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			arm.Set(-40);
+			arm.Set(-80);
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
