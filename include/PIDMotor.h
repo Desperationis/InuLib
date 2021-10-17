@@ -74,6 +74,7 @@ private:
 	float integral;
 	float derivative;
 	float pastError;
+	bool targetSet;
 };
 
 
