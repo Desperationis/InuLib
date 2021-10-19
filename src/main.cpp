@@ -23,7 +23,7 @@ void initialize() {
  * up the claw.
 */ 
 void clawTurn(void* param) {
-	SlewMotor arm(1);
+	SlewMotor arm(11);
 	pros::ADIMotor claw(1);
 	pros::ADIDigitalIn sensor(2);
 	pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -66,6 +66,13 @@ void opcontrol() {
 	// Do not ever use or run this statement because this is a very special
 	// case where it interferes; PID has to be single-threaded
 	// PIDSystem::Start();
+	
+	PIDMotor arm(11);
+	PIDProfile profile;
+	profile.p = 0.8;
+	profile.i = 0;
+	profile.d = 0;
+	arm.SetPID(profile);
 
 	while(true) {
 		callback.PollController();
@@ -79,12 +86,6 @@ void opcontrol() {
 		SlewMotor bottomleft(19);
 		SlewMotor basket(20);
 		SlewMotor camera(14);
-		PIDMotor arm(11);
-
-		PIDProfile profile;
-		profile.p = 0.8;
-		arm.SetPID(profile);
-
 
 		// X-Drive Controller Code
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -99,7 +100,6 @@ void opcontrol() {
 
 		// Arm, claw, and basket code.
 		basket.Set(0);
-		arm.Set(0);
 		claw.set_value(0);
 		camera.Set(0);
 
@@ -118,11 +118,11 @@ void opcontrol() {
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
 			// Modify this at school; This changes the target of the PID arm 
 			// By an amount that might be too slow for our gear ratio
-			arm.Set(armTarget + 80);
+			arm.Set(armTarget + 60);
 		}
 	
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			arm.Set(armTarget - 80);
+			arm.Set(armTarget - 60);
 		}
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
@@ -142,9 +142,8 @@ void opcontrol() {
 		}
 	
 
-		pros::lcd::print(0, "%i", armTarget);
-		pros::lcd::print(1, "%d", armTarget);
 		pros::lcd::print(2, "%f", (float)armTarget);
+		pros::lcd::print(3, "%f", (float)arm.GetTarget());
 
 		arm._UpdatePID();
 
