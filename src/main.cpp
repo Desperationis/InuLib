@@ -61,7 +61,7 @@ void opcontrol() {
 	ControllerCallback callback(pros::E_CONTROLLER_MASTER);
 	callback.SyncCallback(pros::E_CONTROLLER_DIGITAL_A, clawTurn);
 	pros::ADIMotor claw(1);
-	pros::Motor armOG(1); // Don't move arm with this; Only for absolute position
+	pros::Motor armOG(11); // Don't move arm with this; Only for absolute position
 
 	// Do not ever use or run this statement because this is a very special
 	// case where it interferes; PID has to be single-threaded
@@ -73,12 +73,18 @@ void opcontrol() {
 		// Current workaround for using controller callbacks since only once
 		// instance of SlewMotor may exist for a given port; Simply declare the
 		// instances after checking the controller.
-		SlewMotor topleft(20);
-		SlewMotor topright(19);
-		SlewMotor bottomright(18);
-		SlewMotor bottomleft(17);
-		SlewMotor basket(11);
-		PIDMotor arm(1);
+		SlewMotor topleft(9);
+		SlewMotor topright(10);
+		SlewMotor bottomright(12);
+		SlewMotor bottomleft(19);
+		SlewMotor basket(20);
+		SlewMotor camera(14);
+		PIDMotor arm(11);
+
+		PIDProfile profile;
+		profile.p = 0.8;
+		arm.SetPID(profile);
+
 
 		// X-Drive Controller Code
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -95,6 +101,7 @@ void opcontrol() {
 		basket.Set(0);
 		arm.Set(0);
 		claw.set_value(0);
+		camera.Set(0);
 
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
 			basket.Set(40);
@@ -125,6 +132,19 @@ void opcontrol() {
 		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 			claw.set_value(-100);
 		}
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+			camera.Set(-60);
+		}
+		
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+			camera.Set(60);
+		}
+	
+
+		pros::lcd::print(0, "%i", armTarget);
+		pros::lcd::print(1, "%d", armTarget);
+		pros::lcd::print(2, "%f", (float)armTarget);
 
 		arm._UpdatePID();
 
