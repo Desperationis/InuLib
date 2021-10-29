@@ -54,7 +54,7 @@ struct PIDMotor {
 	/**
 	 * @returns The target encoder value for this motor.
 	*/ 
-	unsigned int GetTarget() const;
+	int GetTarget() const;
 
 	/**
 	 * @returns A copy of the PIDProfile currently in use.
@@ -74,6 +74,7 @@ private:
 	float integral;
 	float derivative;
 	float pastError;
+	bool targetSet;
 };
 
 

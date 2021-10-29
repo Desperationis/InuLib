@@ -11,6 +11,8 @@ PIDMotor::PIDMotor(unsigned int port) {
 	integral = 0;
 	derivative = 0;
 	pastError = 0;
+
+	targetSet = false;
 }
 
 PIDMotor::~PIDMotor() {
@@ -19,6 +21,7 @@ PIDMotor::~PIDMotor() {
 
 void PIDMotor::Set(int target) {
 	this->target = target;
+	targetSet = true;
 }
 
 
@@ -30,7 +33,7 @@ unsigned int PIDMotor::GetPort() const {
 	return port;
 }
 
-unsigned int PIDMotor::GetTarget() const {
+int PIDMotor::GetTarget() const {
 	return target;
 }
 
@@ -39,6 +42,14 @@ const PIDProfile PIDMotor::GetPID() const {
 }
 
 void PIDMotor::_UpdatePID() {
+	// If the target is not set, don't update. This decision was made because
+	// there is a strong chance that when this object is initialized, the
+	// motor's position might be extremely high and force this to move it back
+	// to 0, which is bad. Here we assume that the target value inputted is
+	// delibrate.
+	if(!targetSet)
+		return;
+
 	Motor motor(GetPort());
 	double encoderValue = motor.get_position();
 
@@ -62,13 +73,6 @@ void PIDMotor::_UpdatePID() {
 
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
 	motor.move(motorSpeed);
-
-	pros::lcd::print(0, "Encoder Value: %f", encoderValue);
-	pros::lcd::print(1, "Motor speed: %f", motorSpeed);
-	pros::lcd::print(2, "Target: %f", (float)target);
-	pros::lcd::print(3, "P: %f", p);
-	pros::lcd::print(4, "I: %f", i);
-	pros::lcd::print(5, "D: %f", d);
 }
 
 

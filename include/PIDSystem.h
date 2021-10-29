@@ -27,9 +27,10 @@ public:
 	/**
 	 * Sets the task delay of the PID task.
 	 *
-	 * @param delay That represents the amount of time, in milliseconds, the PID task
-	 * will wait every iteration. The default is 10 seconds for accuracy. Lowering this 
-	 * value will increase accuracy at the cost of increased computation, and vise versa.
+	 * @param delay That represents the amount of time, in milliseconds, the
+	 * PID task will wait every iteration. The default is 10 milliseconds for
+	 * accuracy. Lowering this value will increase accuracy at the cost of
+	 * increased computation, and vise versa.
 	*/ 
 	static void SetDelay(unsigned int delay);
 
