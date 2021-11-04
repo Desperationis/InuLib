@@ -15,7 +15,9 @@
 */
 class Chassis {
 public:
-	Chassis();
+	Chassis() { 
+		errorLevel = 10;
+	};
 
 	virtual void turnA(double degrees) = 0;
 
@@ -24,6 +26,13 @@ public:
 	virtual void forward(double ticks) = 0;
 
 	virtual bool isSettled() = 0;
+
+	virtual void setError(unsigned int error) {
+		this->errorLevel = error;
+	};
+
+protected:
+	unsigned int errorLevel;
 };
 
 

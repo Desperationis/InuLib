@@ -3,6 +3,7 @@
 #include "PIDSystem.h"
 #include "PIDProfile.hpp"
 #include "Chassis.h"
+#include "XChassis.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -27,10 +28,10 @@ void initialize() {
 void opcontrol() {
 	PIDSystem::Start();
 
-	Chassis chassis(1,2,3,4);
-	chassis.turn(2500);
+	Chassis* chassis = new XChassis(1,2,3,4);
+	chassis->turn(2500);
 	pros::delay(4000);
-	chassis.turn(-2500);
+	chassis->turn(-2500);
 
 	while(true) {
 		pros::delay(10000);

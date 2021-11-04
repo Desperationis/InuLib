@@ -39,8 +39,6 @@ void XChassis::forward(double ticks) {
 }
 
 bool XChassis::isSettled() {
-	const int errorLevel = 10;
-
 	return topleftMotor->AtTarget(errorLevel) && 
 		toprightMotor->AtTarget(errorLevel) &&
 		bottomleftMotor->AtTarget(errorLevel) &&
