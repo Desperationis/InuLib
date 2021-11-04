@@ -4,28 +4,24 @@
  * Abstract class used to move a chassis.
 */
 
-
-// NOTE: Due to time, this will be a concrete class used for X-drive
-
 #ifndef CHASSIS_H
 #define CHASSIS_H
 
 #include "main.h"
 #include "PIDMotor.h"
 
+/**
+ * Abstract class used for all chassis.
+*/
 class Chassis {
 public:
-	Chassis(int topleft, int topright, int bottomleft, int bottomright);
+	Chassis();
 
-	void turnA(double degrees);
+	virtual void turnA(double degrees) = 0;
 
-	void turn(double ticks);
+	virtual void turn(double ticks) = 0;
 
-	void forward(double ticks);
-
-private: 
-	PIDMotor topleftMotor, toprightMotor;
-	PIDMotor bottomleftMotor, bottomrightMotor;
+	virtual void forward(double ticks) = 0;
 };
 
 
