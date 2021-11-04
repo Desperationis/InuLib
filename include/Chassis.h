@@ -22,6 +22,8 @@ public:
 	virtual void turn(double ticks) = 0;
 
 	virtual void forward(double ticks) = 0;
+
+	virtual bool isSettled() = 0;
 };
 
 

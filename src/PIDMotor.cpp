@@ -41,6 +41,13 @@ const PIDProfile PIDMotor::GetPID() const {
 	return pidProfile;
 }
 
+bool PIDMotor::AtTarget(unsigned int error) const {
+	Motor motor(GetPort());
+	double encoderValue = motor.get_position();
+
+	return target + error > encoderValue && target - error < encoderValue;
+}
+
 void PIDMotor::_UpdatePID() {
 	// If the target is not set, don't update. This decision was made because
 	// there is a strong chance that when this object is initialized, the
@@ -74,12 +81,4 @@ void PIDMotor::_UpdatePID() {
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
 	motor.move(motorSpeed);
 }
-
-
-
-
-
-
-
-
 

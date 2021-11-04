@@ -35,6 +35,8 @@ public:
 
 	virtual void forward(double ticks);
 
+	virtual bool isSettled();
+
 private:
 	PIDMotor* topleftMotor;
 	PIDMotor* toprightMotor;

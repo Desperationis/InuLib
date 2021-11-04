@@ -62,6 +62,11 @@ struct PIDMotor {
 	const PIDProfile GetPID() const;
 
 	/**
+	 * @returns Whether or not the motor has reached its target (with +- `error`)
+	*/
+	bool AtTarget(unsigned int error) const;
+
+	/**
 	 * Internal function called by PIDSystem; Updates p, i, and d once.
 	*/ 
 	void _UpdatePID();
