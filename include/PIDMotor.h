@@ -11,26 +11,13 @@
 #include "BackgroundMotor.h"
 #include "PIDProfile.hpp"
 
-class PIDSystem;
-
-
 /**
  * Motor struct that contains data members, getters, and setters used to use a
  * PID system on a motor.
 */
 class PIDMotor : public BackgroundMotor {
-	/**
-	 * Automatically enroll this motor into PIDSystem. If a PIDMotor with the
-	 * same port is already enrolled, this instance will not work at all, even
-	 * if the port becomes free later.
-	 *
-	 * @param port Integer that represents the port that this motor references.
-	*/ 
 	PIDMotor(unsigned int port);
 
-	/**
-	 * Automatically remove this motor from PIDSystem.
-	*/ 
 	virtual ~PIDMotor();
 
 	/**

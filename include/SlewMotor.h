@@ -9,28 +9,17 @@
 #define SLEWMOTOR_H
 
 #include "main.h"
-
-class SlewSystem;
+#include "BackgroundMotor.h"
 
 /**
  * Motor struct that contains data members, getters, and setters used to slew a
  * motor.
 */
-struct SlewMotor {
+struct SlewMotor : public BackgroundMotor {
 public:
-	/**
-	 * Automatically enroll this motor into SlewSystem. If a SlewMotor with the
-	 * same port is already enrolled, this instance will not work at all, even
-	 * if the port becomes free later.
-	 *
-	 * @param port Integer that represents the port that this motor references.
-	*/ 
 	SlewMotor(unsigned int port);
 
-	/**
-	 * Automatically remove this motor from SlewSystem.
-	*/ 
-	~SlewMotor();
+	virtual ~SlewMotor();
 
 	/**
 	 * Set the target speed of the motor to interpolate towards.
@@ -49,11 +38,6 @@ public:
 	void SetRate(unsigned int rate);
 
 	/**
-	 * @return The port that this instance is referring to.
-	*/ 
-	unsigned int GetPort() const;
-
-	/**
 	 * @return The current maximum rate of change of motor speed this motor is
 	 * configured for.
 	*/ 
@@ -64,8 +48,11 @@ public:
 	*/ 
 	int GetTargetSpeed() const;
 
+
+	void _Update();
+
 private:
-	unsigned int port, rate;
+	unsigned int rate;
 	int targetSpeed;
 };
 
