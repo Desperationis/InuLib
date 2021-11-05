@@ -14,9 +14,12 @@
 
 class BackgroundMotorSystem {
 public:
-	static BackgroundMotorSystem* Instance();
 
-	BackgroundMotorSystem();
+	BackgroundMotorSystem(BackgroundMotorSystem&) = delete;
+
+	void operator=(const BackgroundMotorSystem &) = delete;
+
+	static BackgroundMotorSystem* Instance();
 
 	void SetDelay(unsigned int delay);
 
@@ -27,6 +30,8 @@ public:
 	void RemoveMotor(unsigned int port);
 
 protected:
+
+	BackgroundMotorSystem();
 
 	void BackgroundTask(void* parameters);
 

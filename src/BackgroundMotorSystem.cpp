@@ -13,6 +13,7 @@ BackgroundMotorSystem* BackgroundMotorSystem::Instance() {
 }
 
 BackgroundMotorSystem::BackgroundMotorSystem() {
+	// TO Fix this erro you need to make BackgroundTask a static function
 	backgroundTask = new Task(BackgroundTask, NULL, "BackgroundMotors");
 	delay = 20;
 
