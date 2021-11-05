@@ -8,6 +8,7 @@
 #define PIDMOTOR_H
 
 #include "main.h"
+#include "BackgroundMotor.h"
 #include "PIDProfile.hpp"
 
 class PIDSystem;
@@ -17,7 +18,7 @@ class PIDSystem;
  * Motor struct that contains data members, getters, and setters used to use a
  * PID system on a motor.
 */
-struct PIDMotor {
+class PIDMotor : public BackgroundMotor {
 	/**
 	 * Automatically enroll this motor into PIDSystem. If a PIDMotor with the
 	 * same port is already enrolled, this instance will not work at all, even
@@ -30,7 +31,7 @@ struct PIDMotor {
 	/**
 	 * Automatically remove this motor from PIDSystem.
 	*/ 
-	~PIDMotor();
+	virtual ~PIDMotor();
 
 	/**
 	 * Sets a target encoder value to PID towards.
@@ -47,11 +48,6 @@ struct PIDMotor {
 	void SetPID(PIDProfile pidProfile);
 
 	/**
-	 * @returns The port that this motor is referring to.
-	*/ 
-	unsigned int GetPort() const;
-
-	/**
 	 * @returns The target encoder value for this motor.
 	*/ 
 	int GetTarget() const;
@@ -66,14 +62,10 @@ struct PIDMotor {
 	*/
 	bool AtTarget(unsigned int error) const;
 
-	/**
-	 * Internal function called by PIDSystem; Updates p, i, and d once.
-	*/ 
-	void _UpdatePID();
+	void _Update();
 
 private:
 	PIDProfile pidProfile;
-	unsigned int port;
 	int target;
 	float proportion;
 	float integral;

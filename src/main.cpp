@@ -1,6 +1,5 @@
 #include "main.h"
 #include "PIDMotor.h"
-#include "PIDSystem.h"
 #include "PIDProfile.hpp"
 #include "Chassis.h"
 #include "XChassis.h"
@@ -26,8 +25,6 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	PIDSystem::Start();
-
 	Chassis* chassis = new XChassis(1,2,3,4);
 	chassis->turn(2500);
 	pros::delay(4000);

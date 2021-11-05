@@ -1,11 +1,11 @@
 #include "PIDMotor.h"
-#include "PIDSystem.h"
+#include "BackgroundMotorSystem.h"
 
 using namespace pros;
 
-PIDMotor::PIDMotor(unsigned int port) {
+PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port) {
 	this->port = port;
-	PIDSystem::EnrollMotor(this);
+	BackgroundMotorSystem::Instance()->EnrollMotor(this);
 
 	proportion = 0;
 	integral = 0;
@@ -16,7 +16,7 @@ PIDMotor::PIDMotor(unsigned int port) {
 }
 
 PIDMotor::~PIDMotor() {
-	PIDSystem::RemoveMotor(this);
+	BackgroundMotorSystem::Instance()->RemoveMotor(this);
 }
 
 void PIDMotor::Set(int target) {
@@ -27,10 +27,6 @@ void PIDMotor::Set(int target) {
 
 void PIDMotor::SetPID(PIDProfile pidProfile) {
 	this->pidProfile = pidProfile;
-}
-
-unsigned int PIDMotor::GetPort() const {
-	return port;
 }
 
 int PIDMotor::GetTarget() const {
@@ -48,12 +44,13 @@ bool PIDMotor::AtTarget(unsigned int error) const {
 	return target + error > encoderValue && target - error < encoderValue;
 }
 
-void PIDMotor::_UpdatePID() {
+void PIDMotor::_Update() {
 	// If the target is not set, don't update. This decision was made because
 	// there is a strong chance that when this object is initialized, the
 	// motor's position might be extremely high and force this to move it back
 	// to 0, which is bad. Here we assume that the target value inputted is
 	// delibrate.
+
 	if(!targetSet)
 		return;
 
