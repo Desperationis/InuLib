@@ -35,6 +35,12 @@ public:
 
 	virtual void forward(double ticks);
 
+	virtual void backward(double ticks);
+
+	virtual void strafeLeft(double ticks);
+
+	virtual void strafeRight(double ticks);
+
 	virtual bool isSettled();
 
 private:

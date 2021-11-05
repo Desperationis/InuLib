@@ -25,6 +25,8 @@ public:
 
 	virtual void forward(double ticks) = 0;
 
+	virtual void backward(double ticks) = 0;
+
 	virtual bool isSettled() = 0;
 
 	virtual void setError(unsigned int error) {

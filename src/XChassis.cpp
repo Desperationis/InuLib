@@ -38,6 +38,18 @@ void XChassis::forward(double ticks) {
 	bottomleftMotor->Set(ticks);
 }
 
+void XChassis::backward(double ticks) {
+	forward(-ticks);
+}
+
+
+void XChassis::strafeRight(double ticks) {
+	topleftMotor->Set(ticks);
+	toprightMotor->Set(-ticks);
+	bottomleftMotor->Set(-ticks);
+	bottomleftMotor->Set(ticks);
+}
+
 bool XChassis::isSettled() {
 	return topleftMotor->AtTarget(errorLevel) && 
 		toprightMotor->AtTarget(errorLevel) &&
