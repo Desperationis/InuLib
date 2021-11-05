@@ -16,6 +16,7 @@
  * PID system on a motor.
 */
 class PIDMotor : public BackgroundMotor {
+public:
 	PIDMotor(unsigned int port);
 
 	virtual ~PIDMotor();

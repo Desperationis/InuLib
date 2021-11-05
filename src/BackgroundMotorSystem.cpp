@@ -12,9 +12,15 @@ BackgroundMotorSystem* BackgroundMotorSystem::Instance() {
 	return instance;
 }
 
+void BMSBackgroundFunc(void* parameters) {
+	// Wrapper function for Background Task; This is needed as PROS only allows
+	// compile-time functions to be run.
+	BackgroundMotorSystem::Instance()->BackgroundTask(parameters);
+}
+
 BackgroundMotorSystem::BackgroundMotorSystem() {
 	// TO Fix this erro you need to make BackgroundTask a static function
-	backgroundTask = new Task(BackgroundTask, NULL, "BackgroundMotors");
+	backgroundTask = new Task(BMSBackgroundFunc, NULL, "BackgroundMotors");
 	delay = 20;
 
 	for(size_t i = 0; i < motors.max_size(); i++) {

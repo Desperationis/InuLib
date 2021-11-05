@@ -29,11 +29,11 @@ public:
 
 	void RemoveMotor(unsigned int port);
 
+	void BackgroundTask(void* parameters);
+
 protected:
 
 	BackgroundMotorSystem();
-
-	void BackgroundTask(void* parameters);
 
 protected:
 	static BackgroundMotorSystem* instance; 

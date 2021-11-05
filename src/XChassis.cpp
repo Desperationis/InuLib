@@ -50,6 +50,10 @@ void XChassis::strafeRight(double ticks) {
 	bottomleftMotor->Set(ticks);
 }
 
+void XChassis::strafeLeft(double ticks) {
+	strafeRight(-ticks);
+}
+
 bool XChassis::isSettled() {
 	return topleftMotor->AtTarget(errorLevel) && 
 		toprightMotor->AtTarget(errorLevel) &&
