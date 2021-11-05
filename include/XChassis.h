@@ -28,21 +28,19 @@ public:
 	*/ 
 	XChassis(int topleft, int topright, int bottomleft, int bottomright);
 
-	virtual void turnA(double degrees);
+	virtual void TurnA(double degrees);
 
-	virtual void turn(double ticks);
+	virtual void Turn(double ticks);
 
-	virtual void forward(double ticks);
+	virtual void Forward(double ticks);
 
-	virtual void backward(double ticks);
+	virtual void Backward(double ticks);
 
-	virtual void strafeLeft(double ticks);
+	virtual void StrafeLeft(double ticks);
 
-	virtual void strafeRight(double ticks);
+	virtual void StrafeRight(double ticks);
 
-	virtual void MaxVelocity(std::int32_t velocity);
-
-	virtual bool isSettled();
+	virtual bool IsSettled();
 
 private:
 	pros::Motor topleftMotor;

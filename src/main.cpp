@@ -25,10 +25,11 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	Chassis* chassis = new XChassis(1,2,3,4);
-	chassis->MaxVelocity(100);
-	chassis->turn(1000);
+	XChassis* chassis = new XChassis(1,2,3,4);
+	chassis->MaxVelocity(30);
+	chassis->StrafeLeft(1000);
 	pros::delay(4000);
+	chassis->StrafeRight(1000);
 
 	while(true) {
 		pros::delay(10000);

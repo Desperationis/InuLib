@@ -20,21 +20,23 @@ public:
 		errorLevel = 10;
 	};
 
-	virtual void turnA(double degrees) = 0;
+	virtual void TurnA(double degrees) = 0;
 
-	virtual void turn(double ticks) = 0;
+	virtual void Turn(double ticks) = 0;
 
-	virtual void forward(double ticks) = 0;
+	virtual void Forward(double ticks) = 0;
 
-	virtual void backward(double ticks) = 0;
+	virtual void Backward(double ticks) = 0;
 
-	virtual void MaxVelocity(std::int32_t velocity) = 0;
+	virtual bool IsSettled() = 0;
 
-	virtual bool isSettled() = 0;
-
-	virtual void setError(unsigned int error) {
+	virtual void SetError(unsigned int error) {
 		this->errorLevel = error;
 	};
+
+	virtual void MaxVelocity(std::int32_t velocity) {
+		maxVelocity = velocity;
+	}
 
 protected:
 	unsigned int errorLevel;
