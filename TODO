@@ -1,4 +1,3 @@
 1. Implement strafe left and right
 2. Figure out why PID is delayed on motors incrementally
 3. Deal with absolute encoder position issue in chassis
-4. Abstract away Slew and PID system code to motor so you can abstract them and put them into a single Singleton registry
