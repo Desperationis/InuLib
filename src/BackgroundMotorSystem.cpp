@@ -19,7 +19,6 @@ void BMSBackgroundFunc(void* parameters) {
 }
 
 BackgroundMotorSystem::BackgroundMotorSystem() {
-	// TO Fix this erro you need to make BackgroundTask a static function
 	backgroundTask = new Task(BMSBackgroundFunc, NULL, "BackgroundMotors");
 	delay = 20;
 

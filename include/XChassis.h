@@ -11,7 +11,6 @@
 #define XCHASSIS_H
 
 #include "main.h"
-#include "PIDMotor.h"
 #include "Chassis.h"
 
 
@@ -41,13 +40,15 @@ public:
 
 	virtual void strafeRight(double ticks);
 
+	virtual void MaxVelocity(std::int32_t velocity);
+
 	virtual bool isSettled();
 
 private:
-	PIDMotor* topleftMotor;
-	PIDMotor* toprightMotor;
-	PIDMotor* bottomleftMotor;
-	PIDMotor* bottomrightMotor;
+	pros::Motor topleftMotor;
+	pros::Motor toprightMotor;
+	pros::Motor bottomleftMotor;
+	pros::Motor bottomrightMotor;
 };
 
 

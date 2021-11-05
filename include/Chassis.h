@@ -9,6 +9,7 @@
 
 #include "main.h"
 #include "PIDMotor.h"
+#include <cstdint>
 
 /**
  * Abstract class used for all chassis.
@@ -27,6 +28,8 @@ public:
 
 	virtual void backward(double ticks) = 0;
 
+	virtual void MaxVelocity(std::int32_t velocity) = 0;
+
 	virtual bool isSettled() = 0;
 
 	virtual void setError(unsigned int error) {
@@ -35,6 +38,7 @@ public:
 
 protected:
 	unsigned int errorLevel;
+	std::int32_t maxVelocity;
 };
 
 

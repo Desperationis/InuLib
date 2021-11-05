@@ -1,21 +1,11 @@
 #include "XChassis.h"
 #include "PIDProfile.hpp"
 
-XChassis::XChassis(int topleft, int topright, int bottomleft, int bottomright) {
-	PIDProfile profile;
-	profile.p = 0.05;
-	profile.i = 0.01;
-	profile.d = 0.05;
-
-	topleftMotor = new PIDMotor(topleft);
-	toprightMotor = new PIDMotor(topright);
-	bottomleftMotor = new PIDMotor(bottomleft);
-	bottomrightMotor = new PIDMotor(bottomright);
-
-	topleftMotor->SetPID(profile);
-	toprightMotor->SetPID(profile);
-	bottomleftMotor->SetPID(profile);
-	bottomrightMotor->SetPID(profile);
+XChassis::XChassis(int topleft, int topright, int bottomleft, int bottomright) : 
+	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
+bottomrightMotor(bottomright) 
+	
+{
 }
 
 
@@ -25,17 +15,18 @@ void XChassis::turnA(double degrees) {
 }
 
 void XChassis::turn(double ticks) {
-	topleftMotor->Set(ticks);
-	toprightMotor->Set(ticks);
-	bottomleftMotor->Set(ticks);
-	bottomleftMotor->Set(ticks);
+	topleftMotor.move_relative(ticks, maxVelocity);
+	toprightMotor.move_relative(ticks, maxVelocity);
+	bottomleftMotor.move_relative(ticks, maxVelocity);
+	bottomrightMotor.move_relative(ticks, maxVelocity);
 }
 
 void XChassis::forward(double ticks) {
-	topleftMotor->Set(ticks);
-	toprightMotor->Set(-ticks);
-	bottomleftMotor->Set(-ticks);
-	bottomleftMotor->Set(ticks);
+	// FIX THIS
+	topleftMotor.move_relative(ticks, maxVelocity);
+	toprightMotor.move_relative(ticks, maxVelocity);
+	bottomleftMotor.move_relative(ticks, maxVelocity);
+	bottomrightMotor.move_relative(ticks, maxVelocity);
 }
 
 void XChassis::backward(double ticks) {
@@ -44,10 +35,11 @@ void XChassis::backward(double ticks) {
 
 
 void XChassis::strafeRight(double ticks) {
-	topleftMotor->Set(ticks);
-	toprightMotor->Set(-ticks);
-	bottomleftMotor->Set(-ticks);
-	bottomleftMotor->Set(ticks);
+	// FIX THIS
+	topleftMotor.move_relative(ticks, maxVelocity);
+	toprightMotor.move_relative(ticks, maxVelocity);
+	bottomleftMotor.move_relative(ticks, maxVelocity);
+	bottomrightMotor.move_relative(ticks, maxVelocity);
 }
 
 void XChassis::strafeLeft(double ticks) {
@@ -55,8 +47,10 @@ void XChassis::strafeLeft(double ticks) {
 }
 
 bool XChassis::isSettled() {
-	return topleftMotor->AtTarget(errorLevel) && 
-		toprightMotor->AtTarget(errorLevel) &&
-		bottomleftMotor->AtTarget(errorLevel) &&
-		bottomrightMotor->AtTarget(errorLevel);
+	// FIX THIS
+	return true;
+}
+
+void XChassis::MaxVelocity(std::int32_t velocity) {
+	maxVelocity = velocity;
 }

@@ -26,9 +26,9 @@ void initialize() {
  */
 void opcontrol() {
 	Chassis* chassis = new XChassis(1,2,3,4);
-	chassis->turn(2500);
+	chassis->MaxVelocity(100);
+	chassis->turn(1000);
 	pros::delay(4000);
-	chassis->turn(-2500);
 
 	while(true) {
 		pros::delay(10000);
