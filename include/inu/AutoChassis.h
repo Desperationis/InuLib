@@ -7,7 +7,6 @@
 #ifndef CHASSIS_H
 #define CHASSIS_H
 
-#include "main.h"
 #include <cstdint>
 
 /**

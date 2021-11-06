@@ -8,8 +8,8 @@
 #define PIDMOTOR_H
 
 #include "main.h"
-#include "BackgroundMotor.h"
-#include "PIDProfile.hpp"
+#include "inu/BackgroundMotor.h"
+#include "inu/PIDProfile.hpp"
 
 /**
  * Motor struct that contains data members, getters, and setters used to use a

@@ -1,5 +1,5 @@
-#include "XAutoChassis.h"
-#include "PIDProfile.hpp"
+#include "inu/XAutoChassis.h"
+#include "inu/PIDProfile.hpp"
 
 XAutoChassis::XAutoChassis(int topleft, int topright, int bottomleft, int bottomright) : 
 	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
@@ -44,6 +44,5 @@ void XAutoChassis::StrafeLeft(double ticks) {
 }
 
 bool XAutoChassis::IsSettled() {
-	// FIX THIS
 	return true;
 }

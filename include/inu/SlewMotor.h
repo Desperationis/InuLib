@@ -9,7 +9,7 @@
 #define SLEWMOTOR_H
 
 #include "main.h"
-#include "BackgroundMotor.h"
+#include "inu/BackgroundMotor.h"
 
 /**
  * Motor struct that contains data members, getters, and setters used to slew a

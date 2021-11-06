@@ -1,5 +1,5 @@
-#include "PIDMotor.h"
-#include "BackgroundMotorSystem.h"
+#include "inu/PIDMotor.h"
+#include "inu/BackgroundMotorSystem.h"
 
 using namespace pros;
 

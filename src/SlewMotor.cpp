@@ -1,5 +1,5 @@
-#include "SlewMotor.h"
-#include "BackgroundMotorSystem.h"
+#include "inu/SlewMotor.h"
+#include "inu/BackgroundMotorSystem.h"
 
 using namespace pros;
 

@@ -11,7 +11,7 @@
 #define XCHASSIS_H
 
 #include "main.h"
-#include "AutoChassis.h"
+#include "inu/AutoChassis.h"
 
 /**
  * Controls a x-drive powered chassis with a topleft, topright, bottomleft, and

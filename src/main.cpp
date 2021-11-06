@@ -1,8 +1,8 @@
 #include "main.h"
-#include "PIDMotor.h"
-#include "PIDProfile.hpp"
-#include "AutoChassis.h"
-#include "XAutoChassis.h"
+#include "inu/PIDMotor.h"
+#include "inu/PIDProfile.hpp"
+#include "inu/AutoChassis.h"
+#include "inu/XAutoChassis.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
