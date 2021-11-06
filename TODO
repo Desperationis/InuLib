@@ -1,3 +1,0 @@
-1. Implement strafe left and right
-2. Figure out why PID is delayed on motors incrementally
-3. Deal with absolute encoder position issue in chassis
