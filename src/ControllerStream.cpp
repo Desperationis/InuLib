@@ -2,6 +2,7 @@
 #include "pros/misc.h"
 
 using namespace pros;
+using namespace inu;
 
 std::map<controller_id_e_t, const char*> ControllerStream::requestMap;
 std::map<controller_id_e_t, const char*> ControllerStream::printedMap;

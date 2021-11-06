@@ -9,32 +9,35 @@
 
 #include <cstdint>
 
-/**
- * Abstract class used for all future chassis that move autonomously.
-*/
-class AutoChassis {
-protected:
-	AutoChassis() = default;
 
-public:
-	virtual void TurnA(double degrees) = 0;
+namespace inu {
+	/**
+	 * Abstract class used for all future chassis that move autonomously.
+	*/
+	class AutoChassis {
+	protected:
+		AutoChassis() = default;
 
-	virtual void Turn(double ticks) = 0;
+	public:
+		virtual void TurnA(double degrees) = 0;
 
-	virtual void Forward(double ticks) = 0;
+		virtual void Turn(double ticks) = 0;
 
-	virtual void Backward(double ticks) = 0;
+		virtual void Forward(double ticks) = 0;
 
-	virtual bool IsSettled() = 0;
+		virtual void Backward(double ticks) = 0;
 
-	virtual void MaxVelocity(std::int32_t velocity) {
-		maxVelocity = velocity;
-	}
+		virtual bool IsSettled() = 0;
+
+		virtual void MaxVelocity(std::int32_t velocity) {
+			maxVelocity = velocity;
+		}
 
 
-protected:
-	std::int32_t maxVelocity;
-};
+	protected:
+		std::int32_t maxVelocity;
+	};
+}
 
 
 #endif

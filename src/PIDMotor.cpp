@@ -2,6 +2,7 @@
 #include "inu/BackgroundMotorSystem.h"
 
 using namespace pros;
+using namespace inu;
 
 PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port) {
 	this->port = port;

@@ -3,6 +3,7 @@
 #include "pros/rtos.h"
 
 using namespace pros;
+using namespace inu;
 
 ControllerCallback::ControllerCallback(controller_id_e_t id) : controller(id) {
 }

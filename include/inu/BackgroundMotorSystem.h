@@ -11,37 +11,37 @@
 #include <array>
 #include "inu/BackgroundMotor.h"
 
+namespace inu {
+	class BackgroundMotorSystem {
+	public:
 
-class BackgroundMotorSystem {
-public:
+		BackgroundMotorSystem(BackgroundMotorSystem&) = delete;
 
-	BackgroundMotorSystem(BackgroundMotorSystem&) = delete;
+		void operator=(const BackgroundMotorSystem &) = delete;
 
-	void operator=(const BackgroundMotorSystem &) = delete;
+		static BackgroundMotorSystem* Instance();
 
-	static BackgroundMotorSystem* Instance();
+		void SetDelay(unsigned int delay);
 
-	void SetDelay(unsigned int delay);
+		void EnrollMotor(BackgroundMotor* motor);
 
-	void EnrollMotor(BackgroundMotor* motor);
+		void RemoveMotor(BackgroundMotor* motor);
 
-	void RemoveMotor(BackgroundMotor* motor);
+		void RemoveMotor(unsigned int port);
 
-	void RemoveMotor(unsigned int port);
+		void BackgroundTask(void* parameters);
 
-	void BackgroundTask(void* parameters);
+	protected:
 
-protected:
+		BackgroundMotorSystem();
 
-	BackgroundMotorSystem();
-
-protected:
-	static BackgroundMotorSystem* instance; 
-	pros::Task* backgroundTask;
-	std::array<BackgroundMotor*, 20> motors;
-	unsigned int delay;
-};
-
+	protected:
+		static BackgroundMotorSystem* instance; 
+		pros::Task* backgroundTask;
+		std::array<BackgroundMotor*, 20> motors;
+		unsigned int delay;
+	};
+}
 
 
 #endif

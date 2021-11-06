@@ -10,39 +10,44 @@
 #ifndef BACKGROUNDMOTOR_H
 #define BACKGROUNDMOTOR_H
 
-/**
- * Abstract class for motors that have their internal states updated by 
- * background tasks.
-*/ 
-class BackgroundMotor {
-public:
-	BackgroundMotor() = delete;
 
-	virtual ~BackgroundMotor() = default;
+namespace inu {
 
 	/**
-	 * Creates a background motor at a specific port.
+	 * Abstract class for motors that have their internal states updated by 
+	 * background tasks.
 	*/ 
-	BackgroundMotor(unsigned int port) {
-		this->port = port;
-	}
+	class BackgroundMotor {
+	public:
+		BackgroundMotor() = delete;
 
-	/**
-	 * Updates the internal state of the motor. This can range from a lot of
-	 * things, but it usually changes the motors speed in relation to a sensor.
-	*/ 
-	virtual void _Update() = 0;
+		virtual ~BackgroundMotor() = default;
+
+		/**
+		 * Creates a background motor at a specific port.
+		*/ 
+		BackgroundMotor(unsigned int port) {
+			this->port = port;
+		}
+
+		/**
+		 * Updates the internal state of the motor. This can range from a lot of
+		 * things, but it usually changes the motors speed in relation to a sensor.
+		*/ 
+		virtual void _Update() = 0;
 
 
-	/**
-	 * @returns The port of this motor.
-	*/ 
-	virtual unsigned int GetPort() const {
-		return port;
-	}
+		/**
+		 * @returns The port of this motor.
+		*/ 
+		virtual unsigned int GetPort() const {
+			return port;
+		}
 
-protected:
-	unsigned int port;
-};
+	protected:
+		unsigned int port;
+	};
+
+}
 
 #endif

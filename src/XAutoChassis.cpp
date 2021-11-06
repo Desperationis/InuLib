@@ -1,6 +1,9 @@
 #include "inu/XAutoChassis.h"
 #include "inu/PIDProfile.hpp"
 
+using namespace inu;
+
+
 XAutoChassis::XAutoChassis(int topleft, int topright, int bottomleft, int bottomright) : 
 	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
 bottomrightMotor(bottomright)  {
