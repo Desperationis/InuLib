@@ -3,7 +3,9 @@
 
 XChassis::XChassis(int topleft, int topright, int bottomleft, int bottomright) : 
 	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
-bottomrightMotor(bottomright)  {}
+bottomrightMotor(bottomright)  {
+
+}
 
 
 void XChassis::TurnA(double degrees) {

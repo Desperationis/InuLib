@@ -8,18 +8,16 @@
 #define CHASSIS_H
 
 #include "main.h"
-#include "PIDMotor.h"
 #include <cstdint>
 
 /**
  * Abstract class used for all chassis.
 */
 class Chassis {
-public:
-	Chassis() { 
-		errorLevel = 10;
-	};
+protected:
+	Chassis() = default;
 
+public:
 	virtual void TurnA(double degrees) = 0;
 
 	virtual void Turn(double ticks) = 0;
@@ -30,16 +28,12 @@ public:
 
 	virtual bool IsSettled() = 0;
 
-	virtual void SetError(unsigned int error) {
-		this->errorLevel = error;
-	};
-
 	virtual void MaxVelocity(std::int32_t velocity) {
 		maxVelocity = velocity;
 	}
 
+
 protected:
-	unsigned int errorLevel;
 	std::int32_t maxVelocity;
 };
 

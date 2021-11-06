@@ -13,7 +13,6 @@
 #include "main.h"
 #include "Chassis.h"
 
-
 /**
  * Controls a x-drive powered chassis with a topleft, topright, bottomleft, and
  * bottomright motor.
@@ -28,19 +27,19 @@ public:
 	*/ 
 	XChassis(int topleft, int topright, int bottomleft, int bottomright);
 
-	virtual void TurnA(double degrees);
+	virtual void TurnA(double degrees) override;
 
-	virtual void Turn(double ticks);
+	virtual void Turn(double ticks) override;
 
-	virtual void Forward(double ticks);
+	virtual void Forward(double ticks) override;
 
-	virtual void Backward(double ticks);
+	virtual void Backward(double ticks) override;
+
+	virtual bool IsSettled() override;
 
 	virtual void StrafeLeft(double ticks);
 
 	virtual void StrafeRight(double ticks);
-
-	virtual bool IsSettled();
 
 private:
 	pros::Motor topleftMotor;
