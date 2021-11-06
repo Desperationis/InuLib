@@ -8,6 +8,7 @@
 #define CHASSIS_H
 
 #include <cstdint>
+#include <type_traits>
 
 
 namespace inu {
@@ -16,7 +17,10 @@ namespace inu {
 	*/
 	class AutoChassis {
 	protected:
-		AutoChassis() = default;
+		AutoChassis() {
+			maxError = 10;
+			maxVelocity = 127;
+		}
 
 	public:
 		virtual void TurnA(double degrees) = 0;
@@ -29,13 +33,17 @@ namespace inu {
 
 		virtual bool IsSettled() = 0;
 
-		virtual void MaxVelocity(std::int32_t velocity) {
+		virtual void SetMaxVelocity(std::int32_t velocity) {
 			maxVelocity = velocity;
 		}
 
+		virtual void SetMaxError(std::int32_t error) {
+			maxError = error;
+		}	
+
 
 	protected:
-		std::int32_t maxVelocity;
+		std::int32_t maxVelocity, maxError;
 	};
 }
 
