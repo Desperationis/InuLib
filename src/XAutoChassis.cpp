@@ -1,49 +1,49 @@
-#include "XChassis.h"
+#include "XAutoChassis.h"
 #include "PIDProfile.hpp"
 
-XChassis::XChassis(int topleft, int topright, int bottomleft, int bottomright) : 
+XAutoChassis::XAutoChassis(int topleft, int topright, int bottomleft, int bottomright) : 
 	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
 bottomrightMotor(bottomright)  {
 
 }
 
 
-void XChassis::TurnA(double degrees) {
+void XAutoChassis::TurnA(double degrees) {
 	// Implement this once the gryoscope comes
 
 }
 
-void XChassis::Turn(double ticks) {
+void XAutoChassis::Turn(double ticks) {
 	topleftMotor.move_relative(ticks, maxVelocity);
 	toprightMotor.move_relative(ticks, maxVelocity);
 	bottomleftMotor.move_relative(ticks, maxVelocity);
 	bottomrightMotor.move_relative(ticks, maxVelocity);
 }
 
-void XChassis::Forward(double ticks) {
+void XAutoChassis::Forward(double ticks) {
 	topleftMotor.move_relative(ticks, maxVelocity);
 	toprightMotor.move_relative(-ticks, maxVelocity);
 	bottomleftMotor.move_relative(ticks, maxVelocity);
 	bottomrightMotor.move_relative(-ticks, maxVelocity);
 }
 
-void XChassis::Backward(double ticks) {
+void XAutoChassis::Backward(double ticks) {
 	Forward(-ticks);
 }
 
 
-void XChassis::StrafeRight(double ticks) {
+void XAutoChassis::StrafeRight(double ticks) {
 	topleftMotor.move_relative(ticks, maxVelocity);
 	toprightMotor.move_relative(ticks, maxVelocity);
 	bottomleftMotor.move_relative(-ticks, maxVelocity);
 	bottomrightMotor.move_relative(-ticks, maxVelocity);
 }
 
-void XChassis::StrafeLeft(double ticks) {
+void XAutoChassis::StrafeLeft(double ticks) {
 	StrafeRight(-ticks);
 }
 
-bool XChassis::IsSettled() {
+bool XAutoChassis::IsSettled() {
 	// FIX THIS
 	return true;
 }

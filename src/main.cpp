@@ -1,8 +1,8 @@
 #include "main.h"
 #include "PIDMotor.h"
 #include "PIDProfile.hpp"
-#include "Chassis.h"
-#include "XChassis.h"
+#include "AutoChassis.h"
+#include "XAutoChassis.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -25,7 +25,7 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	XChassis* chassis = new XChassis(1,2,3,4);
+	XAutoChassis* chassis = new XAutoChassis(1,2,3,4);
 	chassis->MaxVelocity(30);
 	chassis->StrafeLeft(1000);
 	pros::delay(4000);

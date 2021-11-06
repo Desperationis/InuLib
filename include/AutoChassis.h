@@ -1,7 +1,7 @@
-/** @file Chassis.h
- * @brief Class for moving a chassis.
+/** @file AutoChassis.h
+ * @brief Class for moving a chassis autonomously.
  *
- * Abstract class used to move a chassis.
+ * Abstract class used to move a chassis autonomously.
 */
 
 #ifndef CHASSIS_H
@@ -11,11 +11,11 @@
 #include <cstdint>
 
 /**
- * Abstract class used for all chassis.
+ * Abstract class used for all future chassis that move autonomously.
 */
-class Chassis {
+class AutoChassis {
 protected:
-	Chassis() = default;
+	AutoChassis() = default;
 
 public:
 	virtual void TurnA(double degrees) = 0;

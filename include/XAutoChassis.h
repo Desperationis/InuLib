@@ -1,4 +1,4 @@
-/** @file XChassis.h
+/** @file XAutoChassis.h
  * @brief Class for moving a x-drive powered chassis.
  *
  * Chassis used to control a x-drive.
@@ -11,13 +11,13 @@
 #define XCHASSIS_H
 
 #include "main.h"
-#include "Chassis.h"
+#include "AutoChassis.h"
 
 /**
  * Controls a x-drive powered chassis with a topleft, topright, bottomleft, and
  * bottomright motor.
 */ 
-class XChassis : public Chassis {
+class XAutoChassis : public AutoChassis {
 public:
 	/**
 	 * topleft, topright, bottomleft, and bottomright are the motor ports of
@@ -25,7 +25,7 @@ public:
 	 * that, when powered with a positive speed, the entire chassis turns
 	 * clockwise.
 	*/ 
-	XChassis(int topleft, int topright, int bottomleft, int bottomright);
+	XAutoChassis(int topleft, int topright, int bottomleft, int bottomright);
 
 	virtual void TurnA(double degrees) override;
 
