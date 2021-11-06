@@ -28,7 +28,7 @@ void initialize() {
  */
 void opcontrol() {
 	XAutoChassis* chassis = new XAutoChassis(1,2,3,4);
-	chassis->MaxVelocity(30);
+	chassis->SetMaxVelocity(30);
 	chassis->StrafeLeft(1000);
 	pros::delay(4000);
 	chassis->StrafeRight(1000);

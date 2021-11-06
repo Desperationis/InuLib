@@ -47,5 +47,8 @@ void XAutoChassis::StrafeLeft(double ticks) {
 }
 
 bool XAutoChassis::IsSettled() {
-	return true;
+	return topleftMotor.Settled(maxError) &&
+		toprightMotor.Settled(maxError) &&
+		bottomleftMotor.Settled(maxError) && 
+		bottomrightMotor.Settled(maxError);
 }
