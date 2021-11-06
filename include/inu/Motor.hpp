@@ -7,9 +7,9 @@
 #include "main.h"
 
 
-
 namespace inu {
 	class Motor : public pros::Motor {
+	public:
 
 		Motor(unsigned int port) : pros::Motor(port) {
 

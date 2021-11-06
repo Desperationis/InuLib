@@ -1,7 +1,7 @@
 #include "inu/SlewMotor.h"
 #include "inu/BackgroundMotorSystem.h"
+#include "inu/Motor.hpp"
 
-using namespace pros;
 using namespace inu;
 
 SlewMotor::SlewMotor(unsigned int port) : BackgroundMotor(port) {

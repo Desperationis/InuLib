@@ -12,6 +12,7 @@
 
 #include "main.h"
 #include "inu/AutoChassis.h"
+#include "inu/Motor.hpp"
 
 namespace inu {
 	/**
@@ -43,10 +44,10 @@ namespace inu {
 		virtual void StrafeRight(double ticks);
 
 	private:
-		pros::Motor topleftMotor;
-		pros::Motor toprightMotor;
-		pros::Motor bottomleftMotor;
-		pros::Motor bottomrightMotor;
+		inu::Motor topleftMotor;
+		inu::Motor toprightMotor;
+		inu::Motor bottomleftMotor;
+		inu::Motor bottomrightMotor;
 	};
 }
 

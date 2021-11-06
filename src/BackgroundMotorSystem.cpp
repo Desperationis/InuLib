@@ -1,6 +1,6 @@
 #include "inu/BackgroundMotorSystem.h"
 
-using namespace pros;
+using pros::Task;
 using namespace inu;
 
 BackgroundMotorSystem* BackgroundMotorSystem::instance = nullptr;

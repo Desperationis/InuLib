@@ -1,7 +1,7 @@
 #include "inu/PIDMotor.h"
 #include "inu/BackgroundMotorSystem.h"
+#include "inu/Motor.hpp"
 
-using namespace pros;
 using namespace inu;
 
 PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port) {
