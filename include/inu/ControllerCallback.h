@@ -8,11 +8,7 @@
 #define CONTROLLERCALLBACK_H
 
 #include "main.h"
-#include "pros/misc.h"
-#include "pros/misc.hpp"
-#include "pros/rtos.h"
 #include <map>
-#include <array>
 
 
 namespace inu {

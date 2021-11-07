@@ -8,8 +8,6 @@
 #define CHASSIS_H
 
 #include <cstdint>
-#include <type_traits>
-
 
 namespace inu {
 	/**
