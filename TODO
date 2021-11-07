@@ -1,0 +1,4 @@
+1. Use a single instance of inu::Motor for SlewMotor and PIDMotor
+2. Change XAutoChassis to AutoXChassis
+3. Define AutoChassisBuilder 
+4. Define AutoXChassisBuilder
