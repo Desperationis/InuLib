@@ -8,8 +8,8 @@
 #ifndef SLEWMOTOR_H
 #define SLEWMOTOR_H
 
-#include "main.h"
 #include "inu/motor/background/BackgroundMotor.h"
+#include "inu/motor/Motor.hpp"
 
 
 namespace inu {
@@ -54,6 +54,7 @@ namespace inu {
 		void _Update();
 
 	private:
+		inu::Motor motor;
 		unsigned int rate;
 		int targetSpeed;
 	};

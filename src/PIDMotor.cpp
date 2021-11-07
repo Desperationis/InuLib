@@ -4,7 +4,7 @@
 
 using namespace inu;
 
-PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port) {
+PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
 	this->port = port;
 	BackgroundMotorSystem::Instance()->EnrollMotor(this);
 
@@ -39,10 +39,7 @@ const PIDProfile PIDMotor::GetPID() const {
 }
 
 bool PIDMotor::AtTarget(unsigned int error) const {
-	Motor motor(GetPort());
-	double encoderValue = motor.get_position();
-
-	return target + error > encoderValue && target - error < encoderValue;
+	return motor.IsSettled(error);
 }
 
 void PIDMotor::_Update() {
@@ -55,7 +52,6 @@ void PIDMotor::_Update() {
 	if(!targetSet)
 		return;
 
-	Motor motor(GetPort());
 	double encoderValue = motor.get_position();
 
 	proportion = target - encoderValue;

@@ -1,11 +1,13 @@
 /** @file Motor.h
  * @brief Extension of pros::Motor class
  *
- * A extension of the pros::Motor class aimed towards autonomous.
+ * A extension of the pros::Motor class.
 */ 
 
 #include "main.h"
 
+#ifndef INUMOTOR_HPP
+#define INUMOTOR_HPP
 
 namespace inu {
 	class Motor : public pros::Motor {
@@ -20,7 +22,7 @@ namespace inu {
 		 * margin of error defined as target position - error < position <
 		 * position + error.
 		 */ 
-		bool Settled(unsigned int error) {
+		bool IsSettled(unsigned int error) const {
 			double currentPosition = get_position();
 			double targetPosition = get_target_position();
 
@@ -29,3 +31,5 @@ namespace inu {
 		}
 	};
 }
+
+#endif

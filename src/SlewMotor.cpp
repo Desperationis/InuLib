@@ -4,7 +4,7 @@
 
 using namespace inu;
 
-SlewMotor::SlewMotor(unsigned int port) : BackgroundMotor(port) {
+SlewMotor::SlewMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
 	this->port = port;
 	rate = 20;
 	targetSpeed = 0;
@@ -48,10 +48,9 @@ unsigned int Interpolate(unsigned int start, unsigned int end,
 
 
 void SlewMotor::_Update() {
-	Motor temp(GetPort());
-	int currentSpeed = (temp.get_voltage() / 12000.0) * 127;
+	int currentSpeed = (motor.get_voltage() / 12000.0) * 127;
 	int targetSpeed = GetTargetSpeed();
 	int maximumDif = GetRate();
 
-	temp.move(Interpolate(currentSpeed, targetSpeed, maximumDif));
+	motor.move(Interpolate(currentSpeed, targetSpeed, maximumDif));
 }

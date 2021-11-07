@@ -14,8 +14,8 @@
 namespace inu {
 
 	/**
-	 * Abstract class for motors that have their internal states updated by 
-	 * background tasks.
+	 * Abstract interface for motors that have their internal states updated by 
+	 * background tasks. Cannot actually control motors on its own.
 	*/ 
 	class BackgroundMotor {
 	public:

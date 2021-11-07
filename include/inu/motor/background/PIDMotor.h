@@ -7,9 +7,9 @@
 #ifndef PIDMOTOR_H
 #define PIDMOTOR_H
 
-#include "main.h"
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
+#include "inu/motor/Motor.hpp"
 
 namespace inu {
 	/**
@@ -54,6 +54,8 @@ namespace inu {
 		void _Update();
 
 	private:
+		inu::Motor motor;
+
 		PIDProfile pidProfile;
 		int target;
 		float proportion;
