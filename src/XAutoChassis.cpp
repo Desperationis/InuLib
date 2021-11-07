@@ -1,5 +1,5 @@
 #include "inu/auto/chassis/XAutoChassis.h"
-#include "inu/PIDProfile.hpp"
+#include "inu/motor/PIDProfile.hpp"
 
 using namespace inu;
 

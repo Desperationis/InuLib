@@ -8,8 +8,8 @@
 #define PIDMOTOR_H
 
 #include "main.h"
-#include "inu/BackgroundMotor.h"
-#include "inu/PIDProfile.hpp"
+#include "inu/motor/background/BackgroundMotor.h"
+#include "inu/motor/PIDProfile.hpp"
 
 namespace inu {
 	/**

@@ -12,7 +12,7 @@
 
 #include "main.h"
 #include "inu/auto/chassis/AutoChassis.h"
-#include "inu/Motor.hpp"
+#include "inu/motor/Motor.hpp"
 
 namespace inu {
 	/**

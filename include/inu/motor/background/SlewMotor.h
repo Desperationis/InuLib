@@ -9,7 +9,7 @@
 #define SLEWMOTOR_H
 
 #include "main.h"
-#include "inu/BackgroundMotor.h"
+#include "inu/motor/background/BackgroundMotor.h"
 
 
 namespace inu {

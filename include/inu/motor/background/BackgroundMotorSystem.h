@@ -9,7 +9,7 @@
 
 #include "main.h"
 #include <array>
-#include "inu/BackgroundMotor.h"
+#include "inu/motor/background/BackgroundMotor.h"
 
 namespace inu {
 	class BackgroundMotorSystem {

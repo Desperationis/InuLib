@@ -1,6 +1,6 @@
-#include "inu/PIDMotor.h"
-#include "inu/BackgroundMotorSystem.h"
-#include "inu/Motor.hpp"
+#include "inu/motor/background/PIDMotor.h"
+#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/motor/Motor.hpp"
 
 using namespace inu;
 

@@ -1,6 +1,6 @@
-#include "inu/SlewMotor.h"
-#include "inu/BackgroundMotorSystem.h"
-#include "inu/Motor.hpp"
+#include "inu/motor/background/SlewMotor.h"
+#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/motor/Motor.hpp"
 
 using namespace inu;
 
