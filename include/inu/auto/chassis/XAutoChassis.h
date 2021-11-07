@@ -11,7 +11,7 @@
 #define XCHASSIS_H
 
 #include "main.h"
-#include "inu/AutoChassis.h"
+#include "inu/auto/chassis/AutoChassis.h"
 #include "inu/Motor.hpp"
 
 namespace inu {

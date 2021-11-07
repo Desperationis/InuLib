@@ -1,4 +1,4 @@
-#include "inu/XAutoChassis.h"
+#include "inu/auto/chassis/XAutoChassis.h"
 #include "inu/PIDProfile.hpp"
 
 using namespace inu;
