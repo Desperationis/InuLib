@@ -27,7 +27,7 @@ namespace inu {
 		 * that, when powered with a positive speed, the entire chassis turns
 		 * clockwise.
 		*/ 
-		XAutoChassis(int topleft, int topright, int bottomleft, int bottomright);
+		XAutoChassis(int topleft, int topright, int bottomleft, int bottomright, int gyro);
 
 		virtual void TurnA(double degrees) override;
 
@@ -48,6 +48,7 @@ namespace inu {
 		inu::Motor toprightMotor;
 		inu::Motor bottomleftMotor;
 		inu::Motor bottomrightMotor;
+		pros::Imu gyro;
 	};
 }
 

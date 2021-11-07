@@ -4,15 +4,16 @@
 using namespace inu;
 
 
-XAutoChassis::XAutoChassis(int topleft, int topright, int bottomleft, int bottomright) : 
+XAutoChassis::XAutoChassis(int topleft, int topright, int bottomleft, int bottomright, int gyroPort) : 
 	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
-bottomrightMotor(bottomright)  {
+bottomrightMotor(bottomright), gyro(gyroPort)  {
 
 }
 
 
 void XAutoChassis::TurnA(double degrees) {
-	// Implement this once the gryoscope comes
+	// Turn left or right depending on angle position.
+	double angle = gyro.get_rotation();
 
 }
 
