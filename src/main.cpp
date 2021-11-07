@@ -27,7 +27,7 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	XAutoChassis* chassis = new XAutoChassis(1,2,3,4);
+	XAutoChassis* chassis = new XAutoChassis(1,2,3,4,5);
 	chassis->SetMaxVelocity(30);
 	chassis->StrafeLeft(1000);
 	pros::delay(4000);
