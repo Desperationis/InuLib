@@ -8,19 +8,33 @@
 #define CHASSIS_H
 
 #include <cstdint>
+#include "inu/auto/chassis/AutoChassisBuilder.hpp"
+#include "pros/imu.hpp"
 
 namespace inu {
 	/**
 	 * Abstract class used for all future chassis that move autonomously.
 	*/
 	class AutoChassis {
-	protected:
-		AutoChassis() {
-			maxError = 10;
-			maxVelocity = 127;
+	public:
+		AutoChassis(const AutoChassisBuilder* builder) {
+			maxAngleError = builder->GetMaxAngleError();
+			maxEncoderError = builder->GetMaxEncoderError();
+			maxVelocity = builder->GetMaxVelocity();
+			currentLimit = builder->GetCurrentLimit();
+
+			usesGyro = builder->UsesGyro();
+			gyro = nullptr;
+
+			if(usesGyro) {
+				gyro = new pros::Imu(builder->GetGyro());
+				gyroPID = builder->GetGyroPID();
+			}
+
+			encoderUnits = builder->GetEncoderUnits();
 		}
 
-	public:
+
 		virtual void TurnA(double degrees) = 0;
 
 		virtual void Turn(double ticks) = 0;
@@ -31,17 +45,18 @@ namespace inu {
 
 		virtual bool IsSettled() = 0;
 
-		virtual void SetMaxVelocity(std::int32_t velocity) {
-			maxVelocity = velocity;
-		}
-
-		virtual void SetMaxError(std::int32_t error) {
-			maxError = error;
-		}	
-
-
 	protected:
-		std::int32_t maxVelocity, maxError;
+		unsigned int maxEncoderError;
+		unsigned int maxAngleError;
+		unsigned int maxVelocity;
+		unsigned int currentLimit;
+
+		pros::Imu* gyro;
+		bool usesGyro;
+
+		pros::motor_encoder_units_e_t encoderUnits;
+
+		PIDProfile gyroPID;
 	};
 }
 

@@ -1,8 +1,8 @@
 #include "main.h"
 #include "inu/motor/background/PIDMotor.h"
 #include "inu/motor/PIDProfile.hpp"
-#include "inu/auto/chassis/AutoChassis.h"
 #include "inu/auto/chassis/AutoXChassis.h"
+#include "inu/auto/chassis/AutoXChassisBuilder.hpp"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -27,8 +27,12 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	AutoXChassis* chassis = new AutoXChassis(1,2,3,4,5);
-	chassis->SetMaxVelocity(30);
+	AutoXChassisBuilder builder;
+	builder.SetMaxVelocity(30);
+	builder.SetMotors(1,2,3,4);
+	builder.SetGyro(5);
+
+	AutoXChassis* chassis = builder.Build();
 	chassis->StrafeLeft(1000);
 	pros::delay(4000);
 	chassis->StrafeRight(1000);

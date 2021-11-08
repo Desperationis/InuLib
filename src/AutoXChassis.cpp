@@ -1,34 +1,37 @@
 #include "inu/auto/chassis/AutoXChassis.h"
+#include "inu/auto/chassis/AutoChassisBuilder.hpp"
+#include "inu/auto/chassis/AutoXChassisBuilder.hpp"
 #include "inu/motor/PIDProfile.hpp"
 
 using namespace inu;
 
 
-AutoXChassis::AutoXChassis(int topleft, int topright, int bottomleft, int bottomright, int gyroPort) : 
-	topleftMotor(topleft), toprightMotor(topright), bottomleftMotor(bottomleft), 
-bottomrightMotor(bottomright), gyro(gyroPort)  {
-
+AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(builder) { 
+	topleftMotor = builder->GetTopleft();
+	toprightMotor = builder->GetTopright();
+	bottomleftMotor = builder->GetBottomleft();
+	bottomrightMotor = builder->GetBottomright();
 }
 
 
 void AutoXChassis::TurnA(double degrees) {
 	// Turn left or right depending on angle position.
-	double angle = gyro.get_rotation();
+	//double angle = gyro.get_rotation();
 
 }
 
 void AutoXChassis::Turn(double ticks) {
-	topleftMotor.move_relative(ticks, maxVelocity);
-	toprightMotor.move_relative(ticks, maxVelocity);
-	bottomleftMotor.move_relative(ticks, maxVelocity);
-	bottomrightMotor.move_relative(ticks, maxVelocity);
+	topleftMotor->move_relative(ticks, maxVelocity);
+	toprightMotor->move_relative(ticks, maxVelocity);
+	bottomleftMotor->move_relative(ticks, maxVelocity);
+	bottomrightMotor->move_relative(ticks, maxVelocity);
 }
 
 void AutoXChassis::Forward(double ticks) {
-	topleftMotor.move_relative(ticks, maxVelocity);
-	toprightMotor.move_relative(-ticks, maxVelocity);
-	bottomleftMotor.move_relative(ticks, maxVelocity);
-	bottomrightMotor.move_relative(-ticks, maxVelocity);
+	topleftMotor->move_relative(ticks, maxVelocity);
+	toprightMotor->move_relative(-ticks, maxVelocity);
+	bottomleftMotor->move_relative(ticks, maxVelocity);
+	bottomrightMotor->move_relative(-ticks, maxVelocity);
 }
 
 void AutoXChassis::Backward(double ticks) {
@@ -37,10 +40,10 @@ void AutoXChassis::Backward(double ticks) {
 
 
 void AutoXChassis::StrafeRight(double ticks) {
-	topleftMotor.move_relative(ticks, maxVelocity);
-	toprightMotor.move_relative(ticks, maxVelocity);
-	bottomleftMotor.move_relative(-ticks, maxVelocity);
-	bottomrightMotor.move_relative(-ticks, maxVelocity);
+	topleftMotor->move_relative(ticks, maxVelocity);
+	toprightMotor->move_relative(ticks, maxVelocity);
+	bottomleftMotor->move_relative(-ticks, maxVelocity);
+	bottomrightMotor->move_relative(-ticks, maxVelocity);
 }
 
 void AutoXChassis::StrafeLeft(double ticks) {
@@ -48,8 +51,8 @@ void AutoXChassis::StrafeLeft(double ticks) {
 }
 
 bool AutoXChassis::IsSettled() {
-	return topleftMotor.Settled(maxError) &&
-		toprightMotor.Settled(maxError) &&
-		bottomleftMotor.Settled(maxError) && 
-		bottomrightMotor.Settled(maxError);
+	return topleftMotor->IsSettled(maxEncoderError) &&
+		toprightMotor->IsSettled(maxEncoderError) &&
+		bottomleftMotor->IsSettled(maxEncoderError) && 
+		bottomrightMotor->IsSettled(maxEncoderError);
 }

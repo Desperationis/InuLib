@@ -14,7 +14,11 @@
 #include "inu/auto/chassis/AutoChassis.h"
 #include "inu/motor/Motor.hpp"
 
+
 namespace inu {
+
+	class AutoXChassisBuilder;
+
 	/**
 	 * Controls a x-drive powered chassis with a topleft, topright, bottomleft, and
 	 * bottomright motor.
@@ -27,7 +31,9 @@ namespace inu {
 		 * that, when powered with a positive speed, the entire chassis turns
 		 * clockwise.
 		*/ 
-		AutoXChassis(int topleft, int topright, int bottomleft, int bottomright, int gyro);
+		AutoXChassis(const inu::AutoXChassisBuilder* builder);
+
+		// TODO; Rule of three with destructor here for motors
 
 		virtual void TurnA(double degrees) override;
 
@@ -44,11 +50,10 @@ namespace inu {
 		virtual void StrafeRight(double ticks);
 
 	private:
-		inu::Motor topleftMotor;
-		inu::Motor toprightMotor;
-		inu::Motor bottomleftMotor;
-		inu::Motor bottomrightMotor;
-		pros::Imu gyro;
+		inu::Motor* topleftMotor;
+		inu::Motor* toprightMotor;
+		inu::Motor* bottomleftMotor;
+		inu::Motor* bottomrightMotor;
 	};
 }
 
