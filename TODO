@@ -1,2 +1,42 @@
-3. Define AutoChassisBuilder 
-4. Define AutoXChassisBuilder
+Plan for Core (Must be done first)
+
+1. Define AutoChassisBuilder 
+2. Define AutoXChassisBuilder
+3. Make sure AutoXChassis is stalling on all moves
+	might want to use a function that will stall
+4. Allow a way to stop all the motors in XAutoChassis, even PID ones
+
+(OPTIONAL)
+7. Add option to use custom PIDProfile for generally moving using builder
+
+
+Plan for gyro
+
+1. Modify PIDMotor such that a custom value can be inputted for checking (encoder value or gyro are interchangeable without issue)
+2. For TurnA()
+	make EXTRA sure it's stalling (so there is no motor concurrency)
+	Internally configure all PID to use gyro as that target
+	Internally configure all PID to use gryo-specific PID profile
+
+	Set PID to target angle
+	stall till it's finished
+	
+	Reconfigure all PID to use encoder values instead
+	If applicable, switch back to old PIDProfile
+
+
+Plan for line following
+
+1. Implement a "checker" function that is passed into AutoXChassis and when it and if it ever returns true, stop stalling, stop all motors, and return back to main execution
+2. Define a XLineFollowerBot or something; Pass in XAutoChassis
+3. 
+
+
+
+FOR later use
+1. Implement functions in new class Chassis, that allows you to set the speed of all motors manually (Turn, forward)
+2. Map controller joysticks to chassis
+3. Define ChassisBuilder
+	Option for Slew, other stuff
+
+4. If you're bored use ChassisBuilder in AutoChassisBuilder
