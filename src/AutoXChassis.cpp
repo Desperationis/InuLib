@@ -2,8 +2,11 @@
 #include "inu/auto/chassis/AutoChassisBuilder.hpp"
 #include "inu/auto/chassis/AutoXChassisBuilder.hpp"
 #include "inu/motor/PIDProfile.hpp"
+#include <chrono>
 
 using namespace inu;
+using cclock = std::chrono::system_clock;
+using sec = std::chrono::duration<double>;
 
 
 AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(builder) { 
@@ -25,6 +28,8 @@ void AutoXChassis::Turn(double ticks) {
 	toprightMotor->move_relative(ticks, maxVelocity);
 	bottomleftMotor->move_relative(ticks, maxVelocity);
 	bottomrightMotor->move_relative(ticks, maxVelocity);
+
+	StallUntilSettled(timeoutLimit);
 }
 
 void AutoXChassis::Forward(double ticks) {
@@ -32,6 +37,8 @@ void AutoXChassis::Forward(double ticks) {
 	toprightMotor->move_relative(-ticks, maxVelocity);
 	bottomleftMotor->move_relative(ticks, maxVelocity);
 	bottomrightMotor->move_relative(-ticks, maxVelocity);
+
+	StallUntilSettled(timeoutLimit);
 }
 
 void AutoXChassis::Backward(double ticks) {
@@ -44,6 +51,8 @@ void AutoXChassis::StrafeRight(double ticks) {
 	toprightMotor->move_relative(ticks, maxVelocity);
 	bottomleftMotor->move_relative(-ticks, maxVelocity);
 	bottomrightMotor->move_relative(-ticks, maxVelocity);
+
+	StallUntilSettled(timeoutLimit);
 }
 
 void AutoXChassis::StrafeLeft(double ticks) {
@@ -55,4 +64,15 @@ bool AutoXChassis::IsSettled() {
 		toprightMotor->IsSettled(maxEncoderError) &&
 		bottomleftMotor->IsSettled(maxEncoderError) && 
 		bottomrightMotor->IsSettled(maxEncoderError);
+}
+
+void AutoXChassis::StallUntilSettled(double timeout) {
+	const auto before = cclock::now();
+
+	sec duration = cclock::now() - before;
+	while(duration.count() < timeout && !IsSettled()) {
+		pros::delay(10);
+
+		sec duration = cclock::now() - before;
+	}
 }

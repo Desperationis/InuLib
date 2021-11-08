@@ -19,6 +19,7 @@ namespace inu {
 			maxVelocity = 127;
 			currentLimit = 2000;
 			usesGyro = false;
+			timeoutLimit = 5;
 
 			encoderUnits = pros::motor_encoder_units_e_t::E_MOTOR_ENCODER_COUNTS;
 		};
@@ -42,6 +43,10 @@ namespace inu {
 		void SetGyro(unsigned int port) {
 			usesGyro = true;
 			gyro = port;
+		}
+
+		void SetTimeout(unsigned int seconds) {
+			timeoutLimit = seconds;
 		}
 
 		void SetEncoderUnits(pros::motor_encoder_units_e_t units) {
@@ -72,6 +77,10 @@ namespace inu {
 			return gyro;
 		}
 
+		unsigned int GetTimeout() const {
+			return timeoutLimit;
+		}
+
 		pros::motor_encoder_units_e_t GetEncoderUnits() const {
 			return encoderUnits;
 		}
@@ -90,6 +99,7 @@ namespace inu {
 		unsigned int maxVelocity;
 		unsigned int gyro;
 		unsigned int currentLimit;
+		unsigned int timeoutLimit;
 
 		bool usesGyro;
 

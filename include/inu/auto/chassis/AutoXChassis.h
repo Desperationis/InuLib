@@ -43,6 +43,8 @@ namespace inu {
 
 		virtual void Backward(double ticks) override;
 
+		virtual void StallUntilSettled(double timeout) override;
+
 		virtual bool IsSettled() override;
 
 		virtual void StrafeLeft(double ticks);
