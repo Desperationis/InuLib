@@ -14,6 +14,8 @@ PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
 	pastError = 0;
 
 	targetSet = false;
+
+	variant = nullptr;
 }
 
 PIDMotor::~PIDMotor() {
@@ -42,6 +44,10 @@ bool PIDMotor::AtTarget(unsigned int error) const {
 	return motor.IsSettled(error);
 }
 
+void PIDMotor::UseVariant(inu::DoubleVariant* variant) {
+	this->variant = variant;
+}
+
 void PIDMotor::_Update() {
 	// If the target is not set, don't update. This decision was made because
 	// there is a strong chance that when this object is initialized, the
@@ -52,14 +58,18 @@ void PIDMotor::_Update() {
 	if(!targetSet)
 		return;
 
-	double encoderValue = motor.get_position();
+	double variantValue = motor.get_position();
 
-	proportion = target - encoderValue;
-	integral += proportion;
+	if(variant != nullptr) {
+		variantValue = variant->Return();
+	}
+
+	proportion = target - variantValue; // becomes NaN
+	integral += proportion; // Delete this; If it works then NaN is the issue
 	derivative = proportion - pastError;
 	pastError = proportion;
 
-	if(abs((int)proportion) < 20) {
+	if(abs((int)proportion) < 5) {
 		integral = 0;
 	}
 

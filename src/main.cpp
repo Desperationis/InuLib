@@ -15,6 +15,7 @@ using namespace inu;
  */
 void initialize() {
 	pros::lcd::initialize();
+	pros::delay(3000);
 }
 
 
@@ -27,17 +28,19 @@ void initialize() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	PIDProfile p;
+	p.p = 0.8;
+	p.i = 0.05;
+	p.d = 0;
+
 	AutoXChassisBuilder builder;
-	builder.SetMaxVelocity(30);
+	builder.SetMaxVelocity(40);
 	builder.SetMotors(1,2,3,4);
-	builder.SetGyro(5);
+	builder.SetGyro(19);
+	builder.SetTimeout(10);
+	builder.SetGyroPID(p);
+	builder.SetMaxAngleError(5);
 
 	AutoXChassis* chassis = builder.Build();
-	chassis->StrafeLeft(1000);
-	pros::delay(4000);
-	chassis->StrafeRight(1000);
-
-	while(true) {
-		pros::delay(10000);
-	}
+	chassis->TurnA(360);
 }

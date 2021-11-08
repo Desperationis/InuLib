@@ -63,9 +63,6 @@ void BackgroundMotorSystem::RemoveMotor(BackgroundMotor* motor) {
 }
 
 void BackgroundMotorSystem::RemoveMotor(unsigned int port) {
-	size_t index = port - 1;
-
-	delete motors[index];
-	motors[index] = nullptr;
+	motors[port - 1] = nullptr;
 }
 

@@ -2,12 +2,11 @@
 #include "inu/auto/chassis/AutoChassisBuilder.hpp"
 #include "inu/auto/chassis/AutoXChassisBuilder.hpp"
 #include "inu/motor/PIDProfile.hpp"
-#include <chrono>
+#include "inu/motor/background/PIDMotor.h"
+#include "inu/motor/DoubleVariant.hpp"
+#include "pros/llemu.hpp"
 
 using namespace inu;
-using cclock = std::chrono::system_clock;
-using sec = std::chrono::duration<double>;
-
 
 AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(builder) { 
 	topleftMotor = builder->GetTopleft();
@@ -19,8 +18,55 @@ AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(bui
 
 void AutoXChassis::TurnA(double degrees) {
 	// Turn left or right depending on angle position.
-	//double angle = gyro.get_rotation();
+	gyro->tare_rotation();
+	double angle = gyro->get_rotation();
 
+	inu::PIDMotor* topleft = new PIDMotor(topleftMotor->get_port());
+	inu::PIDMotor* topright = new PIDMotor(toprightMotor->get_port());
+	inu::PIDMotor* bottomleft = new PIDMotor(bottomleftMotor->get_port());
+	inu::PIDMotor* bottomright = new PIDMotor(bottomrightMotor->get_port());
+
+	topright->SetPID(gyroPID);
+	topleft->SetPID(gyroPID);
+	bottomleft->SetPID(gyroPID);
+	bottomright->SetPID(gyroPID);
+
+	DoubleVariant* variant = new DoubleVariant(gyro);
+
+	topright->UseVariant(variant);
+	topleft->UseVariant(variant);
+	bottomleft->UseVariant(variant);	
+	bottomright->UseVariant(variant);
+
+	topright->Set(degrees);
+	topleft->Set(degrees);
+	bottomleft->Set(degrees);
+	bottomright->Set(degrees);
+
+	double secElapsed = 0;
+	while(secElapsed < timeoutLimit) {
+		if(angle - maxAngleError < degrees && degrees < angle + maxAngleError)
+			break;
+
+		pros::delay(10);
+
+		secElapsed += 0.010;
+	}
+
+	delete topleft;
+	delete topright;
+	delete bottomleft;
+	delete bottomright;
+
+	inu::Motor itopleft(topleftMotor->get_port());
+	inu::Motor itopright(toprightMotor->get_port());
+	inu::Motor ibottomleft(bottomleftMotor->get_port());
+	inu::Motor ibottomright(bottomrightMotor->get_port());
+
+	itopleft.move(0);
+	itopright.move(0);
+	ibottomleft.move(0);
+	ibottomright.move(0);
 }
 
 void AutoXChassis::Turn(double ticks) {
@@ -67,12 +113,9 @@ bool AutoXChassis::IsSettled() {
 }
 
 void AutoXChassis::StallUntilSettled(double timeout) {
-	const auto before = cclock::now();
-
-	sec duration = cclock::now() - before;
-	while(duration.count() < timeout && !IsSettled()) {
+	double secElapsed = 0;
+	while(!IsSettled() && secElapsed < timeout) {
 		pros::delay(10);
-
-		sec duration = cclock::now() - before;
+		secElapsed += 0.010;
 	}
 }

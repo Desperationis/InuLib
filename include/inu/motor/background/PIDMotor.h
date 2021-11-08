@@ -10,6 +10,7 @@
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/motor/Motor.hpp"
+#include "inu/motor/DoubleVariant.hpp"
 
 namespace inu {
 	/**
@@ -47,13 +48,26 @@ namespace inu {
 		const PIDProfile GetPID() const;
 
 		/**
-		 * @returns Whether or not the motor has reached its target (with +- `error`)
+		 * @returns Whether or not the motor has reached its target (with +-
+		 * `error`)
 		*/
 		bool AtTarget(unsigned int error) const;
+
+
+		/** 
+		 * Use another value, other than the integrated encoder, for use in
+		 * comparisions in the PID algorithm. If you want to use the integrated
+		 * encoders again simply pass in nullptr. 
+		 *
+		 * @param foo Pointer to a function that returns the variant as a
+		 * double.
+		 */ 
+		void UseVariant(inu::DoubleVariant* variant);
 
 		void _Update();
 
 	private:
+		DoubleVariant* variant;
 		inu::Motor motor;
 
 		PIDProfile pidProfile;
