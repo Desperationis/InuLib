@@ -1,7 +1,5 @@
 Plan for Core (Must be done first)
 
-1. Define AutoChassisBuilder 
-2. Define AutoXChassisBuilder
 3. Make sure AutoXChassis is stalling on all moves
 	might want to use a function that will stall
 4. Make sure all motors stop moving completely after the move
