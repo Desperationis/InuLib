@@ -4,7 +4,9 @@ Plan for Core (Must be done first)
 2. Define AutoXChassisBuilder
 3. Make sure AutoXChassis is stalling on all moves
 	might want to use a function that will stall
-4. Allow a way to stop all the motors in XAutoChassis, even PID ones
+4. Make sure all motors stop moving completely after the move
+
+# 4. Allow a way to stop all the motors in XAutoChassis, even PID ones
 
 (OPTIONAL)
 7. Add option to use custom PIDProfile for generally moving using builder
