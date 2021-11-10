@@ -33,21 +33,24 @@ void initialize() {
  */
 void opcontrol() {
 	PIDProfile p;
-	p.p = 0.8;
-	p.i = 0.05;
+	p.p = 0.9;
+	p.i = 0.1;
 	p.d = 0;
 
 	AutoXChassisBuilder builder;
-	builder.SetMaxVelocity(40); 
+	builder.SetMaxVelocity(60); 
 	builder.SetMotors(1,2,3,4);
 	builder.SetGyro(19);
 	builder.SetTimeout(10);
 	builder.SetGyroPID(p);
-	builder.SetMaxAngleError(5); 
+	builder.SetMaxAngleError(10); 
 	builder.SetStalling(true);
-
-	// TODO: Refactor PIDMotor
+	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
 	AutoXChassis* chassis = builder.Build();
-	chassis->TurnA(360);
+	chassis->TurnA(90);
+	chassis->Forward(2000);
+	chassis->TurnA(180);
+	chassis->Forward(2000);
+	chassis->TurnA(90);
 }

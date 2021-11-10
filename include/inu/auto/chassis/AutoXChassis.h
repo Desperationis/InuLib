@@ -13,6 +13,7 @@
 #include "main.h"
 #include "inu/auto/chassis/AutoChassis.h"
 #include "inu/motor/Motor.hpp"
+#include "inu/motor/background/PIDInertialMotor.h"
 
 
 namespace inu {
@@ -39,6 +40,8 @@ namespace inu {
 
 		virtual void TurnA(double degrees) override;
 
+		virtual void TurnAbsolute(double degrees) override;
+
 		virtual void Turn(double ticks) override;
 
 		virtual void Forward(double ticks) override;
@@ -60,6 +63,11 @@ namespace inu {
 		inu::Motor* toprightMotor;
 		inu::Motor* bottomleftMotor;
 		inu::Motor* bottomrightMotor;
+
+		inu::PIDInertialMotor* topleft;
+		inu::PIDInertialMotor* topright;
+		inu::PIDInertialMotor* bottomleft;
+		inu::PIDInertialMotor* bottomright;
 	};
 }
 

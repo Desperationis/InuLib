@@ -14,6 +14,12 @@ namespace inu {
 	class AutoChassisBuilder {
 	public:
 		AutoChassisBuilder() {
+			Reset();
+		};
+
+		virtual ~AutoChassisBuilder() = default;
+
+		void Reset() {
 			maxEncoderError = 10;
 			maxAngleError = 5;
 			maxVelocity = 127;
@@ -21,11 +27,13 @@ namespace inu {
 			usesGyro = false;
 			isStalling = true;
 			timeoutLimit = 5;
+			timeoutAlignLimit = 0;
 
 			encoderUnits = pros::motor_encoder_units_e_t::E_MOTOR_ENCODER_COUNTS;
-		};
-
-		virtual ~AutoChassisBuilder() = default;
+			gyroPID.p = 0;
+			gyroPID.i = 0;
+			gyroPID.d = 0;
+		}
 
 		void SetMaxEncoderError(unsigned int error) {
 			maxEncoderError = error;
@@ -62,6 +70,14 @@ namespace inu {
 
 		void SetGyroPID(PIDProfile profile) {
 			gyroPID = profile;
+		}
+
+		void SetTimeoutAlignLimit(double seconds) {
+			timeoutAlignLimit = seconds;
+		}
+
+		double GetTimeoutAlignLimit() const {
+			return timeoutAlignLimit;
 		}
 
 		unsigned int GetMaxEncoderError() const {
@@ -111,6 +127,7 @@ namespace inu {
 		unsigned int gyro;
 		unsigned int currentLimit;
 		unsigned int timeoutLimit;
+		double timeoutAlignLimit;
 
 		bool usesGyro;
 		bool isStalling;

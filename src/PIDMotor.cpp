@@ -45,7 +45,7 @@ bool PIDMotor::AtTarget(unsigned int error) const {
 }
 
 void PIDMotor::SetMaximumVelocity(unsigned int velocity) {
-	maxVelocity = std::min<int>(std::max<int>(-127, velocity), 127);
+	maxVelocity = std::clamp<int>(velocity, -127, 127);
 }
 
 void PIDMotor::_Update() {
@@ -79,7 +79,7 @@ void PIDMotor::_Update() {
 	float d = pidProfile.d;
 
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
-	motorSpeed = std::min<float>(std::max<float>(-maxVelocity, motorSpeed), maxVelocity);
+	motorSpeed = std::clamp<int>(motorSpeed, -maxVelocity, maxVelocity);
 
 	motor.move(motorSpeed);
 }

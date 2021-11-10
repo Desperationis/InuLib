@@ -1,16 +1,18 @@
 
 Core (OPTIONAL)
 1. Add option to use custom PIDProfile for generally moving using builder
-2. Clean up PID variant code; It's yucky
-
-
 
 Plan for line following
 1. Configure min error of PIDMotor to set integral to 0
-
-2. Add reset() to chassis builder
+2. Make it so that the chassis must wait a certain amount of time to adjust (when it is within margin of error) before 
+exiting the stall
+3. MKAE EXTRAAA sure that Chassisbuilder can create multiple motor instances (cloning) so that you can use Build() multiple times.
 3. Define a XLineFollowerBot or something; Pass in XAutoChassis
 4. Have the XLineFollowerBot go as straight as possible (and maybe add conditions for it to stop running)
+
+
+
+
 
 FOR later use
 1. Implement functions in new class Chassis, that allows you to set the speed of all motors manually (Turn, forward)

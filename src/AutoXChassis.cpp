@@ -26,16 +26,14 @@ AutoXChassis::~AutoXChassis() {
 	bottomrightMotor = nullptr;
 }
 
-
-void AutoXChassis::TurnA(double degrees) {
+void AutoXChassis::TurnAbsolute(double degrees) {
 	// Turn left or right depending on angle position.
-	gyro->tare_rotation();
 	double angle = gyro->get_rotation();
 
-	inu::PIDInertialMotor* topleft = new PIDInertialMotor(topleftMotor->get_port(), gyroPort);
-	inu::PIDInertialMotor* topright = new PIDInertialMotor(toprightMotor->get_port(), gyroPort);
-	inu::PIDInertialMotor* bottomleft = new PIDInertialMotor(bottomleftMotor->get_port(), gyroPort);
-	inu::PIDInertialMotor* bottomright = new PIDInertialMotor(bottomrightMotor->get_port(), gyroPort);
+	topleft = new PIDInertialMotor(topleftMotor->get_port(), gyroPort);
+	topright = new PIDInertialMotor(toprightMotor->get_port(), gyroPort);
+	bottomleft = new PIDInertialMotor(bottomleftMotor->get_port(), gyroPort);
+	bottomright = new PIDInertialMotor(bottomrightMotor->get_port(), gyroPort);
 
 	topright->SetPID(gyroPID);
 	topleft->SetPID(gyroPID);
@@ -54,9 +52,19 @@ void AutoXChassis::TurnA(double degrees) {
 
 	if(isStalling) {
 		double secElapsed = 0;
-		while(secElapsed < timeoutLimit) {
-			if(angle < degrees + maxAngleError && angle > degrees - maxAngleError)
-				break;
+		double secElapsedTarget = 0; // Within margin of error
+		while(secElapsed < timeoutLimit && secElapsedTarget <= timeoutAlignLimit) {
+			if(topleft->AtTarget(maxAngleError) &&
+					topright->AtTarget(maxAngleError) &&
+					bottomleft->AtTarget(maxAngleError) &&
+					bottomright->AtTarget(maxAngleError)) {
+
+				secElapsedTarget += 0.010;
+			}
+
+			else {
+				secElapsedTarget = 0;
+			}
 
 			pros::delay(10);
 
@@ -64,14 +72,15 @@ void AutoXChassis::TurnA(double degrees) {
 		}
 	}
 
-	delete topleft;
-	delete topright;
-	delete bottomleft;
-	delete bottomright;
-
 	if(isStalling) {
 		Stop();
 	}
+
+}
+
+
+void AutoXChassis::TurnA(double degrees) {
+	AutoXChassis::TurnAbsolute(gyro->get_rotation() + degrees);
 }
 
 void AutoXChassis::Turn(double ticks) {
@@ -128,14 +137,42 @@ bool AutoXChassis::IsSettled() {
 
 void AutoXChassis::StallUntilSettled(double timeout) {
 	double secElapsed = 0;
-	while(!IsSettled() && secElapsed < timeout) {
+	double secElapsedTarget = 0;
+	while(secElapsed < timeout && secElapsedTarget < timeoutAlignLimit) {
 		pros::delay(10);
 		secElapsed += 0.010;
+
+		if(IsSettled()) {
+			secElapsedTarget += 0.010;
+		}
+		else {
+			secElapsedTarget = 0;
+		}
 	}
 }
 
 
 void AutoXChassis::Stop() {
+	if(topleft != nullptr) {
+		delete topleft;
+		topleft = nullptr;
+	}
+
+	if(topright != nullptr) {
+		delete topright;
+		topright = nullptr;
+	}
+
+	if(bottomleft != nullptr) {
+		delete bottomleft;
+		bottomleft = nullptr;
+	}
+
+	if(bottomright != nullptr) {
+		delete bottomright;
+		bottomright = nullptr;
+	}
+
 	inu::Motor topleft(topleftMotor->get_port());
 	inu::Motor topright(toprightMotor->get_port());
 	inu::Motor bottomleft(bottomleftMotor->get_port());

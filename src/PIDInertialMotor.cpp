@@ -52,7 +52,7 @@ bool PIDInertialMotor::AtTarget(unsigned int error) const {
 }
 
 void PIDInertialMotor::SetMaximumVelocity(unsigned int velocity) {
-	maxVelocity = std::min<int>(std::max<int>(-127, velocity), 127);
+	maxVelocity = std::clamp<int>(velocity, -127, 127);
 }
 
 bool PIDInertialMotor::IsReversed() const {
@@ -69,7 +69,7 @@ void PIDInertialMotor::_Update() {
 	if(!targetSet)
 		return;
 
-	double angleValue = motor.get_position();
+	double angleValue = gyro.get_rotation();
 
 	proportion = target - angleValue; 
 	integral += proportion; 
@@ -90,7 +90,7 @@ void PIDInertialMotor::_Update() {
 	float d = pidProfile.d;
 
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
-	motorSpeed = std::min<float>(std::max<float>(-maxVelocity, motorSpeed), maxVelocity);
+	motorSpeed = std::clamp<int>(motorSpeed, -maxVelocity, maxVelocity);
 
 	motor.move(motorSpeed);
 }

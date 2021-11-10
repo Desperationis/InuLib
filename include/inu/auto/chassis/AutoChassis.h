@@ -24,6 +24,7 @@ namespace inu {
 			currentLimit = builder->GetCurrentLimit();
 			timeoutLimit = builder->GetTimeout();
 			isStalling = builder->IsStalling();
+			timeoutAlignLimit = builder->GetTimeoutAlignLimit();
 
 			usesGyro = builder->UsesGyro();
 			gyro = nullptr;
@@ -45,6 +46,8 @@ namespace inu {
 
 		virtual void TurnA(double degrees) = 0;
 
+		virtual void TurnAbsolute(double degrees) = 0;
+
 		virtual void Turn(double ticks) = 0;
 
 		virtual void Forward(double ticks) = 0;
@@ -63,6 +66,7 @@ namespace inu {
 		unsigned int maxVelocity;
 		unsigned int currentLimit;
 		unsigned int timeoutLimit;
+		double timeoutAlignLimit;
 
 		pros::Imu* gyro;
 		unsigned int gyroPort;
