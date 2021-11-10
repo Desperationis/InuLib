@@ -15,6 +15,18 @@ AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(bui
 	bottomrightMotor = builder->GetBottomright();
 }
 
+AutoXChassis::~AutoXChassis() {
+	delete topleftMotor;
+	delete toprightMotor;
+	delete bottomleftMotor;
+	delete bottomrightMotor;
+
+	topleftMotor = nullptr;
+	toprightMotor = nullptr;
+	bottomleftMotor = nullptr;
+	bottomrightMotor = nullptr;
+}
+
 
 void AutoXChassis::TurnA(double degrees) {
 	// Turn left or right depending on angle position.
@@ -31,6 +43,11 @@ void AutoXChassis::TurnA(double degrees) {
 	bottomleft->SetPID(gyroPID);
 	bottomright->SetPID(gyroPID);
 
+	topright->SetMaximumVelocity(maxVelocity);
+	topleft->SetMaximumVelocity(maxVelocity);
+	bottomleft->SetMaximumVelocity(maxVelocity);
+	bottomright->SetMaximumVelocity(maxVelocity);
+
 	DoubleVariant* variant = new DoubleVariant(gyro);
 
 	topright->UseVariant(variant);
@@ -43,14 +60,16 @@ void AutoXChassis::TurnA(double degrees) {
 	bottomleft->Set(degrees);
 	bottomright->Set(degrees);
 
-	double secElapsed = 0;
-	while(secElapsed < timeoutLimit) {
-		if(angle - maxAngleError < degrees && degrees < angle + maxAngleError)
-			break;
+	if(isStalling) {
+		double secElapsed = 0;
+		while(secElapsed < timeoutLimit) {
+			if(angle < degrees + maxAngleError && angle > degrees - maxAngleError)
+				break;
 
-		pros::delay(10);
+			pros::delay(10);
 
-		secElapsed += 0.010;
+			secElapsed += 0.010;
+		}
 	}
 
 	delete topleft;
@@ -58,15 +77,9 @@ void AutoXChassis::TurnA(double degrees) {
 	delete bottomleft;
 	delete bottomright;
 
-	inu::Motor itopleft(topleftMotor->get_port());
-	inu::Motor itopright(toprightMotor->get_port());
-	inu::Motor ibottomleft(bottomleftMotor->get_port());
-	inu::Motor ibottomright(bottomrightMotor->get_port());
-
-	itopleft.move(0);
-	itopright.move(0);
-	ibottomleft.move(0);
-	ibottomright.move(0);
+	if(isStalling) {
+		Stop();
+	}
 }
 
 void AutoXChassis::Turn(double ticks) {
@@ -75,7 +88,10 @@ void AutoXChassis::Turn(double ticks) {
 	bottomleftMotor->move_relative(ticks, maxVelocity);
 	bottomrightMotor->move_relative(ticks, maxVelocity);
 
-	StallUntilSettled(timeoutLimit);
+	if(isStalling) {
+		StallUntilSettled(timeoutLimit);
+		Stop();
+	}
 }
 
 void AutoXChassis::Forward(double ticks) {
@@ -84,7 +100,10 @@ void AutoXChassis::Forward(double ticks) {
 	bottomleftMotor->move_relative(ticks, maxVelocity);
 	bottomrightMotor->move_relative(-ticks, maxVelocity);
 
-	StallUntilSettled(timeoutLimit);
+	if(isStalling) {
+		StallUntilSettled(timeoutLimit);
+		Stop();
+	}
 }
 
 void AutoXChassis::Backward(double ticks) {
@@ -98,7 +117,10 @@ void AutoXChassis::StrafeRight(double ticks) {
 	bottomleftMotor->move_relative(-ticks, maxVelocity);
 	bottomrightMotor->move_relative(-ticks, maxVelocity);
 
-	StallUntilSettled(timeoutLimit);
+	if(isStalling) {
+		StallUntilSettled(timeoutLimit);
+		Stop();
+	}
 }
 
 void AutoXChassis::StrafeLeft(double ticks) {
@@ -118,4 +140,17 @@ void AutoXChassis::StallUntilSettled(double timeout) {
 		pros::delay(10);
 		secElapsed += 0.010;
 	}
+}
+
+
+void AutoXChassis::Stop() {
+	inu::Motor topleft(topleftMotor->get_port());
+	inu::Motor topright(toprightMotor->get_port());
+	inu::Motor bottomleft(bottomleftMotor->get_port());
+	inu::Motor bottomright(bottomrightMotor->get_port());
+
+	topleft.move(0);
+	topright.move(0);
+	bottomleft.move(0);
+	bottomright.move(0);
 }

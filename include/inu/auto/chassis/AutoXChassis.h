@@ -33,6 +33,8 @@ namespace inu {
 		*/ 
 		AutoXChassis(const inu::AutoXChassisBuilder* builder);
 
+		~AutoXChassis();
+
 		// TODO; Rule of three with destructor here for motors
 
 		virtual void TurnA(double degrees) override;
@@ -46,6 +48,8 @@ namespace inu {
 		virtual void StallUntilSettled(double timeout) override;
 
 		virtual bool IsSettled() override;
+
+		virtual void Stop() override;
 
 		virtual void StrafeLeft(double ticks);
 

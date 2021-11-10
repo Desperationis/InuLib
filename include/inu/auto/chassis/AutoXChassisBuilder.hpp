@@ -23,18 +23,23 @@ namespace inu {
 			bottomleft = bottomright = nullptr;
 		}
 
+		~AutoXChassisBuilder() {
+			// No code here; Anything destroyed permeates to built Chassis
+			// class
+		}
+
 
 		void SetMotors(int tl, int tr, int bl, int br) {
-			topleft = new inu::Motor(tl);
+			topleft = new inu::Motor(std::abs(tl));
 			if (tl < 0) topleft->set_reversed(true);
 
-			topright = new inu::Motor(tr);
+			topright = new inu::Motor(std::abs(tr));
 			if (tr < 0) topright->set_reversed(true);
 
-			bottomleft = new inu::Motor(bl);
+			bottomleft = new inu::Motor(std::abs(bl));
 			if (bl < 0) bottomleft->set_reversed(true);
 
-			bottomright = new inu::Motor(br);
+			bottomright = new inu::Motor(std::abs(br));
 			if (br < 0) bottomright->set_reversed(true);
 
 			motorPortsDefined = true;

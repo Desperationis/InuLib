@@ -63,6 +63,7 @@ void BackgroundMotorSystem::RemoveMotor(BackgroundMotor* motor) {
 }
 
 void BackgroundMotorSystem::RemoveMotor(unsigned int port) {
+	// Never call delete here; we don't own the pointers
 	motors[port - 1] = nullptr;
 }
 

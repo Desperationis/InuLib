@@ -53,7 +53,6 @@ namespace inu {
 		*/
 		bool AtTarget(unsigned int error) const;
 
-
 		/** 
 		 * Use another value, other than the integrated encoder, for use in
 		 * comparisions in the PID algorithm. If you want to use the integrated
@@ -64,9 +63,12 @@ namespace inu {
 		 */ 
 		void UseVariant(inu::DoubleVariant* variant);
 
+		void SetMaximumVelocity(unsigned int velocity);
+
 		void _Update();
 
 	private:
+		unsigned int maxVelocity;
 		DoubleVariant* variant;
 		inu::Motor motor;
 

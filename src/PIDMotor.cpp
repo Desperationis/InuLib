@@ -1,6 +1,7 @@
 #include "inu/motor/background/PIDMotor.h"
 #include "inu/motor/background/BackgroundMotorSystem.h"
 #include "inu/motor/Motor.hpp"
+#include <algorithm>
 
 using namespace inu;
 
@@ -8,6 +9,7 @@ PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
 	this->port = port;
 	BackgroundMotorSystem::Instance()->EnrollMotor(this);
 
+	SetMaximumVelocity(127);
 	proportion = 0;
 	integral = 0;
 	derivative = 0;
@@ -48,6 +50,10 @@ void PIDMotor::UseVariant(inu::DoubleVariant* variant) {
 	this->variant = variant;
 }
 
+void PIDMotor::SetMaximumVelocity(unsigned int velocity) {
+	maxVelocity = std::min<int>(std::max<int>(-127, velocity), 127);
+}
+
 void PIDMotor::_Update() {
 	// If the target is not set, don't update. This decision was made because
 	// there is a strong chance that when this object is initialized, the
@@ -64,8 +70,8 @@ void PIDMotor::_Update() {
 		variantValue = variant->Return();
 	}
 
-	proportion = target - variantValue; // becomes NaN
-	integral += proportion; // Delete this; If it works then NaN is the issue
+	proportion = target - variantValue; 
+	integral += proportion; 
 	derivative = proportion - pastError;
 	pastError = proportion;
 
@@ -83,6 +89,8 @@ void PIDMotor::_Update() {
 	float d = pidProfile.d;
 
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
+	motorSpeed = std::min<float>(std::max<float>(-maxVelocity, motorSpeed), maxVelocity);
+
 	motor.move(motorSpeed);
 }
 

@@ -15,6 +15,10 @@ using namespace inu;
  */
 void initialize() {
 	pros::lcd::initialize();
+
+	// This delay is REQUIRED for the program to work; Without this, core
+	// components may or may not be initialized (i.e. inertial sensor) and 
+	// return wicked weird values like NaN
 	pros::delay(3000);
 }
 
@@ -34,12 +38,15 @@ void opcontrol() {
 	p.d = 0;
 
 	AutoXChassisBuilder builder;
-	builder.SetMaxVelocity(40);
+	builder.SetMaxVelocity(40); 
 	builder.SetMotors(1,2,3,4);
 	builder.SetGyro(19);
 	builder.SetTimeout(10);
 	builder.SetGyroPID(p);
-	builder.SetMaxAngleError(5);
+	builder.SetMaxAngleError(5); 
+	builder.SetStalling(true);
+
+	// TODO: Refactor PIDMotor
 
 	AutoXChassis* chassis = builder.Build();
 	chassis->TurnA(360);

@@ -23,6 +23,7 @@ namespace inu {
 			maxVelocity = builder->GetMaxVelocity();
 			currentLimit = builder->GetCurrentLimit();
 			timeoutLimit = builder->GetTimeout();
+			isStalling = builder->IsStalling();
 
 			usesGyro = builder->UsesGyro();
 			gyro = nullptr;
@@ -35,6 +36,8 @@ namespace inu {
 			encoderUnits = builder->GetEncoderUnits();
 		}
 
+		virtual ~AutoChassis() = default;
+
 
 		virtual void TurnA(double degrees) = 0;
 
@@ -43,6 +46,8 @@ namespace inu {
 		virtual void Forward(double ticks) = 0;
 
 		virtual void Backward(double ticks) = 0;
+
+		virtual void Stop() = 0;
 
 		virtual void StallUntilSettled(double timeout) = 0;
 
@@ -57,6 +62,7 @@ namespace inu {
 
 		pros::Imu* gyro;
 		bool usesGyro;
+		bool isStalling;
 
 		pros::motor_encoder_units_e_t encoderUnits;
 

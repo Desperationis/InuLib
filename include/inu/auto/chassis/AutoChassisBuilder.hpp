@@ -19,10 +19,13 @@ namespace inu {
 			maxVelocity = 127;
 			currentLimit = 2000;
 			usesGyro = false;
+			isStalling = true;
 			timeoutLimit = 5;
 
 			encoderUnits = pros::motor_encoder_units_e_t::E_MOTOR_ENCODER_COUNTS;
 		};
+
+		virtual ~AutoChassisBuilder() = default;
 
 		void SetMaxEncoderError(unsigned int error) {
 			maxEncoderError = error;
@@ -38,6 +41,10 @@ namespace inu {
 
 		void SetCurrentLimit(unsigned int limit) {
 			currentLimit = limit;
+		}
+
+		void SetStalling(bool stalling) {
+			isStalling = stalling;
 		}
 
 		void SetGyro(unsigned int port) {
@@ -81,6 +88,10 @@ namespace inu {
 			return timeoutLimit;
 		}
 
+		bool IsStalling() const {
+			return isStalling;
+		}
+
 		pros::motor_encoder_units_e_t GetEncoderUnits() const {
 			return encoderUnits;
 		}
@@ -102,6 +113,7 @@ namespace inu {
 		unsigned int timeoutLimit;
 
 		bool usesGyro;
+		bool isStalling;
 
 		pros::motor_encoder_units_e_t encoderUnits;
 
