@@ -2,8 +2,7 @@
 #include "inu/auto/chassis/AutoChassisBuilder.hpp"
 #include "inu/auto/chassis/AutoXChassisBuilder.hpp"
 #include "inu/motor/PIDProfile.hpp"
-#include "inu/motor/background/PIDMotor.h"
-#include "inu/motor/DoubleVariant.hpp"
+#include "inu/motor/background/PIDInertialMotor.h"
 #include "pros/llemu.hpp"
 
 using namespace inu;
@@ -33,10 +32,10 @@ void AutoXChassis::TurnA(double degrees) {
 	gyro->tare_rotation();
 	double angle = gyro->get_rotation();
 
-	inu::PIDMotor* topleft = new PIDMotor(topleftMotor->get_port());
-	inu::PIDMotor* topright = new PIDMotor(toprightMotor->get_port());
-	inu::PIDMotor* bottomleft = new PIDMotor(bottomleftMotor->get_port());
-	inu::PIDMotor* bottomright = new PIDMotor(bottomrightMotor->get_port());
+	inu::PIDInertialMotor* topleft = new PIDInertialMotor(topleftMotor->get_port(), gyroPort);
+	inu::PIDInertialMotor* topright = new PIDInertialMotor(toprightMotor->get_port(), gyroPort);
+	inu::PIDInertialMotor* bottomleft = new PIDInertialMotor(bottomleftMotor->get_port(), gyroPort);
+	inu::PIDInertialMotor* bottomright = new PIDInertialMotor(bottomrightMotor->get_port(), gyroPort);
 
 	topright->SetPID(gyroPID);
 	topleft->SetPID(gyroPID);
@@ -47,13 +46,6 @@ void AutoXChassis::TurnA(double degrees) {
 	topleft->SetMaximumVelocity(maxVelocity);
 	bottomleft->SetMaximumVelocity(maxVelocity);
 	bottomright->SetMaximumVelocity(maxVelocity);
-
-	DoubleVariant* variant = new DoubleVariant(gyro);
-
-	topright->UseVariant(variant);
-	topleft->UseVariant(variant);
-	bottomleft->UseVariant(variant);	
-	bottomright->UseVariant(variant);
 
 	topright->Set(degrees);
 	topleft->Set(degrees);

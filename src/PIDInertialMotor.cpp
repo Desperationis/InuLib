@@ -1,11 +1,13 @@
-#include "inu/motor/background/PIDMotor.h"
+#include "inu/motor/background/PIDInertialMotor.h"
 #include "inu/motor/background/BackgroundMotorSystem.h"
 #include "inu/motor/Motor.hpp"
 #include <algorithm>
 
 using namespace inu;
 
-PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
+PIDInertialMotor::PIDInertialMotor(unsigned int motorPort, unsigned int gyro) :
+	BackgroundMotor(motorPort), motor(motorPort), gyro(gyro) {
+
 	this->port = port;
 	BackgroundMotorSystem::Instance()->EnrollMotor(this);
 
@@ -18,37 +20,46 @@ PIDMotor::PIDMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
 	targetSet = false;
 }
 
-PIDMotor::~PIDMotor() {
+PIDInertialMotor::~PIDInertialMotor() {
 	BackgroundMotorSystem::Instance()->RemoveMotor(this);
 }
 
-void PIDMotor::Set(int target) {
+void PIDInertialMotor::Set(double target) {
 	this->target = target;
 	targetSet = true;
 }
 
 
-void PIDMotor::SetPID(PIDProfile pidProfile) {
+void PIDInertialMotor::SetPID(PIDProfile pidProfile) {
 	this->pidProfile = pidProfile;
 }
 
-int PIDMotor::GetTarget() const {
+void PIDInertialMotor::SetReversed(bool reversed) {
+	motor.set_reversed(reversed);
+}
+
+double PIDInertialMotor::GetTarget() const {
 	return target;
 }
 
-const PIDProfile PIDMotor::GetPID() const {
+const PIDProfile PIDInertialMotor::GetPID() const {
 	return pidProfile;
 }
 
-bool PIDMotor::AtTarget(unsigned int error) const {
-	return motor.IsSettled(error);
+bool PIDInertialMotor::AtTarget(unsigned int error) const {
+	double angle = gyro.get_rotation();
+	return angle > target - error && angle < target + error;
 }
 
-void PIDMotor::SetMaximumVelocity(unsigned int velocity) {
+void PIDInertialMotor::SetMaximumVelocity(unsigned int velocity) {
 	maxVelocity = std::min<int>(std::max<int>(-127, velocity), 127);
 }
 
-void PIDMotor::_Update() {
+bool PIDInertialMotor::IsReversed() const {
+	return motor.is_reversed();
+}
+
+void PIDInertialMotor::_Update() {
 	// If the target is not set, don't update. This decision was made because
 	// there is a strong chance that when this object is initialized, the
 	// motor's position might be extremely high and force this to move it back
@@ -58,18 +69,18 @@ void PIDMotor::_Update() {
 	if(!targetSet)
 		return;
 
-	double encoderValue = motor.get_position();
+	double angleValue = motor.get_position();
 
-	proportion = target - encoderValue; 
+	proportion = target - angleValue; 
 	integral += proportion; 
 	derivative = proportion - pastError;
 	pastError = proportion;
 
-	if(abs((int)proportion) < 5) {
+	if(abs((int)proportion) < 10) {
 		integral = 0;
 	}
 
-	if(proportion > 12000) {
+	if(std::abs(proportion) > 180) {
 		// Tune this
 		integral = 0;
 	}

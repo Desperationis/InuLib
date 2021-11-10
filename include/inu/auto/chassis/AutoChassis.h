@@ -31,12 +31,16 @@ namespace inu {
 			if(usesGyro) {
 				gyro = new pros::Imu(builder->GetGyro());
 				gyroPID = builder->GetGyroPID();
+				gyroPort = builder->GetGyro();
 			}
 
 			encoderUnits = builder->GetEncoderUnits();
 		}
 
-		virtual ~AutoChassis() = default;
+		virtual ~AutoChassis() {
+			delete gyro;
+			gyro = nullptr;
+		};
 
 
 		virtual void TurnA(double degrees) = 0;
@@ -61,6 +65,7 @@ namespace inu {
 		unsigned int timeoutLimit;
 
 		pros::Imu* gyro;
+		unsigned int gyroPort;
 		bool usesGyro;
 		bool isStalling;
 
