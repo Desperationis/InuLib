@@ -24,8 +24,15 @@ namespace inu {
 		}
 
 		~AutoXChassisBuilder() {
-			// No code here; Anything destroyed permeates to built Chassis
-			// class
+			delete topleft;
+			delete topright;
+			delete bottomleft;
+			delete bottomright;
+
+			topleft = nullptr;
+			topright = nullptr;
+			bottomleft = nullptr;
+			bottomright = nullptr;
 		}
 
 
@@ -45,13 +52,13 @@ namespace inu {
 			motorPortsDefined = true;
 		}
 
-		inu::Motor* GetTopleft() const { return topleft; }
+		inu::Motor* GetTopleft() const { return topleft->Clone(); }
 
-		inu::Motor* GetTopright() const { return topright; }
+		inu::Motor* GetTopright() const { return topright->Clone(); }
 
-		inu::Motor* GetBottomleft() const { return bottomleft; }
+		inu::Motor* GetBottomleft() const { return bottomleft->Clone(); }
 
-		inu::Motor* GetBottomright() const { return bottomright; }
+		inu::Motor* GetBottomright() const { return bottomright->Clone(); }
 
 		inu::AutoXChassis* Build() {
 			if(!motorPortsDefined) {

@@ -7,11 +7,42 @@
 
 using namespace inu;
 
+void AutoXChassis::Copy(const AutoXChassis& chassis) {
+	topleftMotor = new inu::Motor(chassis.topleftMotor->get_port());
+	toprightMotor = new inu::Motor(chassis.toprightMotor->get_port());
+	bottomleftMotor = new inu::Motor(chassis.bottomleftMotor->get_port());
+	bottomrightMotor = new inu::Motor(chassis.bottomrightMotor->get_port());
+
+	// Don't copy inertial motors; They are created from the ports of the above
+}
+
+AutoXChassis::AutoXChassis(const AutoXChassis& chassis) : AutoChassis(chassis) {
+	Copy(chassis);
+	topleft = nullptr;
+	topright = nullptr;
+	bottomleft = nullptr;
+	bottomright = nullptr;
+}
+
+void AutoXChassis::operator=(const AutoXChassis& chassis) {
+	AutoChassis::operator=(chassis);
+	Copy(chassis);
+	topleft = nullptr;
+	topright = nullptr;
+	bottomleft = nullptr;
+	bottomright = nullptr;
+}
+
 AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(builder) { 
 	topleftMotor = builder->GetTopleft();
 	toprightMotor = builder->GetTopright();
 	bottomleftMotor = builder->GetBottomleft();
 	bottomrightMotor = builder->GetBottomright();
+
+	topleft = nullptr;
+	topright = nullptr;
+	bottomleft = nullptr;
+	bottomright = nullptr;
 }
 
 AutoXChassis::~AutoXChassis() {
@@ -24,9 +55,33 @@ AutoXChassis::~AutoXChassis() {
 	toprightMotor = nullptr;
 	bottomleftMotor = nullptr;
 	bottomrightMotor = nullptr;
+
+	if(topleft != nullptr) {
+		delete topleft;
+		topleft = nullptr;
+	}
+
+	if(topright != nullptr) {
+		delete topright;
+		topright = nullptr;
+	}
+
+	if(bottomleft != nullptr) {
+		delete bottomleft;
+		bottomleft = nullptr;
+	}
+
+	if(bottomright != nullptr) {
+		delete bottomright;
+		bottomright = nullptr;
+	}
 }
 
 void AutoXChassis::TurnAbsolute(double degrees) {
+	if(!usesGyro)
+		return;
+
+
 	// Turn left or right depending on angle position.
 	double angle = gyro->get_rotation();
 
@@ -153,6 +208,7 @@ void AutoXChassis::StallUntilSettled(double timeout) {
 
 
 void AutoXChassis::Stop() {
+
 	if(topleft != nullptr) {
 		delete topleft;
 		topleft = nullptr;
@@ -173,13 +229,8 @@ void AutoXChassis::Stop() {
 		bottomright = nullptr;
 	}
 
-	inu::Motor topleft(topleftMotor->get_port());
-	inu::Motor topright(toprightMotor->get_port());
-	inu::Motor bottomleft(bottomleftMotor->get_port());
-	inu::Motor bottomright(bottomrightMotor->get_port());
-
-	topleft.move(0);
-	topright.move(0);
-	bottomleft.move(0);
-	bottomright.move(0);
+	topleftMotor->move(0);
+	toprightMotor->move(0);
+	bottomleftMotor->move(0);
+	bottomrightMotor->move(0);
 }

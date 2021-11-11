@@ -25,6 +25,9 @@ namespace inu {
 	 * bottomright motor.
 	*/ 
 	class AutoXChassis : public AutoChassis {
+	protected:
+		void Copy(const AutoXChassis& chassis);
+
 	public:
 		/**
 		 * topleft, topright, bottomleft, and bottomright are the motor ports of
@@ -33,6 +36,10 @@ namespace inu {
 		 * clockwise.
 		*/ 
 		AutoXChassis(const inu::AutoXChassisBuilder* builder);
+
+		AutoXChassis(const AutoXChassis& chassis);
+
+		void operator=(const AutoXChassis& chassis);
 
 		~AutoXChassis();
 
@@ -54,8 +61,24 @@ namespace inu {
 
 		virtual void Stop() override;
 
+		/**
+		 * Shortcut for StrafeRight(-ticks).
+		 *
+		 * @param ticks The number of encoder ticks to move each wheel. If encoder
+		 * units where changed, use the new unit instead.
+		*/ 
 		virtual void StrafeLeft(double ticks);
 
+		/**
+		 * Travel straight to the right using the integrated encoders. 
+		 *
+		 * This function has the capability of stalling; If stalling is enabled
+		 * then the chassis will timeout and Stop() if the chassis is not able
+		 * to face the direction.
+		 *
+		 * @param ticks The number of ticks the motors must meet within margin
+		 * of error.
+		*/
 		virtual void StrafeRight(double ticks);
 
 	private:

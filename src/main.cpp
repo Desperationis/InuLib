@@ -3,6 +3,8 @@
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/auto/chassis/AutoXChassis.h"
 #include "inu/auto/chassis/AutoXChassisBuilder.hpp"
+#include "inu/auto/XLineFollower.h"
+#include "inu/auto/XLineFollowerBuilder.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
 
@@ -43,14 +45,31 @@ void opcontrol() {
 	builder.SetGyro(19);
 	builder.SetTimeout(10);
 	builder.SetGyroPID(p);
-	builder.SetMaxAngleError(10); 
+	builder.SetMaxAngleError(1); 
 	builder.SetStalling(true);
 	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
 	AutoXChassis* chassis = builder.Build();
-	chassis->TurnA(90);
-	chassis->Forward(2000);
-	chassis->TurnA(180);
-	chassis->Forward(2000);
-	chassis->TurnA(90);
+
+	XLineFollowerBuilder followerBuilder;
+	followerBuilder.SetSensors(1,5,3);
+	followerBuilder.SetSensorError(80,0,-10);
+	followerBuilder.SetChassis(chassis);
+	followerBuilder.ActivateOnDark(false);
+	followerBuilder.SetLightThreshold(1800); // Tune this
+
+	XLineFollower* follower = followerBuilder.Build();
+	while(true) {
+		follower->Recenter();
+		pros::delay(20);
+	}
+
+/*	while(true) {
+		bool detected = follower->LineDetected();
+		pros::lcd::print(0, "Line detected: %d", (int)detected);
+
+		int value = follower->DebugCalibrate();
+		pros::lcd::print(1, "Recommended midpoint: %d", (int) value);
+		pros::delay(10);
+	}*/
 }

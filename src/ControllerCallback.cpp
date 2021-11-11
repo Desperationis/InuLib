@@ -31,7 +31,7 @@ void ControllerCallback::SyncCallback(controller_digital_e_t button, task_fn_t f
 
 
 void ControllerCallback::PollController() {
-	for(int i = 0; i < DIGITAL.size(); i++) {
+	for(size_t i = 0; i < DIGITAL.size(); i++) {
 		controller_digital_e_t button = DIGITAL[i];
 
 		if(callbackButtonMap.find(button) != callbackButtonMap.end()) {

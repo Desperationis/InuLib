@@ -1,16 +1,21 @@
-
 Core (OPTIONAL)
 1. Add option to use custom PIDProfile for generally moving using builder
 
-Plan for line following
-1. Configure min error of PIDMotor to set integral to 0
-2. Make it so that the chassis must wait a certain amount of time to adjust (when it is within margin of error) before 
-exiting the stall
-3. MKAE EXTRAAA sure that Chassisbuilder can create multiple motor instances (cloning) so that you can use Build() multiple times.
-3. Define a XLineFollowerBot or something; Pass in XAutoChassis
-4. Have the XLineFollowerBot go as straight as possible (and maybe add conditions for it to stop running)
+TODO
+* Decide how we are going to enforce chassis stalling / not stalling in XLineFollower
+* Test how accurate traveling forward and backwards is;
+	* Determines whether or not picking up blocks is distance or detection based
+* Use smart pointers for ownership issues
+* Have ChassisBuilder() in XLineFollowerBuilder to configure builder instead
 
 
+Challenges to overcome
+* Move a specific amount (DONE)
+* Turn a certain angle (DONE)
+* Follow a line a certain distance
+* Detect a corner 
+* Pick up block
+* Hold arm in position
 
 
 

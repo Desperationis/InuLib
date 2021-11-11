@@ -29,6 +29,11 @@ namespace inu {
 			return currentPosition > targetPosition - error &&
 				currentPosition < targetPosition + error;
 		}
+
+		Motor* Clone() {
+			// Test this to see if it is a full copy
+			return new Motor(*this);
+		}
 	};
 }
 
