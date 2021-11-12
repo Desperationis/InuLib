@@ -8,10 +8,12 @@
 #define CHASSIS_H
 
 #include <cstdint>
-#include "inu/auto/chassis/AutoChassisBuilder.hpp"
 #include "main.h"
+#include "inu/motor/PIDProfile.hpp"
 
 namespace inu {
+	class AutoChassisBuilder;
+
 	/**
 	 * Abstract class used for all future chassis that move autonomously.
 	 *
@@ -19,69 +21,41 @@ namespace inu {
 	*/
 	class AutoChassis {
 	protected:
-		void Copy(const AutoChassis& chassis) {
-			maxEncoderError = chassis.maxEncoderError;
-			maxAngleError = chassis.maxAngleError;
-			maxVelocity = chassis.maxVelocity;
-			currentLimit = chassis.currentLimit;
-			timeoutLimit = chassis.timeoutLimit;
-			timeoutAlignLimit = chassis.timeoutAlignLimit;
-
-			usesGyro = chassis.usesGyro;
-			if(usesGyro) {
-				gyro = new pros::Imu(chassis.gyroPort);
-				gyroPort = chassis.gyroPort;
-			}
-				
-			isStalling = chassis.isStalling;
-
-			encoderUnits = chassis.encoderUnits;
-			gyroPID = chassis.gyroPID;
-		}
+		void Copy(const AutoChassis& chassis);
 
 	public:
-		AutoChassis(const AutoChassisBuilder* builder) {
-			maxAngleError = builder->GetMaxAngleError();
-			maxEncoderError = builder->GetMaxEncoderError();
-			maxVelocity = builder->GetMaxVelocity();
-			currentLimit = builder->GetCurrentLimit();
-			timeoutLimit = builder->GetTimeout();
-			isStalling = builder->IsStalling();
-			timeoutAlignLimit = builder->GetTimeoutAlignLimit();
+		AutoChassis(const AutoChassisBuilder* builder);
 
-			usesGyro = builder->UsesGyro();
-			gyro = nullptr;
+		AutoChassis(const AutoChassis& chassis);
 
-			if(usesGyro) {
-				gyro = new pros::Imu(builder->GetGyro());
-				gyroPID = builder->GetGyroPID();
-				gyroPort = builder->GetGyro();
-			}
-
-			encoderUnits = builder->GetEncoderUnits();
-		}
-
-		AutoChassis(const AutoChassis& chassis) {
-			Copy(chassis);
-		}
-
-		virtual ~AutoChassis() {
-			if(gyro != nullptr) {
-				delete gyro;
-				gyro = nullptr;
-			}
-		};
+		virtual ~AutoChassis();
 
 		void operator = (const AutoChassis& chassis) {
 			Copy(chassis);
 		}
 
 		/** 
+		 * Given two speeds x and y, swerve the entire chassis. x and y will be
+		 * clamped at the maximum velocity.
+		 *
+		 * This function will not stall and will simply set the speed of the
+		 * motors.
+		 *
+		 * @param y The speed you want to go forward / backwards.  @param x The
+		 * speed at which you want to turn the chassis while turning.
+		*/
+		virtual void Swerve(std::int8_t y, std::int8_t x) = 0;
+
+		/** 
 		 * If a gyro is attached, turns the entire chassis a specific amount of
 		 * degrees left or right relative to it's current direction. If no gyro
 		 * is attached, do nothing.
 		 *
-		 r This function has the capability of stalling; If stalling is enabled
+		 * NOTE: There must be no background motor that is currently running on
+		 * the same motor ports as what this chassis uses. If there is, this
+		 * will do nothing.
+		 *
+		 * This function has the capability of stalling; If stalling is enabled
 		 * then the chassis will timeout and Stop() if the chassis is not able
 		 * to face the direction.
 		 *
@@ -97,6 +71,10 @@ namespace inu {
 		/**
 		 * If a gyro is attached, turns the entire chassis to an absolute
 		 * heading. If no gyro is attached, do nothing.
+		 *
+		 * NOTE: There must be no background motor that is currently running on
+		 * the same motor ports as what this chassis uses. If there is, this
+		 * will do nothing.
 		 *
 		 * This function has the capability of stalling; If stalling is enabled
 		 * then the chassis will timeout if the chassis is not able to face the

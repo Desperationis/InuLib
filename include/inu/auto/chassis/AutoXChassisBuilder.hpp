@@ -11,7 +11,7 @@
 #include "inu/auto/chassis/AutoChassis.h"
 #include "inu/auto/chassis/AutoChassisBuilder.hpp"
 #include "inu/auto/chassis/AutoXChassis.h"
-#include "inu/motor/Motor.hpp"
+#include "inu/motor/Motor.h"
 #include "inu/motor/background/SlewMotor.h"
 
 namespace inu {

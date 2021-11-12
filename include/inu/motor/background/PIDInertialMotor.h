@@ -10,7 +10,7 @@
 
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
-#include "inu/motor/Motor.hpp"
+#include "inu/motor/Motor.h"
 #include "main.h"
 
 namespace inu {

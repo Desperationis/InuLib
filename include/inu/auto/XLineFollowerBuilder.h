@@ -8,7 +8,6 @@
 #define XLINEFOLLOWERBUILDER_H
 
 #include "main.h"
-#include "inu/auto/XLineFollower.h"
 
 namespace inu {
 	class AutoXChassis;
@@ -16,93 +15,41 @@ namespace inu {
 
 	class XLineFollowerBuilder {
 	public:
-		XLineFollowerBuilder() { 
-			Reset();
-		}
+		XLineFollowerBuilder();
 
-		void Reset() {
-			sensorsSet = false;
-			activeOnDark = false;
+		void Reset();
 
-			lightThreshold = 1000;
-			chassis = nullptr;
-			follower = nullptr;
+		void SetChassis(AutoXChassis* chassis);
 
-			leftError = 0;
-			centerError = 0;
-			rightError = 0;
-		}
+		void SetSensors(unsigned int left, unsigned int center, unsigned int right);
 
-		void SetChassis(AutoXChassis* chassis) {
-			this->chassis = chassis;
-		}
+		void SetSensorError(int left, int center, int right);
 
-		void SetSensors(unsigned int left, unsigned int center, unsigned int right) {
-			leftPort = left;
-			centerPort = center;
-			rightPort = right;
-			sensorsSet = true;
-		}
-
-		void SetSensorError(int left, int center, int right) {
-			leftError = left;
-			centerError = center;
-			rightError = right;
-		}
-
-		void SetLightThreshold(unsigned int threshold) {
-			lightThreshold = threshold;
-		}
+		void SetLightThreshold(unsigned int threshold);
 
 		// Whether or not we will detect a reading if the tape is dark (high
 		// value). If not, it will activate when the tape is white (low value)
-		void ActivateOnDark(bool active) {
-			activeOnDark = active;
-		}
+		void ActivateOnDark(bool active);
 
-		AutoXChassis* GetChassis() const {
-			return chassis;
-		}
+		AutoXChassis* GetChassis() const;
 
-		unsigned int GetLeftSensor() const {
-			return leftPort;
-		}
+		unsigned int GetLeftSensor() const;
 
-		unsigned int GetCenterSensor() const {
-			return centerPort;
-		}
+		unsigned int GetCenterSensor() const;
 
-		unsigned int GetRightSensor() const {
-			return rightPort;
-		}
+		unsigned int GetRightSensor() const;
 
-		int GetLeftSensorError() const {
-			return leftError;
-		}
+		int GetLeftSensorError() const;
 
-		int GetCenterSensorError() const {
-			return centerError;
-		}
+		int GetCenterSensorError() const;
 
-		int GetRightSensorError() const {
-			return rightError;
-		}
+		int GetRightSensorError() const;
 
-		unsigned int GetLightThreshold() const {
-			return lightThreshold;
-		}
+		unsigned int GetLightThreshold() const;
 
-		bool IsActiveOnDark() const {
-			return activeOnDark;
-		}
+		bool IsActiveOnDark() const;
 
-		XLineFollower* Build() {
-			if(!sensorsSet) 
-				return nullptr;
-
-			return new XLineFollower(this);
-		}
-
+		XLineFollower* Build();
 
 	private:
 		AutoXChassis* chassis;

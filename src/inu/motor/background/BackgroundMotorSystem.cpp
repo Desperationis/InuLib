@@ -47,7 +47,7 @@ void BackgroundMotorSystem::SetDelay(unsigned int delay) {
 void BackgroundMotorSystem::EnrollMotor(BackgroundMotor* motor) {
 	size_t index = motor->GetPort() - 1;
 
-	if(motors[index] == nullptr) {
+	if(!MotorExists(motor->GetPort())) {
 		motors[index] = motor;
 	}
 }
@@ -60,6 +60,10 @@ void BackgroundMotorSystem::RemoveMotor(BackgroundMotor* motor) {
 			break;
 		}
 	}
+}
+
+bool BackgroundMotorSystem::MotorExists(unsigned int port) {
+	return motors[port - 1] != nullptr;
 }
 
 void BackgroundMotorSystem::RemoveMotor(unsigned int port) {

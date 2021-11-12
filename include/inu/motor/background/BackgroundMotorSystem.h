@@ -29,6 +29,8 @@ namespace inu {
 
 		void RemoveMotor(unsigned int port);
 
+		bool MotorExists(unsigned int port);
+
 		void BackgroundTask(void* parameters);
 
 	protected:

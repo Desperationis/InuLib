@@ -12,13 +12,11 @@
 
 #include "main.h"
 #include "inu/auto/chassis/AutoChassis.h"
-#include "inu/motor/Motor.hpp"
-#include "inu/motor/background/PIDInertialMotor.h"
-
+#include "inu/motor/Motor.h"
 
 namespace inu {
-
 	class AutoXChassisBuilder;
+	class PIDInertialMotor;
 
 	/**
 	 * Controls a x-drive powered chassis with a topleft, topright, bottomleft, and
@@ -43,7 +41,7 @@ namespace inu {
 
 		~AutoXChassis();
 
-		// TODO; Rule of three with destructor here for motors
+		virtual void Swerve(std::int8_t y, std::int8_t x) override;
 
 		virtual void TurnA(double degrees) override;
 
@@ -81,16 +79,36 @@ namespace inu {
 		*/
 		virtual void StrafeRight(double ticks);
 
-	private:
-		inu::Motor* topleftMotor;
-		inu::Motor* toprightMotor;
-		inu::Motor* bottomleftMotor;
-		inu::Motor* bottomrightMotor;
+	protected:
+		/**
+		 * Deallocates the space of any background motors currently running
+		 * that are used by the chassis.
+		 *
+		 * Call this when you need to be extra sure that no background motors
+		 * exist.
+		*/ 
+		void FreeBackgroundMotors();
 
-		inu::PIDInertialMotor* topleft;
-		inu::PIDInertialMotor* topright;
-		inu::PIDInertialMotor* bottomleft;
-		inu::PIDInertialMotor* bottomright;
+
+		/**
+		 * Create background motors, assuming they don't exist. If they do exist,
+		 * return false.
+		 *
+		 * @retuns true if the background motors were able to be created, false
+		 * if a background motors is already occupying the space.
+		*/
+		bool CreateBackgroundMotors();
+
+	protected:
+		inu::Motor* topleft = nullptr;
+		inu::Motor* topright = nullptr;
+		inu::Motor* bottomleft = nullptr;
+		inu::Motor* bottomright = nullptr;
+
+		inu::PIDInertialMotor* inertialTopleft = nullptr;
+		inu::PIDInertialMotor* inertialTopright = nullptr;
+		inu::PIDInertialMotor* inertialBottomleft = nullptr;
+		inu::PIDInertialMotor* inertialBottomright = nullptr;
 	};
 }
 

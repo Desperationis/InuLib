@@ -10,12 +10,20 @@
 
 namespace inu {
 	/**
-	 * Data structure that holds P, I, and D variables. This is used in PIDMotor.
+	 * Data structure that holds P, I, and D variables used for PID control.
 	*/ 
 	struct PIDProfile {
-		float p = 0.0f;
-		float i = 0.0f;
-		float d = 0.0f;
+		float p;
+		float i;
+		float d;
+
+		PIDProfile() {
+			p = i = d = 0;
+		}
+
+		PIDProfile(float p) : p(p) {}
+		PIDProfile(float p, float i) : p(p), i(i) {}
+		PIDProfile(float p, float i, float d) : p(p), i(i), d(d) {}
 	};
 }
 

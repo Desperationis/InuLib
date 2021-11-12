@@ -9,7 +9,7 @@
 #define XLINEFOLLOWER_H
 
 #include "main.h"
-#include "pros/adi.hpp"
+#include "inu/auto/LineSensor.h"
 
 namespace inu {
 	class AutoXChassis;
@@ -27,10 +27,6 @@ namespace inu {
 		// Whether or not the line is detected on one of the sensors.
 		bool LineDetected();
 
-		// Whether or not a given light value means that the line is 
-		// underneath it.
-		bool IsLine(std::int32_t light);
-
 		// Folows line; non blokcing
 		void FollowLine();
 
@@ -46,8 +42,7 @@ namespace inu {
 		unsigned int lightThreshold;
 		bool activeOnDark;
 
-		pros::ADILineSensor left, center,right;
-		int leftError, centerError, rightError;
+		inu::LineSensor left, center, right;
 	};
 }
 
