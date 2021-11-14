@@ -70,7 +70,7 @@ void opcontrol() {
 		bool detected = follower->LineDetected();
 		pros::lcd::print(0, "Line detected: %d", (int)detected);
 
-		int value = follower->DebugCalibrate();
+		int value = follower->RecommendThreshold();
 		pros::lcd::print(1, "Recommended midpoint: %d", (int) value);
 		pros::delay(10);
 	}

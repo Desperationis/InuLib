@@ -20,21 +20,33 @@ namespace inu {
 		XLineFollower(XLineFollowerBuilder* builder);
 		~XLineFollower() = default; // Do not free anything
 
-		// If the line is detected on one of the line sensors,
-		// try to make it the center; Blocking with timeout
-		void Recenter();
-
-		// Whether or not the line is detected on one of the sensors.
+		/**
+		 * @returns Whether or not a single line sensor can detect a line according to 
+		 * the threshold.
+		*/ 
 		bool LineDetected();
 
-		// Folows line; non blokcing
+		/**
+		 * If a line is detected on the sensors follow it as best as possible.
+		 * Note that this is a halting process until the chassis does not
+		 * detect the line anymore, in which case it stops.
+		*/
 		void FollowLine();
 
-		// Returns the recommended light threshold given that the center
-		// sensor is on the line and the left and right are on the background
-		std::int32_t DebugCalibrate();
+		/** 
+		 * Get the recommended threshold value used for line following by
+		 * calculating the midpoint between the highest and lowest light
+		 * readings.  This assumes that at least one sensor is hitting the line
+		 * and at least one is hitting the background; Two sensors can be
+		 * outside or inside the line.
+		 *
+		 * @returns The recommended threshold.
+		*/
+		std::int32_t RecommendThreshold();
 
-		// Stop Following the line completely
+		/**
+		 * Stop moving the chassis completely.
+		 */ 
 		void Stop();
 
 	private:

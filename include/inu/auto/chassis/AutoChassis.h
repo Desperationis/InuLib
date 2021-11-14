@@ -157,6 +157,17 @@ namespace inu {
 		*/ 
 		virtual bool IsSettled() = 0;
 
+		/**
+		 * Tare the encoder value of all motors to 0.
+		*/ 
+		virtual void TareDistance() = 0;
+
+		/**
+		 * Take the absolute value of all motor encoder positions and average
+		 * them out.
+		 */ 
+		virtual double GetDistance() = 0;
+
 	protected:
 		unsigned int maxEncoderError;
 		unsigned int maxAngleError;

@@ -13,6 +13,9 @@
 namespace inu {
 	class LineSensor {
 	public:
+		/**
+		 * @param port The port of the line sensor; 1 - 8.
+		*/ 
 		LineSensor(unsigned int port);
 
 		/**

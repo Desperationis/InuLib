@@ -208,6 +208,22 @@ void AutoXChassis::Stop() {
 	bottomright->move(0);
 }
 
+void AutoXChassis::TareDistance() {
+	topleft->tare_position();
+	topright->tare_position();
+	bottomleft->tare_position();
+	bottomright->tare_position();
+}
+
+double AutoXChassis::GetDistance() {
+	double tl = std::abs(topleft->get_position());
+	double tr = std::abs(topright->get_position());
+	double bl = std::abs(bottomleft->get_position());
+	double br = std::abs(bottomright->get_position());
+
+	return (tl + tr + bl + br) / 4;
+}
+
 
 void AutoXChassis::FreeBackgroundMotors() {
 	if(inertialTopleft != nullptr) {

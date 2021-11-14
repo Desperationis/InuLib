@@ -59,6 +59,10 @@ namespace inu {
 
 		virtual void Stop() override;
 
+		virtual void TareDistance() override;
+
+		virtual double GetDistance() override;
+
 		/**
 		 * Shortcut for StrafeRight(-ticks).
 		 *

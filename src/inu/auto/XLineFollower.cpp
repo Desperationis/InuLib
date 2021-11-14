@@ -18,31 +18,23 @@ XLineFollower::XLineFollower(XLineFollowerBuilder* builder) :
 	right.SetError(builder->GetRightSensorError());
 }
 
-void XLineFollower::Recenter() {
-	while(!center.IsLine(lightThreshold, activeOnDark)) {
-		if(left.IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 6);
-		}
-
-		else if(right.IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30,6);
-		}
-
-		pros::delay(10);
-	}
-}
-
 void XLineFollower::FollowLine() {
 	while(LineDetected()) {
 		if(center.IsLine(lightThreshold, activeOnDark)) {
 			chassis->Swerve(30, 0);
 		}
-		else {
-			Recenter();
+		else if(left.IsLine(lightThreshold, activeOnDark)) {
+			chassis->Swerve(30, -6);
+		}
+
+		else if(right.IsLine(lightThreshold, activeOnDark)) {
+			chassis->Swerve(30, 6);
 		}
 
 		pros::delay(10);
 	}
+
+	Stop();
 }
 
 bool XLineFollower::LineDetected() {
@@ -51,17 +43,23 @@ bool XLineFollower::LineDetected() {
 		left.IsLine(lightThreshold, activeOnDark);
 }
 
-std::int32_t XLineFollower::DebugCalibrate() {
-	// Assume that left and right are facing background and center is facing
-	// the line.
+std::int32_t XLineFollower::RecommendThreshold() {
+	// Get darkest value (highest)
+	std::int32_t darkVal = std::max({
+			right.GetValue(), 
+			left.GetValue(),
+			center.GetValue()
+		});
+	
+	// Get lightest value
+	std::int32_t whiteVal = std::min({
+			right.GetValue(), 
+			left.GetValue(),
+			center.GetValue()
+		});
 
-	// Get the midpoint between the values
-	std::int32_t darkAvg = (left.GetValue() + right.GetValue()) / 2;
-	std::int32_t midpoint = (darkAvg + center.GetValue()) / 2;
-
-	pros::lcd::print(3, "Left: %d", (int)left.GetValue());
-	pros::lcd::print(4, "Center: %d", (int)center.GetValue());
-	pros::lcd::print(5, "Right: %d", (int)right.GetValue());
+	// Get the midpoint between the values; This is the optimal threshold
+	std::int32_t midpoint = (darkVal + whiteVal) / 2;
 
 	return midpoint;
 }
