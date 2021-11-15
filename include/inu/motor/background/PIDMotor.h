@@ -9,7 +9,7 @@
 
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
-#include "inu/motor/Motor.h"
+#include "inu/wrapper/Motor.h"
 
 namespace inu {
 	/**
@@ -37,7 +37,8 @@ namespace inu {
 		void SetPID(PIDProfile pidProfile);
 
 		/**
-		 * @returns The target encoder value for this motor.
+		 * @returns The target encoder value for this motor; Adjusted based on
+		 * if the motor is reversed.
 		*/ 
 		int GetTarget() const;
 
@@ -52,12 +53,25 @@ namespace inu {
 		*/
 		bool AtTarget(unsigned int error) const;
 
+		/**
+		 * Set the maximum velocity possible [-127, 127] that this motor is
+		 * allowed to go to.
+		 *
+		 * @param velocity The max velocity of the motor.
+		 */
 		void SetMaximumVelocity(unsigned int velocity);
+
+		/**
+		 * Reverse the polarity of the PIDMotor; This simply changes the sign
+		 * of the target.
+		*/ 
+		void SetReversed(bool reversed);
 
 		void _Update();
 
 	private:
 		unsigned int maxVelocity;
+		bool reversed;
 		inu::Motor motor;
 
 		PIDProfile pidProfile;

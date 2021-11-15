@@ -53,10 +53,10 @@ void AutoXChassis::Swerve(std::int8_t y, std::int8_t x) {
 	std::int8_t leftSide = std::clamp<std::int8_t>(y + x, -maxVelocity, maxVelocity);
 	std::int8_t rightSide = std::clamp<std::int8_t>(-y + x, -maxVelocity, maxVelocity);
 
-	topleft->move(leftSide);
-	topright->move(rightSide);
-	bottomleft->move(leftSide);
-	bottomright->move(rightSide);
+	topleft->Move(leftSide);
+	topright->Move(rightSide);
+	bottomleft->Move(leftSide);
+	bottomright->Move(rightSide);
 }
 
 
@@ -122,10 +122,10 @@ void AutoXChassis::TurnA(double degrees) {
 void AutoXChassis::Turn(double ticks) {
 	FreeBackgroundMotors();
 
-	topleft->move_relative(ticks, maxVelocity);
-	topright->move_relative(ticks, maxVelocity);
-	bottomleft->move_relative(ticks, maxVelocity);
-	bottomright->move_relative(ticks, maxVelocity);
+	topleft->MoveRelative(ticks, maxVelocity);
+	topright->MoveRelative(ticks, maxVelocity);
+	bottomleft->MoveRelative(ticks, maxVelocity);
+	bottomright->MoveRelative(ticks, maxVelocity);
 
 	if(isStalling) {
 		StallUntilSettled(timeoutLimit);
@@ -136,10 +136,10 @@ void AutoXChassis::Turn(double ticks) {
 void AutoXChassis::Forward(double ticks) {
 	FreeBackgroundMotors();
 
-	topleft->move_relative(ticks, maxVelocity);
-	topright->move_relative(-ticks, maxVelocity);
-	bottomleft->move_relative(ticks, maxVelocity);
-	bottomright->move_relative(-ticks, maxVelocity);
+	topleft->MoveRelative(ticks, maxVelocity);
+	topright->MoveRelative(-ticks, maxVelocity);
+	bottomleft->MoveRelative(ticks, maxVelocity);
+	bottomright->MoveRelative(-ticks, maxVelocity);
 
 	if(isStalling) {
 		StallUntilSettled(timeoutLimit);
@@ -155,10 +155,10 @@ void AutoXChassis::Backward(double ticks) {
 void AutoXChassis::StrafeRight(double ticks) {
 	FreeBackgroundMotors();
 
-	topleft->move_relative(ticks, maxVelocity);
-	topright->move_relative(ticks, maxVelocity);
-	bottomleft->move_relative(-ticks, maxVelocity);
-	bottomright->move_relative(-ticks, maxVelocity);
+	topleft->MoveRelative(ticks, maxVelocity);
+	topright->MoveRelative(ticks, maxVelocity);
+	bottomleft->MoveRelative(-ticks, maxVelocity);
+	bottomright->MoveRelative(-ticks, maxVelocity);
 
 	if(isStalling) {
 		StallUntilSettled(timeoutLimit);
@@ -197,24 +197,24 @@ void AutoXChassis::StallUntilSettled(double timeout) {
 void AutoXChassis::Stop() {
 	FreeBackgroundMotors();
 
-	topleft->move(0);
-	topright->move(0);
-	bottomleft->move(0);
-	bottomright->move(0);
+	topleft->Move(0);
+	topright->Move(0);
+	bottomleft->Move(0);
+	bottomright->Move(0);
 }
 
 void AutoXChassis::TareDistance() {
-	topleft->tare_position();
-	topright->tare_position();
-	bottomleft->tare_position();
-	bottomright->tare_position();
+	topleft->TarePosition();
+	topright->TarePosition();
+	bottomleft->TarePosition();
+	bottomright->TarePosition();
 }
 
 double AutoXChassis::GetDistance() {
-	double tl = std::abs(topleft->get_position());
-	double tr = std::abs(topright->get_position());
-	double bl = std::abs(bottomleft->get_position());
-	double br = std::abs(bottomright->get_position());
+	double tl = std::abs(topleft->GetPosition());
+	double tr = std::abs(topright->GetPosition());
+	double bl = std::abs(bottomleft->GetPosition());
+	double br = std::abs(bottomright->GetPosition());
 
 	return (tl + tr + bl + br) / 4;
 }
@@ -228,10 +228,10 @@ void AutoXChassis::FreeBackgroundMotors() {
 }
 
 bool AutoXChassis::CreateBackgroundMotors() {
-	int tl = topleft->get_port();
-	int tr = topright->get_port();
-	int bl = bottomleft->get_port();
-	int br = bottomright->get_port();
+	int tl = topleft->GetPort();
+	int tr = topright->GetPort();
+	int bl = bottomleft->GetPort();
+	int br = bottomright->GetPort();
 
 	auto system = BackgroundMotorSystem::Instance();
 

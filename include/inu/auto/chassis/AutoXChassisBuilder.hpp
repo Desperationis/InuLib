@@ -11,7 +11,7 @@
 #include "inu/auto/chassis/AutoChassis.h"
 #include "inu/auto/chassis/AutoChassisBuilder.hpp"
 #include "inu/auto/chassis/AutoXChassis.h"
-#include "inu/motor/Motor.h"
+#include "inu/wrapper/Motor.h"
 #include "inu/motor/background/SlewMotor.h"
 #include <memory>
 
@@ -32,16 +32,16 @@ namespace inu {
 
 		void SetMotors(int tl, int tr, int bl, int br) {
 			topleft.reset(new inu::Motor(std::abs(tl)));
-			if (tl < 0) topleft->set_reversed(true);
+			if (tl < 0) topleft->SetReversed(true);
 
 			topright.reset(new inu::Motor(std::abs(tr)));
-			if (tr < 0) topright->set_reversed(true);
+			if (tr < 0) topright->SetReversed(true);
 
 			bottomleft.reset(new inu::Motor(std::abs(bl)));
-			if (bl < 0) bottomleft->set_reversed(true);
+			if (bl < 0) bottomleft->SetReversed(true);
 
 			bottomright.reset(new inu::Motor(std::abs(br)));
-			if (br < 0) bottomright->set_reversed(true);
+			if (br < 0) bottomright->SetReversed(true);
 
 			motorPortsDefined = true;
 		}

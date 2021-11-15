@@ -9,7 +9,7 @@
 #define XLINEFOLLOWER_H
 
 #include "main.h"
-#include "inu/auto/LineSensor.h"
+#include "inu/wrapper/LineSensor.h"
 #include <memory>
 
 namespace inu {

@@ -32,7 +32,13 @@ void PIDMotor::SetPID(PIDProfile pidProfile) {
 }
 
 int PIDMotor::GetTarget() const {
+	if(reversed)
+		return -target;
 	return target;
+}
+
+void PIDMotor::SetReversed(bool reverse) {
+	this->reversed = reverse;
 }
 
 const PIDProfile PIDMotor::GetPID() const {
@@ -57,9 +63,9 @@ void PIDMotor::_Update() {
 	if(!targetSet)
 		return;
 
-	double encoderValue = motor.get_position();
+	double encoderValue = motor.GetPosition();
 
-	proportion = target - encoderValue; 
+	proportion = GetTarget() - encoderValue; 
 	integral += proportion; 
 	derivative = proportion - pastError;
 	pastError = proportion;
@@ -80,6 +86,6 @@ void PIDMotor::_Update() {
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
 	motorSpeed = std::clamp<int>(motorSpeed, -maxVelocity, maxVelocity);
 
-	motor.move(motorSpeed);
+	motor.Move(motorSpeed);
 }
 

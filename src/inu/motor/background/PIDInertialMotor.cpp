@@ -34,7 +34,7 @@ void PIDInertialMotor::SetPID(PIDProfile pidProfile) {
 }
 
 void PIDInertialMotor::SetReversed(bool reversed) {
-	motor.set_reversed(reversed);
+	motor.SetReversed(reversed);
 }
 
 double PIDInertialMotor::GetTarget() const {
@@ -55,7 +55,7 @@ void PIDInertialMotor::SetMaximumVelocity(unsigned int velocity) {
 }
 
 bool PIDInertialMotor::IsReversed() const {
-	return motor.is_reversed();
+	return motor.IsReversed();
 }
 
 void PIDInertialMotor::_Update() {
@@ -92,6 +92,6 @@ void PIDInertialMotor::_Update() {
 	float motorSpeed = (proportion * p) + (integral * i) + (derivative * d);
 	motorSpeed = std::clamp<int>(motorSpeed, -maxVelocity, maxVelocity);
 
-	motor.move(motorSpeed);
+	motor.Move(motorSpeed);
 }
 

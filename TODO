@@ -1,24 +1,12 @@
 Core (OPTIONAL)
 1. Add option to use custom PIDProfile for generally moving using builder
 
-TODO
-* Decide how we are going to enforce chassis stalling / not stalling in XLineFollower
-* Test how accurate traveling forward and backwards is;
-	* Determines whether or not picking up blocks is distance or detection based
-* Use smart pointers for ownership issues
-* Have ChassisBuilder() in XLineFollowerBuilder to configure builder instead
-
-
-* Implement other Swerve() in AutoXChassis
-
-
 Challenges to overcome
 * Move a specific amount (DONE)
 * Turn a certain angle (DONE)
 * Follow a line a certain distance
-* Detect a corner 
-* Pick up block
-* Hold arm in position
+* Pick up block (DONE
+* Hold arm in position (DONE)
 
 
 

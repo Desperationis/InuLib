@@ -1,4 +1,4 @@
-#include "inu/auto/LineSensor.h"
+#include "inu/wrapper/LineSensor.h"
 
 using namespace inu;
 
