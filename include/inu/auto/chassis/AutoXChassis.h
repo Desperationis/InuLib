@@ -13,6 +13,7 @@
 #include "main.h"
 #include "inu/auto/chassis/AutoChassis.h"
 #include "inu/motor/Motor.h"
+#include <memory>
 
 namespace inu {
 	class AutoXChassisBuilder;
@@ -33,7 +34,7 @@ namespace inu {
 		 * that, when powered with a positive speed, the entire chassis turns
 		 * clockwise.
 		*/ 
-		AutoXChassis(const inu::AutoXChassisBuilder* builder);
+		AutoXChassis(const inu::AutoXChassisBuilder& builder);
 
 		AutoXChassis(const AutoXChassis& chassis);
 
@@ -104,15 +105,15 @@ namespace inu {
 		bool CreateBackgroundMotors();
 
 	protected:
-		inu::Motor* topleft = nullptr;
-		inu::Motor* topright = nullptr;
-		inu::Motor* bottomleft = nullptr;
-		inu::Motor* bottomright = nullptr;
+		std::shared_ptr<inu::Motor> topleft;
+		std::shared_ptr<inu::Motor> topright;
+		std::shared_ptr<inu::Motor> bottomleft;
+		std::shared_ptr<inu::Motor> bottomright;
 
-		inu::PIDInertialMotor* inertialTopleft = nullptr;
-		inu::PIDInertialMotor* inertialTopright = nullptr;
-		inu::PIDInertialMotor* inertialBottomleft = nullptr;
-		inu::PIDInertialMotor* inertialBottomright = nullptr;
+		std::unique_ptr<inu::PIDInertialMotor> inertialTopleft;
+		std::unique_ptr<inu::PIDInertialMotor> inertialTopright;
+		std::unique_ptr<inu::PIDInertialMotor> inertialBottomleft;
+		std::unique_ptr<inu::PIDInertialMotor> inertialBottomright;
 	};
 }
 

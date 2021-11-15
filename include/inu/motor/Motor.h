@@ -20,14 +20,6 @@ namespace inu {
 		 * position + error.
 		 */ 
 		bool IsSettled(unsigned int error) const;
-
-		/**
-		 * Returns a clone of this motor; You are responsible for managing the
-		 * memory.
-		 *
-		 * @returns a clone of this motor.
-		*/ 
-		Motor* Clone() const;
 	};
 }
 

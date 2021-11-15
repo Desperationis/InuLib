@@ -4,18 +4,18 @@
 
 using namespace inu;
 
-XLineFollower::XLineFollower(XLineFollowerBuilder* builder) : 
-	left(builder->GetLeftSensor()),
-	center(builder->GetCenterSensor()),
-	right(builder->GetRightSensor()) {
+XLineFollower::XLineFollower(const XLineFollowerBuilder& builder) : 
+	left(builder.GetLeftSensor()),
+	center(builder.GetCenterSensor()),
+	right(builder.GetRightSensor()) {
 
-	chassis = builder->GetChassis();
-	activeOnDark = builder->IsActiveOnDark();	
-	lightThreshold = builder->GetLightThreshold();
+	chassis = builder.GetChassis().lock(); // TODO: Error handle this
+	activeOnDark = builder.IsActiveOnDark();	
+	lightThreshold = builder.GetLightThreshold();
 
-	left.SetError(builder->GetLeftSensorError());
-	center.SetError(builder->GetCenterSensorError());
-	right.SetError(builder->GetRightSensorError());
+	left.SetError(builder.GetLeftSensorError());
+	center.SetError(builder.GetCenterSensorError());
+	right.SetError(builder.GetRightSensorError());
 }
 
 void XLineFollower::FollowLine() {

@@ -8,6 +8,7 @@
 #include "inu/auto/XLineFollowerBuilder.h"
 #include "pros/misc.h"
 #include "pros/motors.hpp"
+#include <memory>
 
 using namespace inu;
 
@@ -50,16 +51,16 @@ void opcontrol() {
 	builder.SetStalling(true);
 	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
-	AutoXChassis* chassis = builder.Build();
+	std::shared_ptr<AutoXChassis> chassis = builder.Build();
 
 	XLineFollowerBuilder followerBuilder;
 	followerBuilder.SetSensors(6,7,8);
 	followerBuilder.SetSensorError(250,0,0);
-	followerBuilder.SetChassis(chassis);
+	followerBuilder.SetChassis(std::weak_ptr(chassis));
 	followerBuilder.ActivateOnDark(false);
-	followerBuilder.SetLightThreshold(500); // Tune this
+	followerBuilder.SetLightThreshold(500);
 
-	XLineFollower* follower = followerBuilder.Build();
+	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 	while(true) {
 		follower->FollowLine();
 		pros::delay(20);

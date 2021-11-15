@@ -8,6 +8,7 @@
 #define XLINEFOLLOWERBUILDER_H
 
 #include "main.h"
+#include <memory>
 
 namespace inu {
 	class AutoXChassis;
@@ -19,7 +20,7 @@ namespace inu {
 
 		void Reset();
 
-		void SetChassis(AutoXChassis* chassis);
+		void SetChassis(std::weak_ptr<AutoXChassis> chassis);
 
 		void SetSensors(unsigned int left, unsigned int center, unsigned int right);
 
@@ -31,7 +32,7 @@ namespace inu {
 		// value). If not, it will activate when the tape is white (low value)
 		void ActivateOnDark(bool active);
 
-		AutoXChassis* GetChassis() const;
+		std::weak_ptr<AutoXChassis> GetChassis() const;
 
 		unsigned int GetLeftSensor() const;
 
@@ -49,11 +50,11 @@ namespace inu {
 
 		bool IsActiveOnDark() const;
 
-		XLineFollower* Build();
+		std::shared_ptr<XLineFollower> Build();
 
 	private:
-		AutoXChassis* chassis;
-		XLineFollower* follower;
+		std::weak_ptr<AutoXChassis> chassis;
+		std::shared_ptr<XLineFollower> follower;
 		
 		unsigned int leftPort, centerPort, rightPort;
 		int leftError, centerError, rightError;

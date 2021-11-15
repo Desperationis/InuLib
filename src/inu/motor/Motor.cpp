@@ -13,7 +13,3 @@ bool Motor::IsSettled(unsigned int error) const {
 	return currentPosition > targetPosition - error &&
 		currentPosition < targetPosition + error;
 }
-
-Motor* Motor::Clone() const {
-	return new Motor(*this);
-}

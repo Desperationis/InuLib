@@ -24,7 +24,7 @@ namespace inu {
 		void Copy(const AutoChassis& chassis);
 
 	public:
-		AutoChassis(const AutoChassisBuilder* builder);
+		AutoChassis(const AutoChassisBuilder& builder);
 
 		AutoChassis(const AutoChassis& chassis);
 

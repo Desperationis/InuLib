@@ -23,25 +23,25 @@ void AutoChassis::Copy(const AutoChassis& chassis) {
 	gyroPID = chassis.gyroPID;
 }
 
-AutoChassis::AutoChassis(const AutoChassisBuilder* builder) {
-	maxAngleError = builder->GetMaxAngleError();
-	maxEncoderError = builder->GetMaxEncoderError();
-	maxVelocity = builder->GetMaxVelocity();
-	currentLimit = builder->GetCurrentLimit();
-	timeoutLimit = builder->GetTimeout();
-	isStalling = builder->IsStalling();
-	timeoutAlignLimit = builder->GetTimeoutAlignLimit();
+AutoChassis::AutoChassis(const AutoChassisBuilder& builder) {
+	maxAngleError = builder.GetMaxAngleError();
+	maxEncoderError = builder.GetMaxEncoderError();
+	maxVelocity = builder.GetMaxVelocity();
+	currentLimit = builder.GetCurrentLimit();
+	timeoutLimit = builder.GetTimeout();
+	isStalling = builder.IsStalling();
+	timeoutAlignLimit = builder.GetTimeoutAlignLimit();
 
-	usesGyro = builder->UsesGyro();
+	usesGyro = builder.UsesGyro();
 	gyro = nullptr;
 
 	if(usesGyro) {
-		gyro = new pros::Imu(builder->GetGyro());
-		gyroPID = builder->GetGyroPID();
-		gyroPort = builder->GetGyro();
+		gyro = new pros::Imu(builder.GetGyro());
+		gyroPID = builder.GetGyroPID();
+		gyroPort = builder.GetGyro();
 	}
 
-	encoderUnits = builder->GetEncoderUnits();
+	encoderUnits = builder.GetEncoderUnits();
 }
 
 

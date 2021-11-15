@@ -13,66 +13,68 @@
 #include "inu/auto/chassis/AutoXChassis.h"
 #include "inu/motor/Motor.h"
 #include "inu/motor/background/SlewMotor.h"
+#include <memory>
 
 namespace inu {
 	class AutoXChassisBuilder : public AutoChassisBuilder {
 	public:
 		AutoXChassisBuilder() {
 			motorPortsDefined = false;
-			topleft = topright = nullptr;
-			bottomleft = bottomright = nullptr;
 		}
 
 		~AutoXChassisBuilder() {
-			delete topleft;
-			delete topright;
-			delete bottomleft;
-			delete bottomright;
-
-			topleft = nullptr;
-			topright = nullptr;
-			bottomleft = nullptr;
-			bottomright = nullptr;
+			topleft.reset();
+			topright.reset();
+			bottomleft.reset();
+			bottomright.reset();
 		}
 
 
 		void SetMotors(int tl, int tr, int bl, int br) {
-			topleft = new inu::Motor(std::abs(tl));
+			topleft.reset(new inu::Motor(std::abs(tl)));
 			if (tl < 0) topleft->set_reversed(true);
 
-			topright = new inu::Motor(std::abs(tr));
+			topright.reset(new inu::Motor(std::abs(tr)));
 			if (tr < 0) topright->set_reversed(true);
 
-			bottomleft = new inu::Motor(std::abs(bl));
+			bottomleft.reset(new inu::Motor(std::abs(bl)));
 			if (bl < 0) bottomleft->set_reversed(true);
 
-			bottomright = new inu::Motor(std::abs(br));
+			bottomright.reset(new inu::Motor(std::abs(br)));
 			if (br < 0) bottomright->set_reversed(true);
 
 			motorPortsDefined = true;
 		}
 
-		inu::Motor* GetTopleft() const { return topleft->Clone(); }
+		std::weak_ptr<inu::Motor> GetTopleft() const { 
+			return topleft; 
+		}
 
-		inu::Motor* GetTopright() const { return topright->Clone(); }
+		std::weak_ptr<inu::Motor> GetTopright() const {
+		   	return topright; 
+		}
 
-		inu::Motor* GetBottomleft() const { return bottomleft->Clone(); }
+		std::weak_ptr<inu::Motor> GetBottomleft() const { 
+			return bottomleft; 
+		}
 
-		inu::Motor* GetBottomright() const { return bottomright->Clone(); }
+		std::weak_ptr<inu::Motor> GetBottomright() const { 
+			return bottomright; 
+		}
 
-		inu::AutoXChassis* Build() {
+		std::shared_ptr<inu::AutoXChassis> Build() {
 			if(!motorPortsDefined) {
 				return nullptr;
 			}
 
-			return new inu::AutoXChassis(this);
+			return std::shared_ptr<inu::AutoXChassis>(new inu::AutoXChassis(*this));
 		}
 
 
 	private:
 		bool motorPortsDefined;
-		inu::Motor *topleft, *topright;
-		inu::Motor *bottomleft, *bottomright;
+		std::shared_ptr<inu::Motor> topleft, topright;
+		std::shared_ptr<inu::Motor> bottomleft, bottomright;
 	};
 }
 

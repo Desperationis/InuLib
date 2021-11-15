@@ -1,5 +1,6 @@
 #include "inu/auto/XLineFollowerBuilder.h"
 #include "inu/auto/XLineFollower.h"
+#include <memory>
 
 using namespace inu;
 
@@ -12,15 +13,15 @@ void XLineFollowerBuilder::Reset() {
 	activeOnDark = false;
 
 	lightThreshold = 1000;
-	chassis = nullptr;
-	follower = nullptr;
+	chassis.reset();
+	follower.reset();
 
 	leftError = 0;
 	centerError = 0;
 	rightError = 0;
 }
 
-void XLineFollowerBuilder::SetChassis(AutoXChassis* chassis) {
+void XLineFollowerBuilder::SetChassis(std::weak_ptr<AutoXChassis> chassis) {
 	this->chassis = chassis;
 }
 
@@ -47,7 +48,7 @@ void XLineFollowerBuilder::ActivateOnDark(bool active) {
 	activeOnDark = active;
 }
 
-AutoXChassis* XLineFollowerBuilder::GetChassis() const {
+std::weak_ptr<AutoXChassis> XLineFollowerBuilder::GetChassis() const {
 	return chassis;
 }
 
@@ -83,9 +84,9 @@ bool XLineFollowerBuilder::IsActiveOnDark() const {
 	return activeOnDark;
 }
 
-XLineFollower* XLineFollowerBuilder::Build() {
+std::shared_ptr<XLineFollower> XLineFollowerBuilder::Build() {
 	if(!sensorsSet) 
 		return nullptr;
 
-	return new XLineFollower(this);
+	return std::shared_ptr<XLineFollower>(new XLineFollower(*this));
 }

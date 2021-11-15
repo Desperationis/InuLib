@@ -10,6 +10,7 @@
 
 #include "main.h"
 #include "inu/auto/LineSensor.h"
+#include <memory>
 
 namespace inu {
 	class AutoXChassis;
@@ -17,8 +18,7 @@ namespace inu {
 
 	class XLineFollower {
 	public:
-		XLineFollower(XLineFollowerBuilder* builder);
-		~XLineFollower() = default; // Do not free anything
+		XLineFollower(const XLineFollowerBuilder& builder);
 
 		/**
 		 * @returns Whether or not a single line sensor can detect a line according to 
@@ -50,7 +50,7 @@ namespace inu {
 		void Stop();
 
 	private:
-		AutoXChassis* chassis;
+		std::shared_ptr<AutoXChassis> chassis;
 		unsigned int lightThreshold;
 		bool activeOnDark;
 

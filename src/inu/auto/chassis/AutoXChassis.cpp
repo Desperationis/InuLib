@@ -9,10 +9,10 @@
 using namespace inu;
 
 void AutoXChassis::Copy(const AutoXChassis& chassis) { 
-	topleft = chassis.topleft->Clone();
-	topright = chassis.topright->Clone();
-	bottomleft = chassis.bottomleft->Clone();
-	bottomright = chassis.bottomright->Clone();
+	topleft = chassis.topleft;
+	topright = chassis.topright;
+	bottomleft = chassis.bottomleft;
+	bottomright = chassis.bottomright;
 
 	FreeBackgroundMotors();
 }
@@ -28,25 +28,20 @@ void AutoXChassis::operator=(const AutoXChassis& chassis) {
 	FreeBackgroundMotors();
 }
 
-AutoXChassis::AutoXChassis(const AutoXChassisBuilder* builder) : AutoChassis(builder) { 
-	topleft = builder->GetTopleft();
-	topright = builder->GetTopright();
-	bottomleft = builder->GetBottomleft();
-	bottomright = builder->GetBottomright();
+AutoXChassis::AutoXChassis(const AutoXChassisBuilder& builder) : AutoChassis(builder) {  
+	topleft = builder.GetTopleft().lock();
+	topright = builder.GetTopright().lock();
+	bottomleft = builder.GetBottomleft().lock();
+	bottomright = builder.GetBottomright().lock();
 
 	FreeBackgroundMotors();
 }
 
 AutoXChassis::~AutoXChassis() {
-	delete topleft;
-	delete topright;
-	delete bottomleft;
-	delete bottomright;
-
-	topleft = nullptr;
-	topright = nullptr;
-	bottomleft = nullptr;
-	bottomright = nullptr;
+	topleft.reset();
+	topright.reset();
+	bottomleft.reset();
+	bottomright.reset();
 
 	FreeBackgroundMotors();
 }
@@ -226,25 +221,10 @@ double AutoXChassis::GetDistance() {
 
 
 void AutoXChassis::FreeBackgroundMotors() {
-	if(inertialTopleft != nullptr) {
-		delete inertialTopleft;
-		inertialTopleft = nullptr;
-	}
-
-	if(inertialTopright != nullptr) {
-		delete inertialTopright;
-		inertialTopright = nullptr;
-	}
-
-	if(inertialBottomleft != nullptr) {
-		delete inertialBottomleft;
-		inertialBottomleft = nullptr;
-	}
-
-	if(inertialBottomright != nullptr) {
-		delete inertialBottomright;
-		inertialBottomright = nullptr;
-	}
+	inertialTopleft.reset();
+	inertialTopright.reset();
+	inertialBottomleft.reset();
+	inertialBottomright.reset();
 }
 
 bool AutoXChassis::CreateBackgroundMotors() {
@@ -267,10 +247,10 @@ bool AutoXChassis::CreateBackgroundMotors() {
 	if(system->MotorExists(br)) 
 		return false;
 
-	inertialTopleft = new PIDInertialMotor(tl, gyroPort);
-	inertialTopright = new PIDInertialMotor(tr, gyroPort);
-	inertialBottomleft = new PIDInertialMotor(bl, gyroPort);
-	inertialBottomright = new PIDInertialMotor(br, gyroPort);
+	inertialTopleft.reset(new PIDInertialMotor(tl, gyroPort));
+	inertialTopright.reset(new PIDInertialMotor(tr, gyroPort));
+	inertialBottomleft.reset(new PIDInertialMotor(bl, gyroPort));
+	inertialBottomright.reset(new PIDInertialMotor(br, gyroPort));
 
 	return true;
 }
