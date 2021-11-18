@@ -71,24 +71,22 @@ void opcontrol() {
 	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
 	std::shared_ptr<AutoXChassis> chassis = builder.Build();
-	//chassis->Backward(1000);
-	//chassis->Turn(1000);
-	//chassis->Turn(-1000);
-	chassis->TurnA(360);
-	chassis->Turn(-360);
-	//chassis->Forward(1000);
 	
 
 	XLineFollowerBuilder followerBuilder;
-	followerBuilder.SetSensors(6,7,8);
-	followerBuilder.SetSensorError(250,0,0);
+	followerBuilder.SetSensors( { 'C', 'F', 'G', 'H', 'B'} );
+	followerBuilder.SetSensorError( {400, 220, 0, 0, 500 } );
 	followerBuilder.SetChassis(std::weak_ptr(chassis));
 	followerBuilder.ActivateOnDark(false);
-	followerBuilder.SetLightThreshold(500);
+	followerBuilder.SetLightThreshold(350);
 
 	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
+
 	while(true) {
-		follower->FollowLine();
+		pros::lcd::print(0, "Line detected: %d", (int)follower->LineDetected());
 		pros::delay(20);
 	}
+	follower->FollowLine();
+	chassis->TurnA(-360);
+	chassis->TurnA(-135);
 }

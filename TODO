@@ -1,12 +1,49 @@
-Core (OPTIONAL)
-1. Add option to use custom PIDProfile for generally moving using builder
-
 Challenges to overcome
 * Move a specific amount (DONE)
 * Turn a certain angle (DONE)
 * Follow a line a certain distance
 * Pick up block (DONE
 * Hold arm in position (DONE)
+
+
+
+
+Library issues that need to be addressed:
+* How to move chassis asynchronously such that any condition can be applied to the movement
+	* Have every single movement in AutoChassis be asynchronous
+	* Make synchronous an option
+
+* How to follow a line asynchronously such that any condition can be applied
+	* Not necessary since we won't be using camera
+	* Only need to add an option to follow a line a certain distance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

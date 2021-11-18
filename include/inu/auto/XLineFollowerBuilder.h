@@ -9,6 +9,7 @@
 
 #include "main.h"
 #include <memory>
+#include <array>
 
 namespace inu {
 	class AutoXChassis;
@@ -22,9 +23,10 @@ namespace inu {
 
 		void SetChassis(std::weak_ptr<AutoXChassis> chassis);
 
-		void SetSensors(unsigned int left, unsigned int center, unsigned int right);
+		// 2 left, 1 center, 2 right
+		void SetSensors(const std::array<std::uint8_t, 5>& lightSensors);
 
-		void SetSensorError(int left, int center, int right);
+		void SetSensorError(const std::array<int, 5>& errors);
 
 		void SetLightThreshold(unsigned int threshold);
 
@@ -34,17 +36,9 @@ namespace inu {
 
 		std::weak_ptr<AutoXChassis> GetChassis() const;
 
-		unsigned int GetLeftSensor() const;
+		const std::array<uint8_t, 5> GetSensors() const;
 
-		unsigned int GetCenterSensor() const;
-
-		unsigned int GetRightSensor() const;
-
-		int GetLeftSensorError() const;
-
-		int GetCenterSensorError() const;
-
-		int GetRightSensorError() const;
+		const std::array<int, 5> GetSensorErrors() const;
 
 		unsigned int GetLightThreshold() const;
 
@@ -55,9 +49,9 @@ namespace inu {
 	private:
 		std::weak_ptr<AutoXChassis> chassis;
 		std::shared_ptr<XLineFollower> follower;
-		
-		unsigned int leftPort, centerPort, rightPort;
-		int leftError, centerError, rightError;
+
+		std::array<uint8_t, 5> sensors;
+		std::array<int, 5> sensorError;
 		bool sensorsSet;
 
 		unsigned int lightThreshold;

@@ -16,26 +16,26 @@ void XLineFollowerBuilder::Reset() {
 	chassis.reset();
 	follower.reset();
 
-	leftError = 0;
-	centerError = 0;
-	rightError = 0;
+	for(std::size_t i = 0; i < sensors.max_size(); i++) {
+		sensors[i] = 0;
+	}
+
+	for(std::size_t i = 0; i < sensorError.max_size(); i++) {
+		sensorError[i] = 0;
+	}
 }
 
 void XLineFollowerBuilder::SetChassis(std::weak_ptr<AutoXChassis> chassis) {
 	this->chassis = chassis;
 }
 
-void XLineFollowerBuilder::SetSensors(unsigned int left, unsigned int center, unsigned int right) {
-	leftPort = left;
-	centerPort = center;
-	rightPort = right;
+void XLineFollowerBuilder::SetSensors(const std::array<std::uint8_t, 5>& lightSensors) {
+	sensors = lightSensors;
 	sensorsSet = true;
 }
 
-void XLineFollowerBuilder::SetSensorError(int left, int center, int right) {
-	leftError = left;
-	centerError = center;
-	rightError = right;
+void XLineFollowerBuilder::SetSensorError(const std::array<int, 5>& errors) {
+	sensorError = errors;
 }
 
 void XLineFollowerBuilder::SetLightThreshold(unsigned int threshold) {
@@ -52,28 +52,12 @@ std::weak_ptr<AutoXChassis> XLineFollowerBuilder::GetChassis() const {
 	return chassis;
 }
 
-unsigned int XLineFollowerBuilder::GetLeftSensor() const {
-	return leftPort;
+const std::array<std::uint8_t, 5> XLineFollowerBuilder::GetSensors() const {
+	return sensors;
 }
 
-unsigned int XLineFollowerBuilder::GetCenterSensor() const {
-	return centerPort;
-}
-
-unsigned int XLineFollowerBuilder::GetRightSensor() const {
-	return rightPort;
-}
-
-int XLineFollowerBuilder::GetLeftSensorError() const {
-	return leftError;
-}
-
-int XLineFollowerBuilder::GetCenterSensorError() const {
-	return centerError;
-}
-
-int XLineFollowerBuilder::GetRightSensorError() const {
-	return rightError;
+const std::array<int, 5> XLineFollowerBuilder::GetSensorErrors() const {
+	return sensorError;
 }
 
 unsigned int XLineFollowerBuilder::GetLightThreshold() const {

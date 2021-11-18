@@ -8,9 +8,11 @@
 #ifndef XLINEFOLLOWER_H
 #define XLINEFOLLOWER_H
 
+#include "inu/wrapper/ADIMotor.h"
 #include "main.h"
 #include "inu/wrapper/LineSensor.h"
 #include <memory>
+#include <array>
 
 namespace inu {
 	class AutoXChassis;
@@ -27,11 +29,22 @@ namespace inu {
 		bool LineDetected();
 
 		/**
-		 * If a line is detected on the sensors follow it as best as possible.
+		 * If a line is detected on the sensors follow it as best as possible
+		 * until the line is no longer detected.
+		 *
 		 * Note that this is a halting process until the chassis does not
-		 * detect the line anymore, in which case it stops.
+		 * detect the line anymore.
 		*/
 		void FollowLine();
+
+		/**
+		 * If a line is detected on the sensors follow it as best as possible
+		 * for a certain distance.
+		 *
+		 * Note that this is a halting process until the chassis reaches the
+		 * desired distance.
+		*/
+		void FollowLine(unsigned int distance);
 
 		/** 
 		 * Get the recommended threshold value used for line following by
@@ -54,7 +67,7 @@ namespace inu {
 		unsigned int lightThreshold;
 		bool activeOnDark;
 
-		inu::LineSensor left, center, right;
+		std::array<std::unique_ptr<inu::LineSensor>, 5> lightSensors;
 	};
 }
 
