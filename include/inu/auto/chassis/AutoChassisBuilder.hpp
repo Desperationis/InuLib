@@ -55,9 +55,10 @@ namespace inu {
 			isStalling = stalling;
 		}
 
-		void SetGyro(unsigned int port) {
+		void SetGyro(unsigned int port, PIDProfile profile) {
 			usesGyro = true;
 			gyro = port;
+			gyroPID = profile;
 		}
 
 		void SetTimeout(unsigned int seconds) {
@@ -66,10 +67,6 @@ namespace inu {
 
 		void SetEncoderUnits(pros::motor_encoder_units_e_t units) {
 			encoderUnits = units;
-		}
-
-		void SetGyroPID(PIDProfile profile) {
-			gyroPID = profile;
 		}
 
 		void SetTimeoutAlignLimit(double seconds) {

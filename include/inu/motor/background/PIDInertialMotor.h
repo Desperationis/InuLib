@@ -11,16 +11,13 @@
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
+#include "inu/motor/PID.h"
 #include "main.h"
 
 namespace inu {
-	/**
-	 * Motor struct that contains data members, getters, and setters used to use a
-	 * PID system on a motor.
-	*/
 	class PIDInertialMotor : public BackgroundMotor {
 	public:
-		PIDInertialMotor(unsigned int motorPort, unsigned int gyro);
+		PIDInertialMotor(unsigned int motorPort, unsigned int gyro, const PIDProfile& profile);
 
 		virtual ~PIDInertialMotor();
 		
@@ -28,9 +25,7 @@ namespace inu {
 
 		void Set(double target);
 
-		void SetPID(PIDProfile pidProfile);
-
-		void SetReversed(bool reversed);
+		void SetPID(const PIDProfile& pidProfile);
 
 		void SetMaximumVelocity(unsigned int velocity);
 
@@ -43,17 +38,9 @@ namespace inu {
 		void _Update();
 
 	private:
-		unsigned int maxVelocity;
 		inu::Motor motor;
 		pros::Imu gyro;
-
-		PIDProfile pidProfile;
-		double target;
-		float proportion;
-		float integral;
-		float derivative;
-		float pastError;
-		bool targetSet;
+		inu::PID pid;
 	};
 
 }

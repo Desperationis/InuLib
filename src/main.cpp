@@ -28,18 +28,7 @@ void initialize() {
 	pros::delay(3000);
 }
 
-void CalibrateThreshold() {
-	AutoXChassisBuilder builder;
-	builder.SetMotors(11,20,3,4);
-	std::shared_ptr<AutoXChassis> chassis = builder.Build();
-
-	XLineFollowerBuilder followerBuilder;
-	followerBuilder.SetSensors(6,7,8);
-	followerBuilder.SetSensorError(250,0,0);
-	followerBuilder.SetChassis(std::weak_ptr(chassis));
-	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
-
-	// Calibration code
+void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 	while(true) {
 		bool detected = follower->LineDetected();
 		pros::lcd::print(0, "Line detected: %d", (int)detected);
@@ -64,86 +53,42 @@ void opcontrol() {
 	armAssembly->Grab();
 	armAssembly->Release();*/
 
-	/*
+	
 	PIDProfile p;
 	p.p = 0.9;
 	p.i = 0.15;
 	p.d = 0;
+	p.integralWindupLimit = 100;
+	p.integralLevelingError = 2;
 
 	AutoXChassisBuilder builder;
 	builder.SetMaxVelocity(60); 
 	builder.SetMotors(11,20,3,4);
-	builder.SetGyro(10);
+	builder.SetGyro(10, p);
 	builder.SetTimeout(10);
-	builder.SetGyroPID(p);
 	builder.SetMaxAngleError(5); 
 	builder.SetStalling(true);
 	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
 	std::shared_ptr<AutoXChassis> chassis = builder.Build();
+	//chassis->Backward(1000);
+	//chassis->Turn(1000);
+	//chassis->Turn(-1000);
 	chassis->TurnA(360);
+	chassis->Turn(-360);
+	//chassis->Forward(1000);
+	
 
 	XLineFollowerBuilder followerBuilder;
 	followerBuilder.SetSensors(6,7,8);
 	followerBuilder.SetSensorError(250,0,0);
 	followerBuilder.SetChassis(std::weak_ptr(chassis));
 	followerBuilder.ActivateOnDark(false);
-	//followerBuilder.SetLightThreshold(500);
-	followerBuilder.SetLightThreshold(1500);
+	followerBuilder.SetLightThreshold(500);
 
 	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 	while(true) {
 		follower->FollowLine();
-		//pros::lcd::print(6, "Rec: %i", (int)follower->RecommendThreshold());
 		pros::delay(20);
-	} // CAMERA
-
-	*/
-	
-	auto JENGA = pros::Vision::signature_from_utility(1, 1561, 2319, 1940, -1525, -911, -1218, 3.000, 0);
-
-	std::shared_ptr<VisionSensor> vision(new VisionSensor(9)); // right
-	std::shared_ptr<VisionSensor> vision2(new VisionSensor(12)); // left
-	vision->SetExposure(58);
-	vision2->SetExposure(58);
-	vision->SetSignature(1, &JENGA);
-	vision2->SetSignature(1, &JENGA);
-	vision->SetMinimumArea(80);
-	vision2->SetMinimumArea(80);
-	vision->SetCenterPoint(200, 30);
-	vision2->SetCenterPoint(200, 30);
-
-	inu::PIDVisionMotor tl(11, vision2, vision2);
-	inu::PIDVisionMotor tr(20, vision2, vision2);
-	inu::PIDVisionMotor bl(3, vision2, vision2);
-	inu::PIDVisionMotor br(4, vision2, vision2);
-
-	tl.SetMaximumVelocity(40);
-	tr.SetMaximumVelocity(40);
-	bl.SetMaximumVelocity(40);
-	br.SetMaximumVelocity(40);
-
-	tl.Enable();
-	tr.Enable();
-	bl.Enable();
-	br.Enable();
-
-	PIDProfile t;
-	t.p = 0.3;
-
-	tl.SetPID(t);
-	tr.SetPID(t);
-	bl.SetPID(t);
-	br.SetPID(t);
-
-	while(true) {
-		auto leftLargestObject = vision2->GetLargestObject();
-		if(leftLargestObject != nullptr) {
-			pros::lcd::print(0, "Left: %i %i", leftLargestObject->x_middle_coord, leftLargestObject->y_middle_coord);
-			pros::lcd::print(1, "Left X Dif: %i", vision->GetCenterOffsetX(*leftLargestObject));
-		}
-		pros::delay(10);
 	}
-
-
 }

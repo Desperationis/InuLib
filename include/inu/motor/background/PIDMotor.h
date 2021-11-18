@@ -1,7 +1,5 @@
 /** @file PIDMotor.h
- * @brief Motor data structure used to PID.
- *
- * Motor struct that contains all necessary variables and functions in order to PID. 
+ * @brief Motor data structure used to PID with integrated encoders.
  */
 
 #ifndef PIDMOTOR_H
@@ -10,15 +8,12 @@
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
+#include "inu/motor/PID.h"
 
 namespace inu {
-	/**
-	 * Motor struct that contains data members, getters, and setters used to use a
-	 * PID system on a motor.
-	*/
 	class PIDMotor : public BackgroundMotor {
 	public:
-		PIDMotor(unsigned int port);
+		PIDMotor(unsigned int port, const PIDProfile& profile);
 
 		virtual ~PIDMotor();
 
@@ -30,22 +25,14 @@ namespace inu {
 		void Set(int target);
 
 		/**
-		 * Set the PIDProfile that this motor will use.
-		 *
-		 * @param PIDProfile Constant copy of a PIDProfile.
-		*/ 
-		void SetPID(PIDProfile pidProfile);
+		 * @param profile The PIDProfile of this motor.
+		 */
+		void SetPID(const PIDProfile& profile);
 
 		/**
-		 * @returns The target encoder value for this motor; Adjusted based on
-		 * if the motor is reversed.
+		 * @returns The target encoder value for this motor.
 		*/ 
 		int GetTarget() const;
-
-		/**
-		 * @returns A copy of the PIDProfile currently in use.
-		*/ 
-		const PIDProfile GetPID() const;
 
 		/**
 		 * @returns Whether or not the motor has reached its target (with +-
@@ -54,33 +41,18 @@ namespace inu {
 		bool AtTarget(unsigned int error) const;
 
 		/**
-		 * Set the maximum velocity possible [-127, 127] that this motor is
+		 * Set the maximum velocity possible [0 - 127] that this motor is
 		 * allowed to go to.
 		 *
 		 * @param velocity The max velocity of the motor.
 		 */
 		void SetMaximumVelocity(unsigned int velocity);
 
-		/**
-		 * Reverse the polarity of the PIDMotor; This simply changes the sign
-		 * of the target.
-		*/ 
-		void SetReversed(bool reversed);
-
 		void _Update();
 
 	private:
-		unsigned int maxVelocity;
-		bool reversed;
+		inu::PID pid;
 		inu::Motor motor;
-
-		PIDProfile pidProfile;
-		int target;
-		float proportion;
-		float integral;
-		float derivative;
-		float pastError;
-		bool targetSet;
 	};
 
 }

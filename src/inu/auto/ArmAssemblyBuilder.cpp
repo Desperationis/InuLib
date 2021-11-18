@@ -14,12 +14,10 @@ void ArmAssemblyBuilder::Reset() {
 	armMaximumVelocity = 0;
 	clawMotor.reset();
 	armMotor.reset();
-	pidProfile.reset();
 }
 
-void ArmAssemblyBuilder::SetArmMotor(unsigned int port, bool reversed) {
-	armMotor.reset(new inu::PIDMotor(port));
-	armMotor->SetReversed(reversed);
+void ArmAssemblyBuilder::SetArmMotor(unsigned int port, const PIDProfile& profile) {
+	armMotor.reset(new inu::PIDMotor(port, profile));
 }
 
 void ArmAssemblyBuilder::SetClawMotor(unsigned int port, bool reversed) {
@@ -31,10 +29,6 @@ void ArmAssemblyBuilder::SetArmMaximumVelocity(unsigned int velocity) {
 	armMotor->SetMaximumVelocity(velocity);
 }
 
-void ArmAssemblyBuilder::SetArmPIDProfile(PIDProfile profile) {
-	pidProfile.reset(new PIDProfile(profile));
-}
-
 std::shared_ptr<inu::ADIMotor> ArmAssemblyBuilder::GetClawMotor() const {
 	return clawMotor;
 }
@@ -44,10 +38,8 @@ std::shared_ptr<inu::PIDMotor> ArmAssemblyBuilder::GetArmMotor() const {
 }
 
 std::shared_ptr<ArmAssembly> ArmAssemblyBuilder::Build() {
-	if(clawMotor == nullptr || armMotor == nullptr || pidProfile == nullptr)
+	if(clawMotor == nullptr || armMotor == nullptr)
 		return nullptr;
-
-	armMotor->SetPID(*pidProfile);
 
 	return std::shared_ptr<ArmAssembly>(new ArmAssembly(*this));
 }

@@ -30,18 +30,14 @@ namespace inu {
 		}
 
 
-		void SetMotors(int tl, int tr, int bl, int br) {
-			topleft.reset(new inu::Motor(std::abs(tl)));
-			if (tl < 0) topleft->SetReversed(true);
+		void SetMotors(unsigned int tl, unsigned int tr, unsigned int bl, unsigned int br) {
+			topleft.reset(new inu::Motor(tl));
 
-			topright.reset(new inu::Motor(std::abs(tr)));
-			if (tr < 0) topright->SetReversed(true);
+			topright.reset(new inu::Motor(tr));
 
-			bottomleft.reset(new inu::Motor(std::abs(bl)));
-			if (bl < 0) bottomleft->SetReversed(true);
+			bottomleft.reset(new inu::Motor(bl));
 
-			bottomright.reset(new inu::Motor(std::abs(br)));
-			if (br < 0) bottomright->SetReversed(true);
+			bottomright.reset(new inu::Motor(br));
 
 			motorPortsDefined = true;
 		}

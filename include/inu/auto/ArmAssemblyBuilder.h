@@ -24,7 +24,7 @@ namespace inu {
 
 		void Reset();
 
-		void SetArmMotor(unsigned int port, bool reversed = false);
+		void SetArmMotor(unsigned int port, const PIDProfile& profile);
 
 		void SetClawMotor(unsigned int adiPort, bool reversed = false);
 
@@ -40,7 +40,6 @@ namespace inu {
 
 	private:
 		unsigned int armMaximumVelocity;
-		std::shared_ptr<PIDProfile> pidProfile;
 		std::shared_ptr<inu::ADIMotor> clawMotor;
 		std::shared_ptr<inu::PIDMotor> armMotor;
 	};

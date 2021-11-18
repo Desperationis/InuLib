@@ -17,6 +17,17 @@ namespace inu {
 		float i;
 		float d;
 
+		/**
+		 * The absolute maximum value a integral can have.
+		 */ 
+		float integralWindupLimit = 12000;
+
+		/**
+		 * If the absolute difference between the target and the input is lower
+		 * than or equal to this amount, the integral will be set to 0.
+		 */ 
+		float integralLevelingError = 0;
+
 		PIDProfile() {
 			p = i = d = 0;
 		}

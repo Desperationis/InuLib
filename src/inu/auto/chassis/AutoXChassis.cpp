@@ -71,17 +71,6 @@ void AutoXChassis::TurnAbsolute(double degrees) {
 	// Turn left or right depending on angle position.
 	double angle = gyro->get_rotation();
 
-
-	inertialTopright->SetPID(gyroPID);
-	inertialTopleft->SetPID(gyroPID);
-	inertialBottomleft->SetPID(gyroPID);
-	inertialBottomright->SetPID(gyroPID);
-
-	inertialTopright->SetMaximumVelocity(maxVelocity);
-	inertialTopleft->SetMaximumVelocity(maxVelocity);
-	inertialBottomleft->SetMaximumVelocity(maxVelocity);
-	inertialBottomright->SetMaximumVelocity(maxVelocity);
-
 	inertialTopright->Set(degrees);
 	inertialTopleft->Set(degrees);
 	inertialBottomleft->Set(degrees);
@@ -247,10 +236,20 @@ bool AutoXChassis::CreateBackgroundMotors() {
 	if(system->MotorExists(br)) 
 		return false;
 
-	inertialTopleft.reset(new PIDInertialMotor(tl, gyroPort));
-	inertialTopright.reset(new PIDInertialMotor(tr, gyroPort));
-	inertialBottomleft.reset(new PIDInertialMotor(bl, gyroPort));
-	inertialBottomright.reset(new PIDInertialMotor(br, gyroPort));
+	inertialTopleft.reset(new PIDInertialMotor(tl, gyroPort, gyroPID));
+	inertialTopright.reset(new PIDInertialMotor(tr, gyroPort, gyroPID));
+	inertialBottomleft.reset(new PIDInertialMotor(bl, gyroPort, gyroPID));
+	inertialBottomright.reset(new PIDInertialMotor(br, gyroPort, gyroPID));
+
+	inertialTopright->SetPID(gyroPID);
+	inertialTopleft->SetPID(gyroPID);
+	inertialBottomleft->SetPID(gyroPID);
+	inertialBottomright->SetPID(gyroPID);
+
+	inertialTopright->SetMaximumVelocity(maxVelocity);
+	inertialTopleft->SetMaximumVelocity(maxVelocity);
+	inertialBottomleft->SetMaximumVelocity(maxVelocity);
+	inertialBottomright->SetMaximumVelocity(maxVelocity);
 
 	return true;
 }
