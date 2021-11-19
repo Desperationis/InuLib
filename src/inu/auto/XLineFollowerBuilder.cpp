@@ -38,7 +38,7 @@ void XLineFollowerBuilder::SetSensorError(const std::array<int, 5>& errors) {
 	sensorError = errors;
 }
 
-void XLineFollowerBuilder::SetLightThreshold(unsigned int threshold) {
+void XLineFollowerBuilder::SetLightThreshold(int threshold) {
 	lightThreshold = threshold;
 }
 
@@ -60,7 +60,7 @@ const std::array<int, 5> XLineFollowerBuilder::GetSensorErrors() const {
 	return sensorError;
 }
 
-unsigned int XLineFollowerBuilder::GetLightThreshold() const {
+int XLineFollowerBuilder::GetLightThreshold() const {
 	return lightThreshold;
 }
 

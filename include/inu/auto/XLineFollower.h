@@ -64,7 +64,7 @@ namespace inu {
 
 	private:
 		std::shared_ptr<AutoXChassis> chassis;
-		unsigned int lightThreshold;
+		int lightThreshold;
 		bool activeOnDark;
 
 		std::array<std::unique_ptr<inu::LineSensor>, 5> lightSensors;

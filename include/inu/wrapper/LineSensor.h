@@ -19,9 +19,9 @@ namespace inu {
 		LineSensor(unsigned int port);
 
 		/**
-		 * If the sensor has a constant offset relative to other sensors,
-		 * define that offshoot / undershoot here. The value here will be
-		 * subtracted when you get the value of the sensor.
+		 * If the sensor has a constant offset relative to other sensors, you
+		 * can add that missing value here. The value here will be added when
+		 * you get the value of the sensor.
 		 *
 		 * @param error The overshoot or undershoot in light value.
 		*/
@@ -32,7 +32,7 @@ namespace inu {
 		 *
 		 * @returns The light value read by the sensor.
 		*/ 
-		unsigned int GetValue() const;
+		int GetValue() const;
 
 		/**
 		 * Whether or not the light value read is a line.
@@ -44,7 +44,7 @@ namespace inu {
 		 * @param activeOnBlack Whether or not the line trying to be read is
 		 * black on a white background.
 		*/ 
-		bool IsLine(unsigned int threshold, bool activeOnBlack = false);
+		bool IsLine(int threshold, bool activeOnBlack = false);
 
 	private:
 		pros::ADILineSensor sensor;

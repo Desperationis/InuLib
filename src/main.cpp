@@ -75,7 +75,7 @@ void opcontrol() {
 
 	XLineFollowerBuilder followerBuilder;
 	followerBuilder.SetSensors( { 'C', 'F', 'G', 'H', 'B'} );
-	followerBuilder.SetSensorError( {400, 220, 0, 0, 500 } );
+	followerBuilder.SetSensorError( { -500, -190, 0, 60, -400 } );
 	followerBuilder.SetChassis(std::weak_ptr(chassis));
 	followerBuilder.ActivateOnDark(false);
 	followerBuilder.SetLightThreshold(350);
@@ -84,6 +84,7 @@ void opcontrol() {
 
 	while(true) {
 		pros::lcd::print(0, "Line detected: %d", (int)follower->LineDetected());
+		//follower->RecommendThreshold();
 		pros::delay(20);
 	}
 	follower->FollowLine();

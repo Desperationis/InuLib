@@ -28,7 +28,7 @@ namespace inu {
 
 		void SetSensorError(const std::array<int, 5>& errors);
 
-		void SetLightThreshold(unsigned int threshold);
+		void SetLightThreshold(int threshold);
 
 		// Whether or not we will detect a reading if the tape is dark (high
 		// value). If not, it will activate when the tape is white (low value)
@@ -40,7 +40,7 @@ namespace inu {
 
 		const std::array<int, 5> GetSensorErrors() const;
 
-		unsigned int GetLightThreshold() const;
+		int GetLightThreshold() const;
 
 		bool IsActiveOnDark() const;
 
@@ -54,7 +54,7 @@ namespace inu {
 		std::array<int, 5> sensorError;
 		bool sensorsSet;
 
-		unsigned int lightThreshold;
+		int lightThreshold;
 		bool activeOnDark;
 	};
 }
