@@ -10,15 +10,14 @@
 #include "inu/motor/PIDProfile.hpp"
 #include <algorithm>
 #include <stdexcept>
-#include "main.h"
 
 namespace inu {
 	class PID {
 	public:
 		/**
-		 * @param min The minimum value possible that this PID can output.
+		 * @param min Minimum value possible this PID can output.
 		 *
-		 * @param max The maximum value possible that this PID can output
+		 * @param max Maximum value possible this PID can output
 		 *
 		 * @param profile The PID profile to use.
 		*/ 
@@ -34,7 +33,7 @@ namespace inu {
 		/**
 		 * Sets the target value for this PID to reach.
 		 *
-		 * @param value Target value
+		 * @param target Target value
 		*/ 
 		void SetTarget(const double target) {
 			this->target = target;
@@ -43,6 +42,10 @@ namespace inu {
 
 		/**
 		 * Sets the range of outputs possible by this PID.
+		 *
+		 * @param min Minimum value possible this PID can output.
+		 *
+		 * @param max Maximum value possible this PID can output.
 		*/ 
 		void SetRange(double min, double max) {
 			this->min = min;
@@ -71,6 +74,11 @@ namespace inu {
 		}
 
 		/**
+		 * @param input Input value to be checked with target.
+		 *
+		 * @param error The maximum absolute difference between the input and
+		 * the target value.
+		 *
 		 * @returns whether or not the given input is close to the target
 		 * within a margin of error.
 		 */ 
@@ -84,6 +92,8 @@ namespace inu {
 		 *
 		 * The target must be set at least once in order for this to run. If
 		 * not, a std::exception will be thrown.
+		 *
+		 * @param input The input value that changes when given this output.
 		*/ 
 		double Update(const double input) {
 			if(!targetSet)
