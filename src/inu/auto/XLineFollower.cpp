@@ -41,11 +41,11 @@ void XLineFollower::FollowLine() {
 		}
 
 		else if(leftest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -12);
+			chassis->Swerve(30, -6);
 		}
 
 		else if(rightest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 12);
+			chassis->Swerve(30, 6);
 		}
 
 		pros::delay(10);
@@ -63,7 +63,27 @@ void XLineFollower::FollowLine(unsigned int distance) {
 
 	chassis->TareDistance();
 
+	auto OGdirection = chassis->GetAbsoluteRotation();
+
 	while(chassis->GetDistance() < distance) {
+		/*if(center->IsLine(lightThreshold, activeOnDark)) {
+			chassis->Swerve(30, 0);
+		}
+		else if(left->IsLine(lightThreshold, activeOnDark)) {
+			chassis->Swerve(30, -6, 0);
+		}
+
+		else if(right->IsLine(lightThreshold, activeOnDark)) {
+			chassis->Swerve(30, 6, 0);
+		}
+
+		else if(leftest->IsLine(lightThreshold, activeOnDark)) {
+			chassis->StrafeLeft(50);
+		}
+
+		else if(rightest->IsLine(lightThreshold, activeOnDark)) {
+			chassis->StrafeRight(50);
+		}*/
 		if(center->IsLine(lightThreshold, activeOnDark)) {
 			chassis->Swerve(30, 0);
 		}
@@ -76,15 +96,17 @@ void XLineFollower::FollowLine(unsigned int distance) {
 		}
 
 		else if(leftest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -12);
+			chassis->Swerve(30, -6);
 		}
 
 		else if(rightest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 12);
+			chassis->Swerve(30, 6);
 		}
 
 		pros::delay(10);
 	}
+
+	chassis->TurnAbsolute(OGdirection);
 
 	Stop();
 }

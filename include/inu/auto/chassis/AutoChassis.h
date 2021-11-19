@@ -168,6 +168,8 @@ namespace inu {
 		 */ 
 		virtual double GetDistance() = 0;
 
+		virtual double GetAbsoluteRotation() = 0;
+
 	protected:
 		unsigned int maxEncoderError;
 		unsigned int maxAngleError;

@@ -64,6 +64,8 @@ namespace inu {
 
 		virtual double GetDistance() override;
 
+		virtual double GetAbsoluteRotation() override;
+
 		/**
 		 * Shortcut for StrafeRight(-ticks).
 		 *
@@ -83,6 +85,8 @@ namespace inu {
 		 * of error.
 		*/
 		virtual void StrafeRight(double ticks);
+
+		virtual void Swerve(std::int8_t forward, std::int8_t right, std::int8_t turn);
 
 	protected:
 		/**

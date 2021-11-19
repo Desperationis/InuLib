@@ -47,16 +47,23 @@ AutoXChassis::~AutoXChassis() {
 }
 
 void AutoXChassis::Swerve(std::int8_t y, std::int8_t x) {
-	y = std::clamp<std::int8_t>(y, -maxVelocity, maxVelocity);
-	x = std::clamp<std::int8_t>(x, -maxVelocity, maxVelocity);
+	Swerve(y, 0, x);
+}
 
-	std::int8_t leftSide = std::clamp<std::int8_t>(y + x, -maxVelocity, maxVelocity);
-	std::int8_t rightSide = std::clamp<std::int8_t>(-y + x, -maxVelocity, maxVelocity);
+void AutoXChassis::Swerve(std::int8_t forward, std::int8_t right, std::int8_t turn) {
+	forward = std::clamp<std::int8_t>(forward, -maxVelocity, maxVelocity);
+	right = std::clamp<std::int8_t>(right, -maxVelocity, maxVelocity);
+	turn = std::clamp<std::int8_t>(turn, -maxVelocity, maxVelocity);
 
-	topleft->Move(leftSide);
-	topright->Move(rightSide);
-	bottomleft->Move(leftSide);
-	bottomright->Move(rightSide);
+	auto tl = std::clamp<std::int8_t>(forward + turn + right, -maxVelocity, maxVelocity);
+	auto bl = std::clamp<std::int8_t>(forward + turn - right, -maxVelocity, maxVelocity);
+	auto tr = std::clamp<std::int8_t>(-forward + turn + right, -maxVelocity, maxVelocity);
+	auto br = std::clamp<std::int8_t>(-forward + turn - right, -maxVelocity, maxVelocity);
+
+	topleft->Move(tl);
+	topright->Move(tr);
+	bottomleft->Move(bl);
+	bottomright->Move(br);
 }
 
 
@@ -208,6 +215,9 @@ double AutoXChassis::GetDistance() {
 	return (tl + tr + bl + br) / 4;
 }
 
+double AutoXChassis::GetAbsoluteRotation() {
+	return gyro->get_rotation();
+}
 
 void AutoXChassis::FreeBackgroundMotors() {
 	inertialTopleft.reset();

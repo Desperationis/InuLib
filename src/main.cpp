@@ -56,10 +56,10 @@ void opcontrol() {
 	
 	PIDProfile p;
 	p.p = 0.9;
-	p.i = 0.15;
+	p.i = 0.1;
 	p.d = 0;
-	p.integralWindupLimit = 100;
-	p.integralLevelingError = 2;
+	p.integralWindupLimit = 50;
+	p.integralLevelingError = 0;
 
 	AutoXChassisBuilder builder;
 	builder.SetMaxVelocity(60); 
@@ -71,23 +71,14 @@ void opcontrol() {
 	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
 	std::shared_ptr<AutoXChassis> chassis = builder.Build();
-	
 
 	XLineFollowerBuilder followerBuilder;
-	followerBuilder.SetSensors( { 'C', 'F', 'G', 'H', 'B'} );
+	followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'C'} );
 	followerBuilder.SetSensorError( { -500, -190, 0, 60, -400 } );
 	followerBuilder.SetChassis(std::weak_ptr(chassis));
 	followerBuilder.ActivateOnDark(false);
 	followerBuilder.SetLightThreshold(350);
 
 	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
-
-	while(true) {
-		pros::lcd::print(0, "Line detected: %d", (int)follower->LineDetected());
-		//follower->RecommendThreshold();
-		pros::delay(20);
-	}
-	follower->FollowLine();
-	chassis->TurnA(-360);
-	chassis->TurnA(-135);
+	follower->FollowLine(1000);	
 }
