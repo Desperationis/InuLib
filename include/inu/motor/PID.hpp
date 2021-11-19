@@ -1,4 +1,4 @@
-/** PID.h
+/** PID.hpp
  * @brief General Algorithm to PID anything.
  *
  * General Algorithm to PID anything.

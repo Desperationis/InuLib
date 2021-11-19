@@ -8,7 +8,7 @@
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
-#include "inu/motor/PID.h"
+#include "inu/motor/PID.hpp"
 
 namespace inu {
 	class PIDMotor : public BackgroundMotor {
