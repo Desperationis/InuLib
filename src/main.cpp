@@ -1,4 +1,7 @@
 #include "main.h"
+#include "inu/InuException.hpp"
+#include "inu/Color.hpp"
+#include "inu/Logo.hpp"
 #include "inu/motor/background/PIDVisionMotor.h"
 #include "inu/motor/background//SlewMotor.h"
 #include "inu/motor/PIDProfile.hpp"
@@ -11,7 +14,7 @@
 #include "inu/auto/ArmAssemblyBuilder.h"
 #include <memory>
 #include <algorithm>
-#include <stdexcept>
+
 
 using namespace inu;
 
@@ -21,7 +24,9 @@ using namespace inu;
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
+	//pros::lcd::initialize();
+	inu::Logo::Draw();
+	
 
 	// This delay is REQUIRED for the program to work; Without this, core
 	// components may or may not be initialized (i.e. inertial sensor) and 
@@ -41,48 +46,56 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 }
 
 void opcontrol() {
-	/*ArmAssemblyBuilder armBuilder;
-	armBuilder.SetArmMotor(18);
-	armBuilder.SetClawMotor(1);
-	armBuilder.SetArmPIDProfile(PIDProfile(0.6f));
-	armBuilder.SetArmMaximumVelocity(40);
+	try {
+		/*ArmAssemblyBuilder armBuilder;
+		armBuilder.SetArmMotor(18);
+		armBuilder.SetClawMotor(1);
+		armBuilder.SetArmPIDProfile(PIDProfile(0.6f));
+		armBuilder.SetArmMaximumVelocity(40);
 
-	std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
+		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
 
-	armAssembly->SetArm(-500);
-	pros::delay(10000);
-	armAssembly->Grab();
-	armAssembly->Release();*/
+		armAssembly->SetArm(-500);
+		pros::delay(10000);
+		armAssembly->Grab();
+		armAssembly->Release();*/
 
-	
-	PIDProfile p;
-	p.p = 0.9;
-	p.i = 0.1;
-	p.d = 0;
-	p.integralWindupLimit = 50;
-	p.integralLevelingError = 0;
+		
+		PIDProfile p;
+		p.p = 0.9;
+		p.i = 0.1;
+		p.d = 0;
+		p.integralWindupLimit = 50;
+		p.integralLevelingError = 0;
 
-	AutoXChassisBuilder builder;
-	builder.SetMaxVelocity(60); 
-	builder.SetMotors(11,20,3,4);
-	builder.SetGyro(10, p);
-	builder.SetTimeout(10);
-	builder.SetMaxAngleError(5); 
-	builder.SetStalling(true);
-	builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
+		AutoXChassisBuilder builder;
+		builder.SetMaxVelocity(60); 
+		builder.SetMotors(11,20,3,4);
+		builder.SetGyro(10, p);
+		builder.SetTimeout(10);
+		builder.SetMaxAngleError(5); 
+		builder.SetStalling(true);
+		builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
 
-	std::shared_ptr<AutoXChassis> chassis = builder.Build();
+		std::shared_ptr<AutoXChassis> chassis = builder.Build();
 
-	XLineFollowerBuilder followerBuilder;
-	followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'C'} );
-	followerBuilder.SetSensorError( { -500, -190, 0, 60, -400 } );
-	followerBuilder.SetChassis(std::weak_ptr(chassis));
-	followerBuilder.ActivateOnDark(false);
-	followerBuilder.SetLightThreshold(350);
+		XLineFollowerBuilder followerBuilder;
+		followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'C'} );
+		followerBuilder.SetSensorError( { -500, -190, 0, 60, -400 } );
+		followerBuilder.SetChassis(std::weak_ptr(chassis));
+		followerBuilder.ActivateOnDark(false);
+		followerBuilder.SetLightThreshold(350);
 
-	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
-	follower->FollowLine(1000);	
-	std::cout<<"Hello"<<std::endl;
-	pros::delay(1000);
-	throw std::runtime_error("Bruh meme lol");
+		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
+		//follower->FollowLine(1000);	
+		std::cout<<"Hello"<<std::endl;
+		throw InuException("Error: Something went very wrong");
+		pros::delay(1000);
+	}
+	catch(InuException e) {
+		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;
+
+		for(std::size_t i = 0; i < 10; i++) 
+			pros::lcd::print(i, "InuException caught; Check Terminal.");
+	}
 }
