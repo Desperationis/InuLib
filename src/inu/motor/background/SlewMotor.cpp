@@ -47,7 +47,7 @@ unsigned int Interpolate(unsigned int start, unsigned int end,
 
 
 void SlewMotor::_Update() {
-	int currentSpeed = motor.GetValue();
+	int currentSpeed = motor.GetVoltage();
 	int targetSpeed = GetTargetSpeed();
 	int maximumDif = GetRate();
 

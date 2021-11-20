@@ -12,6 +12,7 @@
 #include "inu/wrapper/VisionSensor.h"
 #include "inu/auto/ArmAssembly.h"
 #include "inu/auto/ArmAssemblyBuilder.h"
+#include "pros/motors.h"
 #include <memory>
 #include <algorithm>
 #include <stdexcept>
@@ -48,9 +49,18 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 void opcontrol() {
 	try {
-		inu::PID p(-100, 100, PIDProfile(0.5f));
-		p.SetRange(-1000, 1000);
-		p.Update(1);
+		/*pros::Motor motor(3);
+		motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		motor.move_velocity(40);
+		pros::Motor motor1(11);
+		motor1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		motor1.move_velocity(40);
+		pros::Motor motor2(20);
+		motor2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		motor2.move_velocity(-40);
+		pros::Motor motor3(4);
+		motor3.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		motor3.move_velocity(-40);*/
 
 		ArmAssemblyBuilder armBuilder;
 		armBuilder.SetArmMotor(18, PIDProfile(0.7f));

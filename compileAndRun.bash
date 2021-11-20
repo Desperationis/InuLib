@@ -1,2 +1,2 @@
 pros v5 stop
-pros build-compile-commands && pros upload && pros v5 run
+pros build-compile-commands && pros upload && sleep 2s && pros v5 run
