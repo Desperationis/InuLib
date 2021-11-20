@@ -30,8 +30,6 @@ namespace inu {
 
 		void SetArmMaximumVelocity(unsigned int velocity);
 
-		void SetArmPIDProfile(PIDProfile profile);
-
 		std::shared_ptr<inu::ADIMotor> GetClawMotor() const;
 
 		std::shared_ptr<inu::PIDMotor> GetArmMotor() const;

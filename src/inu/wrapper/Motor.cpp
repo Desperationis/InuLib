@@ -54,7 +54,7 @@ std::int32_t Motor::GetValue() const {
 	return (motor.get_voltage() / 12000.0) * 127;
 }
 
-bool Motor::IsSettled(unsigned int error) const {
+bool Motor::IsSettled(int error) const {
 	double currentPosition = motor.get_position();
 	double targetPosition = motor.get_target_position();
 

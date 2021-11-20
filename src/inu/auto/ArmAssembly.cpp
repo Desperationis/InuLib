@@ -27,6 +27,14 @@ void ArmAssembly::Release() {
 	claw->Set(0);
 }
 
-bool ArmAssembly::AtTarget(unsigned int error) {
+bool ArmAssembly::AtTarget(int error) {
 	return arm->AtTarget(error);
+}
+
+double ArmAssembly::GetTarget() const {
+	return arm->GetTarget();
+}
+
+double ArmAssembly::GetRotation() const {
+	return arm->GetPosition();
 }

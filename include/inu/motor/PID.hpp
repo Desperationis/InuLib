@@ -10,6 +10,7 @@
 #include "inu/motor/PIDProfile.hpp"
 #include <algorithm>
 #include <stdexcept>
+#include <iostream>
 
 namespace inu {
 	class PID {
@@ -71,6 +72,10 @@ namespace inu {
 		*/ 
 		const PIDProfile GetPID() const {
 			return profile;
+		}
+
+		bool TargetSet() const {
+			return targetSet;
 		}
 
 		/**

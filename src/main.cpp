@@ -47,21 +47,28 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 void opcontrol() {
 	try {
-		/*ArmAssemblyBuilder armBuilder;
-		armBuilder.SetArmMotor(18);
+		ArmAssemblyBuilder armBuilder;
+		armBuilder.SetArmMotor(18, PIDProfile(0.7f));
 		armBuilder.SetClawMotor(1);
-		armBuilder.SetArmPIDProfile(PIDProfile(0.6f));
 		armBuilder.SetArmMaximumVelocity(40);
 
 		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
-
 		armAssembly->SetArm(-500);
-		pros::delay(10000);
+
+		while(!armAssembly->AtTarget(10)) {
+			pros::delay(10);
+		}
+		
 		armAssembly->Grab();
-		armAssembly->Release();*/
+		armAssembly->Release();
+		armAssembly->SetArm(0);
+
+		while(!armAssembly->AtTarget(10)) {
+			pros::delay(10);
+		}
 
 		
-		PIDProfile p;
+		/*PIDProfile p;
 		p.p = 0.9;
 		p.i = 0.1;
 		p.d = 0;
@@ -86,11 +93,7 @@ void opcontrol() {
 		followerBuilder.ActivateOnDark(false);
 		followerBuilder.SetLightThreshold(350);
 
-		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
-		//follower->FollowLine(1000);	
-		std::cout<<"Hello"<<std::endl;
-		throw InuException("Error: Something went very wrong");
-		pros::delay(1000);
+		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();*/
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;

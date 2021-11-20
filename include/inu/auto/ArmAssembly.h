@@ -53,7 +53,12 @@ namespace inu {
 		 *
 		 * @returns whether ot nor the arm is at the target.
 		*/ 
-		bool AtTarget(unsigned int error);
+		bool AtTarget(int error);
+
+
+		double GetRotation() const;
+
+		double GetTarget() const;
 
 	private:
 		std::shared_ptr<inu::PIDMotor> arm;

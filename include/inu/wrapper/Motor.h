@@ -44,7 +44,7 @@ namespace inu {
 		 * margin of error defined as target position - error < position <
 		 * position + error.
 		 */ 
-		bool IsSettled(unsigned int error) const;
+		bool IsSettled(int error) const;
 
 
 	private:

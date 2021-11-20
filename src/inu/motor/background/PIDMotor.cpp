@@ -27,16 +27,25 @@ int PIDMotor::GetTarget() const {
 	return pid.GetTarget();
 }
 
-bool PIDMotor::AtTarget(unsigned int error) const {
-	return motor.IsSettled(error);
+bool PIDMotor::AtTarget(int error) const {
+	return pid.WithinError(motor.GetPosition(), error);
 }
 
-void PIDMotor::SetMaximumVelocity(unsigned int velocity) {
-	pid.SetRange(-(int)velocity, (int)velocity);
+void PIDMotor::SetMaximumVelocity(int velocity) {
+	pid.SetRange(-velocity, velocity);
+}
+
+double PIDMotor::GetPosition() const {
+	return motor.GetPosition();
 }
 
 void PIDMotor::_Update() {
-	double motorSpeed = pid.Update(motor.GetPosition());
-	motor.Move(motorSpeed);
+	if(pid.TargetSet()) {
+		double motorSpeed = pid.Update(motor.GetPosition());
+		motor.Move(motorSpeed);
+	}
+	else {
+		motor.Move(0);
+	}
 }
 

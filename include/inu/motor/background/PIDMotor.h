@@ -38,7 +38,7 @@ namespace inu {
 		 * @returns Whether or not the motor has reached its target (with +-
 		 * `error`)
 		*/
-		bool AtTarget(unsigned int error) const;
+		bool AtTarget(int error) const;
 
 		/**
 		 * Set the maximum velocity possible [0 - 127] that this motor is
@@ -46,7 +46,9 @@ namespace inu {
 		 *
 		 * @param velocity The max velocity of the motor.
 		 */
-		void SetMaximumVelocity(unsigned int velocity);
+		void SetMaximumVelocity(int velocity);
+
+		double GetPosition() const;
 
 		void _Update();
 
