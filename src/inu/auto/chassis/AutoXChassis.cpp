@@ -60,10 +60,10 @@ void AutoXChassis::Swerve(std::int8_t forward, std::int8_t right, std::int8_t tu
 	auto tr = std::clamp<std::int8_t>(-forward + turn + right, -maxVelocity, maxVelocity);
 	auto br = std::clamp<std::int8_t>(-forward + turn - right, -maxVelocity, maxVelocity);
 
-	topleft->Move(tl);
-	topright->Move(tr);
-	bottomleft->Move(bl);
-	bottomright->Move(br);
+	topleft->MoveVelocity(tl);
+	topright->MoveVelocity(tr);
+	bottomleft->MoveVelocity(bl);
+	bottomright->MoveVelocity(br);
 }
 
 
@@ -193,10 +193,10 @@ void AutoXChassis::StallUntilSettled(double timeout) {
 void AutoXChassis::Stop() {
 	FreeBackgroundMotors();
 
-	topleft->Move(0);
-	topright->Move(0);
-	bottomleft->Move(0);
-	bottomright->Move(0);
+	topleft->MoveVelocity(0);
+	topright->MoveVelocity(0);
+	bottomleft->MoveVelocity(0);
+	bottomright->MoveVelocity(0);
 }
 
 void AutoXChassis::TareDistance() {

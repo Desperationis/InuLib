@@ -48,7 +48,11 @@ bool PIDInertialMotor::IsReversed() const {
 }
 
 void PIDInertialMotor::_Update() {
-	double motorSpeed = pid.Update(gyro.get_rotation());
-	motor.Move(motorSpeed);
+	if(pid.TargetSet()) {
+		double motorSpeed = pid.Update(gyro.get_rotation());
+		motor.MoveVelocity(motorSpeed);
+	}
+	else 
+		motor.MoveVelocity(0);
 }
 

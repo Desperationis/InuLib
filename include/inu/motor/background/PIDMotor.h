@@ -41,8 +41,8 @@ namespace inu {
 		bool AtTarget(int error) const;
 
 		/**
-		 * Set the maximum velocity possible [0 - 127] that this motor is
-		 * allowed to go to.
+		 * Set the maximum velocity possible that this motor is allowed to go
+		 * to. Max velocity will be capped by motor gearing if it's too high.
 		 *
 		 * @param velocity The max velocity of the motor.
 		 */

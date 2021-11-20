@@ -49,18 +49,6 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 void opcontrol() {
 	try {
-		/*pros::Motor motor(3);
-		motor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-		motor.move_velocity(40);
-		pros::Motor motor1(11);
-		motor1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-		motor1.move_velocity(40);
-		pros::Motor motor2(20);
-		motor2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-		motor2.move_velocity(-40);
-		pros::Motor motor3(4);
-		motor3.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-		motor3.move_velocity(-40);*/
 
 		ArmAssemblyBuilder armBuilder;
 		armBuilder.SetArmMotor(18, PIDProfile(0.7f));
@@ -68,22 +56,9 @@ void opcontrol() {
 		armBuilder.SetArmMaximumVelocity(40);
 
 		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
-		armAssembly->SetArm(-500);
-
-		while(!armAssembly->AtTarget(10)) {
-			pros::delay(10);
-		}
-		
-		armAssembly->Grab();
-		armAssembly->Release();
-		armAssembly->SetArm(0);
-
-		while(!armAssembly->AtTarget(10)) {
-			pros::delay(10);
-		}
 
 		
-		/*PIDProfile p;
+		PIDProfile p;
 		p.p = 0.9;
 		p.i = 0.1;
 		p.d = 0;
@@ -108,7 +83,8 @@ void opcontrol() {
 		followerBuilder.ActivateOnDark(false);
 		followerBuilder.SetLightThreshold(350);
 
-		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();*/
+		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
+		follower->FollowLine(500);
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;

@@ -42,10 +42,10 @@ double PIDMotor::GetPosition() const {
 void PIDMotor::_Update() {
 	if(pid.TargetSet()) {
 		double motorSpeed = pid.Update(motor.GetPosition());
-		motor.Move(motorSpeed);
+		motor.MoveVelocity(motorSpeed);
 	}
 	else {
-		motor.Move(0);
+		motor.MoveVelocity(0);
 	}
 }
 
