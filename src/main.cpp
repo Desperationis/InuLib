@@ -11,6 +11,7 @@
 #include "inu/auto/ArmAssemblyBuilder.h"
 #include <memory>
 #include <algorithm>
+#include <stdexcept>
 
 using namespace inu;
 
@@ -81,4 +82,7 @@ void opcontrol() {
 
 	std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 	follower->FollowLine(1000);	
+	std::cout<<"Hello"<<std::endl;
+	pros::delay(1000);
+	throw std::runtime_error("Bruh meme lol");
 }
