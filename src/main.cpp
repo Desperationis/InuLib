@@ -14,6 +14,7 @@
 #include "inu/auto/ArmAssemblyBuilder.h"
 #include <memory>
 #include <algorithm>
+#include <stdexcept>
 
 
 using namespace inu;
@@ -47,6 +48,10 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 void opcontrol() {
 	try {
+		inu::PID p(-100, 100, PIDProfile(0.5f));
+		p.SetRange(-1000, 1000);
+		p.Update(1);
+
 		ArmAssemblyBuilder armBuilder;
 		armBuilder.SetArmMotor(18, PIDProfile(0.7f));
 		armBuilder.SetClawMotor(1);
@@ -97,8 +102,6 @@ void opcontrol() {
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;
-
-		for(std::size_t i = 0; i < 10; i++) 
-			pros::lcd::print(i, "InuException caught; Check Terminal.");
+		throw std::runtime_error("InuException thrown");
 	}
 }

@@ -8,18 +8,15 @@
 #define INUPID_H
 
 #include "inu/motor/PIDProfile.hpp"
+#include "inu/InuException.hpp"
 #include <algorithm>
-#include <stdexcept>
-#include <iostream>
 
 namespace inu {
 	class PID {
 	public:
 		/**
 		 * @param min Minimum value possible this PID can output.
-		 *
-		 * @param max Maximum value possible this PID can output
-		 *
+		 * @param max Maximum value possible this PID can output.
 		 * @param profile The PID profile to use.
 		*/ 
 		PID(double min, double max, const PIDProfile& profile) : profile(profile) {
@@ -45,10 +42,12 @@ namespace inu {
 		 * Sets the range of outputs possible by this PID.
 		 *
 		 * @param min Minimum value possible this PID can output.
-		 *
 		 * @param max Maximum value possible this PID can output.
 		*/ 
 		void SetRange(double min, double max) {
+			if (min >= max)
+				throw inu::InuException("PID.hpp: Minimum cannot be greater than or equal to maximum.");
+
 			this->min = min;
 			this->max = max;
 		}
@@ -68,19 +67,24 @@ namespace inu {
 		}
 
 		/**
-		 * Gets the PIDProfile used.
+		 * @returns A copy to the PIDProfile used.
 		*/ 
 		const PIDProfile GetPID() const {
 			return profile;
 		}
 
+		/**
+		 * @returns Whether or not the target has been set.
+		*/ 
 		bool TargetSet() const {
 			return targetSet;
 		}
 
 		/**
-		 * @param input Input value to be checked with target.
+		 * Whether or not the input value is close to the target by a degree of
+		 * error.
 		 *
+		 * @param input Input value to be checked with target.
 		 * @param error The maximum absolute difference between the input and
 		 * the target value.
 		 *
@@ -95,14 +99,13 @@ namespace inu {
 		 * Updates the PID one time. This assumes that calls to this function
 		 * are done in consistent, constant intervals of time.
 		 *
-		 * The target must be set at least once in order for this to run. If
-		 * not, a std::exception will be thrown.
+		 * The target must be set at least once in order for this to run.
 		 *
 		 * @param input The input value that changes when given this output.
 		*/ 
 		double Update(const double input) {
 			if(!targetSet)
-				throw std::runtime_error("inu: PID.h: Target must be set.");
+				throw inu::InuException("PID.hpp: Target must be set.");
 
 			proportion = GetTarget() - input; 
 			integral += proportion; 
