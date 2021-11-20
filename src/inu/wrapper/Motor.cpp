@@ -2,10 +2,11 @@
 #include "inu/InuException.hpp"
 #include "pros/motors.h"
 #include <algorithm>
+#include <cstdint>
 
 using namespace inu;
 
-Motor::Motor(unsigned int port) : motor(port) {
+Motor::Motor(inu::port port) : motor(port) {
 	if(port < 1 || port > 20)
 		throw InuException("Motor.h: Port must be between 1-20.");
 }
@@ -74,7 +75,7 @@ double Motor::GetTargetPosition() const {
 	return motor.get_target_position();
 }
 
-std::uint8_t Motor::GetPort() const {
+inu::port Motor::GetPort() const {
 	return motor.get_port();
 }
 

@@ -62,11 +62,11 @@ void BackgroundMotorSystem::RemoveMotor(BackgroundMotor* motor) {
 	}
 }
 
-bool BackgroundMotorSystem::MotorExists(unsigned int port) {
+bool BackgroundMotorSystem::MotorExists(inu::port port) {
 	return motors[port - 1] != nullptr;
 }
 
-void BackgroundMotorSystem::RemoveMotor(unsigned int port) {
+void BackgroundMotorSystem::RemoveMotor(inu::port port) {
 	// Never call delete here; we don't own the pointers
 	motors[port - 1] = nullptr;
 }

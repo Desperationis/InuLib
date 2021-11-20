@@ -10,6 +10,7 @@
 #ifndef BACKGROUNDMOTOR_H
 #define BACKGROUNDMOTOR_H
 
+#include "inu/Types.hpp"
 
 namespace inu {
 
@@ -26,7 +27,7 @@ namespace inu {
 		/**
 		 * Creates a background motor at a specific port.
 		*/ 
-		BackgroundMotor(unsigned int port) {
+		BackgroundMotor(inu::port port) {
 			this->port = port;
 		}
 
@@ -40,12 +41,12 @@ namespace inu {
 		/**
 		 * @returns The port of this motor.
 		*/ 
-		virtual unsigned int GetPort() const {
+		virtual inu::port GetPort() const {
 			return port;
 		}
 
 	protected:
-		unsigned int port;
+		inu::port port;
 	};
 
 }

@@ -12,12 +12,13 @@
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
 #include "inu/motor/PID.hpp"
+#include "inu/Types.hpp"
 #include "main.h"
 
 namespace inu {
 	class PIDInertialMotor : public BackgroundMotor {
 	public:
-		PIDInertialMotor(unsigned int motorPort, unsigned int gyro, const PIDProfile& profile);
+		PIDInertialMotor(inu::port motorPort, inu::port gyro, const PIDProfile& profile);
 
 		virtual ~PIDInertialMotor();
 		
@@ -27,7 +28,7 @@ namespace inu {
 
 		void SetPID(const PIDProfile& pidProfile);
 
-		void SetMaximumVelocity(unsigned int velocity);
+		void SetMaximumVelocity(int velocity);
 
 		double GetTarget() const;
 

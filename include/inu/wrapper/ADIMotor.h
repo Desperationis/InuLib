@@ -8,24 +8,25 @@
 #define INUADIMOTOR_HPP
 
 #include "main.h"
+#include "inu/InuException.hpp"
+#include "inu/Types.hpp"
 
 namespace inu {
 	class ADIMotor {
 	public:
 		/**
-		 * @param port Port of the adi motor, 1-8, which each number
-		 * corresponding to a letter (with 'A' starting as 1)
+		 * @param port Port of the adi motor, 1-8, 'a'-'z', or 'A' - 'Z'.
 		 */ 
-		ADIMotor(unsigned int port) : motor(port) { 
+		ADIMotor(inu::port port) : motor(port) { 
 			reversed = false;
 		}
 
 		/**
-		 * Sets the velocity of the motor [-127, 127].
+		 * Sets the voltage of the motor [-127, 127].
 		 *
-		 * @param velocity Velocity of the motor.
+		 * @param voltage Voltage of the motor.
 		*/ 
-		void Set(int velocity) {
+		void Set(std::int32_t velocity) const {
 			motor.set_value(velocity * (reversed ? -1 : 1));
 		}
 

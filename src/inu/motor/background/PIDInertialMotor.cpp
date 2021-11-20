@@ -5,9 +5,8 @@
 
 using namespace inu;
 
-PIDInertialMotor::PIDInertialMotor(unsigned int motorPort, unsigned int gyro,
-		const PIDProfile& profile) : BackgroundMotor(motorPort),
-		motor(motorPort), gyro(gyro), pid(-127, 127, profile) {
+PIDInertialMotor::PIDInertialMotor(inu::port motorPort, inu::port gyro, const PIDProfile& profile) : 
+	BackgroundMotor(motorPort), motor(motorPort), gyro(gyro), pid(-127, 127, profile) {
 
 	this->port = port;
 	BackgroundMotorSystem::Instance()->EnrollMotor(this);
@@ -36,11 +35,11 @@ const PIDProfile PIDInertialMotor::GetPID() const {
 
 bool PIDInertialMotor::AtTarget(unsigned int error) const {
 	double angle = gyro.get_rotation();
-	return pid.WithinError(angle, error);
+	return pid.WithinError(angle, (int)error);
 }
 
-void PIDInertialMotor::SetMaximumVelocity(unsigned int velocity) {
-	pid.SetRange(-(int)velocity, (int)velocity);
+void PIDInertialMotor::SetMaximumVelocity(int velocity) {
+	pid.SetRange(-velocity, velocity);
 }
 
 bool PIDInertialMotor::IsReversed() const {
@@ -52,7 +51,8 @@ void PIDInertialMotor::_Update() {
 		double motorSpeed = pid.Update(gyro.get_rotation());
 		motor.MoveVelocity(motorSpeed);
 	}
-	else 
+	else {
 		motor.MoveVelocity(0);
+	}
 }
 

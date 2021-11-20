@@ -3,7 +3,7 @@
 
 using namespace inu;
 
-SlewMotor::SlewMotor(unsigned int port) : BackgroundMotor(port), motor(port) {
+SlewMotor::SlewMotor(inu::port port) : BackgroundMotor(port), motor(port) {
 	this->port = port;
 	rate = 20;
 	targetSpeed = 0;

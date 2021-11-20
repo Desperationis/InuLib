@@ -1,10 +1,11 @@
 #include "inu/motor/background/PIDMotor.h"
 #include "inu/motor/background/BackgroundMotorSystem.h"
+#include "pros/motors.h"
 #include <algorithm>
 
 using namespace inu;
 
-PIDMotor::PIDMotor(unsigned int port, const PIDProfile& profile) :
+PIDMotor::PIDMotor(inu::port port, const PIDProfile& profile) :
 	BackgroundMotor(port), motor(port), pid(-127, 127, profile) {
 
 	this->port = port;
@@ -33,6 +34,10 @@ bool PIDMotor::AtTarget(int error) const {
 
 void PIDMotor::SetMaximumVelocity(int velocity) {
 	pid.SetRange(-velocity, velocity);
+}
+
+void PIDMotor::SetBrakeMode(pros::motor_brake_mode_e_t mode) {
+	motor.SetBrakeMode(mode);
 }
 
 double PIDMotor::GetPosition() const {

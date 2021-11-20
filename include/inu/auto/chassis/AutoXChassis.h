@@ -4,9 +4,6 @@
  * Chassis used to control a x-drive.
 */
 
-
-// NOTE: Due to time, this will be a concrete class used for X-drive
-
 #ifndef XCHASSIS_H
 #define XCHASSIS_H
 

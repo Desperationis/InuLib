@@ -8,6 +8,7 @@
 #define XLINEFOLLOWERBUILDER_H
 
 #include "main.h"
+#include "inu/Types.hpp"
 #include <memory>
 #include <array>
 
@@ -24,7 +25,7 @@ namespace inu {
 		void SetChassis(std::weak_ptr<AutoXChassis> chassis);
 
 		// 2 left, 1 center, 2 right
-		void SetSensors(const std::array<std::uint8_t, 5>& lightSensors);
+		void SetSensors(const std::array<inu::port, 5>& lightSensors);
 
 		void SetSensorError(const std::array<int, 5>& errors);
 
@@ -36,7 +37,7 @@ namespace inu {
 
 		std::weak_ptr<AutoXChassis> GetChassis() const;
 
-		const std::array<uint8_t, 5> GetSensors() const;
+		const std::array<inu::port, 5> GetSensors() const;
 
 		const std::array<int, 5> GetSensorErrors() const;
 
@@ -50,7 +51,7 @@ namespace inu {
 		std::weak_ptr<AutoXChassis> chassis;
 		std::shared_ptr<XLineFollower> follower;
 
-		std::array<uint8_t, 5> sensors;
+		std::array<inu::port, 5> sensors;
 		std::array<int, 5> sensorError;
 		bool sensorsSet;
 

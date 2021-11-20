@@ -6,10 +6,11 @@
 #include "inu/motor/background//SlewMotor.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/auto/chassis/AutoXChassis.h"
-#include "inu/auto/chassis/AutoXChassisBuilder.hpp"
+#include "inu/auto/chassis/AutoXChassisBuilder.h"
 #include "inu/auto/XLineFollower.h"
 #include "inu/auto/XLineFollowerBuilder.h"
 #include "inu/wrapper/VisionSensor.h"
+#include "inu/wrapper/InertialSensor.h"
 #include "inu/auto/ArmAssembly.h"
 #include "inu/auto/ArmAssemblyBuilder.h"
 #include "pros/motors.h"
@@ -49,32 +50,47 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 void opcontrol() {
 	try {
+		int port = 4;
+		std::cout << Color::FG_GREEN << port << Color::FG_DEFAULT << std::endl;
+		InertialSensor sensor(port); 
+
 
 		ArmAssemblyBuilder armBuilder;
 		armBuilder.SetArmMotor(18, PIDProfile(0.7f));
 		armBuilder.SetClawMotor(1);
 		armBuilder.SetArmMaximumVelocity(40);
-
 		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
 
+
 		
-		PIDProfile p;
-		p.p = 0.9;
-		p.i = 0.1;
-		p.d = 0;
-		p.integralWindupLimit = 50;
-		p.integralLevelingError = 0;
+		AutoChassisBuilder::AutoChassisOptions chassisOptions;
+		chassisOptions.maxVelocity = 60;
+		chassisOptions.timeoutLimit = 10;
+		chassisOptions.timeoutAlignLimit = 0.5;
+		chassisOptions.stalls = true;
+		chassisOptions.steadyStateEncoderError = 10;
+
+		AutoChassisBuilder::AutoChassisGyroOptions gyroOptions;
+		gyroOptions.gyroPID.p = 0.9;
+		gyroOptions.gyroPID.i = 0.15;
+		gyroOptions.gyroPID.d = 0;
+		gyroOptions.gyroPID.integralWindupLimit = 50;
+		gyroOptions.gyroPID.integralLevelingError = 0;
 
 		AutoXChassisBuilder builder;
-		builder.SetMaxVelocity(60); 
 		builder.SetMotors(11,20,3,4);
-		builder.SetGyro(10, p);
-		builder.SetTimeout(10);
-		builder.SetMaxAngleError(5); 
-		builder.SetStalling(true);
-		builder.SetTimeoutAlignLimit(0.5); // Makes a HUGE difference
+		builder.SetGyro(10, gyroOptions);
+		builder.SetChassisOptions(chassisOptions);
 
 		std::shared_ptr<AutoXChassis> chassis = builder.Build();
+		chassis->Turn(-1000);
+		chassis->Turn(1000);
+		chassis->TurnA(360);
+		chassis->TurnA(-360);
+
+		while(true) {
+			pros::delay(10);
+		}
 
 		XLineFollowerBuilder followerBuilder;
 		followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'C'} );

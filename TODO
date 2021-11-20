@@ -5,6 +5,8 @@ Challenges to overcome
 * Pick up block (DONE
 * Hold arm in position (DONE)
 
+NOTE to self:
+MoveVelocity() is horrible for driving, use voltage instead
 
 
 

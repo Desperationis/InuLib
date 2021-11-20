@@ -16,11 +16,11 @@ void XLineFollowerBuilder::Reset() {
 	chassis.reset();
 	follower.reset();
 
-	for(std::size_t i = 0; i < sensors.max_size(); i++) {
+	for(size_t i = 0; i < sensors.max_size(); i++) {
 		sensors[i] = 0;
 	}
 
-	for(std::size_t i = 0; i < sensorError.max_size(); i++) {
+	for(size_t i = 0; i < sensorError.max_size(); i++) {
 		sensorError[i] = 0;
 	}
 }
@@ -29,7 +29,7 @@ void XLineFollowerBuilder::SetChassis(std::weak_ptr<AutoXChassis> chassis) {
 	this->chassis = chassis;
 }
 
-void XLineFollowerBuilder::SetSensors(const std::array<std::uint8_t, 5>& lightSensors) {
+void XLineFollowerBuilder::SetSensors(const std::array<inu::port, 5>& lightSensors) {
 	sensors = lightSensors;
 	sensorsSet = true;
 }
@@ -52,7 +52,7 @@ std::weak_ptr<AutoXChassis> XLineFollowerBuilder::GetChassis() const {
 	return chassis;
 }
 
-const std::array<std::uint8_t, 5> XLineFollowerBuilder::GetSensors() const {
+const std::array<inu::port, 5> XLineFollowerBuilder::GetSensors() const {
 	return sensors;
 }
 

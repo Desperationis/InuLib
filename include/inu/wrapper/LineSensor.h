@@ -9,14 +9,15 @@
 #define INULINESENSOR_HPP
 
 #include "main.h"
+#include "inu/Types.hpp"
 
 namespace inu {
 	class LineSensor {
 	public:
 		/**
-		 * @param port The port of the line sensor; 1 - 8.
+		 * @param port Port of the line sensor from 1-8, 'a'-'z', or 'A'-'Z'.
 		*/ 
-		LineSensor(unsigned int port);
+		LineSensor(inu::port port);
 
 		/**
 		 * If the sensor has a constant offset relative to other sensors, you

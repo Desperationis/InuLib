@@ -1,10 +1,9 @@
 #include "inu/auto/chassis/AutoXChassis.h"
-#include "inu/auto/chassis/AutoChassisBuilder.hpp"
-#include "inu/auto/chassis/AutoXChassisBuilder.hpp"
+#include "inu/auto/chassis/AutoXChassisBuilder.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/motor/background/PIDInertialMotor.h"
 #include "inu/motor/background/BackgroundMotorSystem.h"
-#include "pros/llemu.hpp"
+#include "inu/InuException.hpp"
 
 using namespace inu;
 
@@ -51,6 +50,8 @@ void AutoXChassis::Swerve(std::int8_t y, std::int8_t x) {
 }
 
 void AutoXChassis::Swerve(std::int8_t forward, std::int8_t right, std::int8_t turn) {
+	auto maxVelocity = chassisOptions.maxVelocity;
+
 	forward = std::clamp<std::int8_t>(forward, -maxVelocity, maxVelocity);
 	right = std::clamp<std::int8_t>(right, -maxVelocity, maxVelocity);
 	turn = std::clamp<std::int8_t>(turn, -maxVelocity, maxVelocity);
@@ -69,19 +70,24 @@ void AutoXChassis::Swerve(std::int8_t forward, std::int8_t right, std::int8_t tu
 
 void AutoXChassis::TurnAbsolute(double degrees) {
 	if(!usesGyro)
-		return;
+		throw InuException("AutoXChassis.h: Cannot TurnAbsolute() as gyro has not been defined.");
 
 	FreeBackgroundMotors();
 	if(!CreateBackgroundMotors())
-		return;
+		throw InuException("AutoXChassis.h: Cannot TurnAbsolute() as background motors were unable to be created.");
 
 	// Turn left or right depending on angle position.
-	double angle = gyro->get_rotation();
+	double angle = gyro->GetRotation();
 
 	inertialTopright->Set(degrees);
 	inertialTopleft->Set(degrees);
 	inertialBottomleft->Set(degrees);
 	inertialBottomright->Set(degrees);
+
+	auto isStalling = chassisOptions.stalls;
+	auto timeoutLimit = chassisOptions.timeoutLimit;
+	auto timeoutAlignLimit = chassisOptions.timeoutAlignLimit;
+	auto maxAngleError = gyroOptions.steadyStateAngleError;
 
 	if(isStalling) {
 		double secElapsed = 0;
@@ -112,11 +118,15 @@ void AutoXChassis::TurnAbsolute(double degrees) {
 
 
 void AutoXChassis::TurnA(double degrees) {
-	AutoXChassis::TurnAbsolute(gyro->get_rotation() + degrees);
+	AutoXChassis::TurnAbsolute(gyro->GetRotation() + degrees);
 }
 
 void AutoXChassis::Turn(double ticks) {
 	FreeBackgroundMotors();
+
+	auto maxVelocity = chassisOptions.maxVelocity;
+	auto timeoutLimit = chassisOptions.timeoutLimit;
+	auto isStalling = chassisOptions.stalls;
 
 	topleft->MoveRelative(ticks, maxVelocity);
 	topright->MoveRelative(ticks, maxVelocity);
@@ -131,6 +141,10 @@ void AutoXChassis::Turn(double ticks) {
 
 void AutoXChassis::Forward(double ticks) {
 	FreeBackgroundMotors();
+
+	auto maxVelocity = chassisOptions.maxVelocity;
+	auto timeoutLimit = chassisOptions.timeoutLimit;
+	auto isStalling = chassisOptions.stalls;
 
 	topleft->MoveRelative(ticks, maxVelocity);
 	topright->MoveRelative(-ticks, maxVelocity);
@@ -151,6 +165,10 @@ void AutoXChassis::Backward(double ticks) {
 void AutoXChassis::StrafeRight(double ticks) {
 	FreeBackgroundMotors();
 
+	auto maxVelocity = chassisOptions.maxVelocity;
+	auto timeoutLimit = chassisOptions.timeoutLimit;
+	auto isStalling = chassisOptions.stalls;
+
 	topleft->MoveRelative(ticks, maxVelocity);
 	topright->MoveRelative(ticks, maxVelocity);
 	bottomleft->MoveRelative(-ticks, maxVelocity);
@@ -167,6 +185,8 @@ void AutoXChassis::StrafeLeft(double ticks) {
 }
 
 bool AutoXChassis::IsSettled() {
+	auto maxEncoderError = chassisOptions.steadyStateEncoderError;
+
 	return topleft->IsSettled(maxEncoderError) &&
 		topright->IsSettled(maxEncoderError) &&
 		bottomleft->IsSettled(maxEncoderError) && 
@@ -176,6 +196,8 @@ bool AutoXChassis::IsSettled() {
 void AutoXChassis::StallUntilSettled(double timeout) {
 	double secElapsed = 0;
 	double secElapsedTarget = 0;
+	auto timeoutAlignLimit = chassisOptions.timeoutAlignLimit;
+
 	while(secElapsed < timeout && secElapsedTarget < timeoutAlignLimit) {
 		pros::delay(10);
 		secElapsed += 0.010;
@@ -216,7 +238,7 @@ double AutoXChassis::GetDistance() {
 }
 
 double AutoXChassis::GetAbsoluteRotation() {
-	return gyro->get_rotation();
+	return gyro->GetRotation();
 }
 
 void AutoXChassis::FreeBackgroundMotors() {
@@ -246,6 +268,11 @@ bool AutoXChassis::CreateBackgroundMotors() {
 	if(system->MotorExists(br)) 
 		return false;
 
+	auto gyroPID = gyroOptions.gyroPID;
+	auto maxVelocity = chassisOptions.maxVelocity;
+
+
+	// exceptions pls
 	inertialTopleft.reset(new PIDInertialMotor(tl, gyroPort, gyroPID));
 	inertialTopright.reset(new PIDInertialMotor(tr, gyroPort, gyroPID));
 	inertialBottomleft.reset(new PIDInertialMotor(bl, gyroPort, gyroPID));

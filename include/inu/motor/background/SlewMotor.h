@@ -10,6 +10,7 @@
 
 #include "inu/motor/background/BackgroundMotor.h"
 #include "inu/wrapper/Motor.h"
+#include "inu/Types.hpp"
 
 
 namespace inu {
@@ -19,7 +20,7 @@ namespace inu {
 	*/
 	struct SlewMotor : public BackgroundMotor {
 	public:
-		SlewMotor(unsigned int port);
+		SlewMotor(inu::port port);
 
 		virtual ~SlewMotor();
 

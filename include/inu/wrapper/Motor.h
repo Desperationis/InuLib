@@ -8,6 +8,7 @@
 #define INUMOTOR_HPP
 
 #include "main.h"
+#include "inu/Types.hpp"
 
 namespace inu {
 	class Motor {
@@ -15,7 +16,7 @@ namespace inu {
 		/**
 		 * @param port Port of the motor, 1-20.
 		*/ 
-		Motor(unsigned int port);
+		Motor(inu::port port);
 
 		/**
 		 *	Sets the voltage of the motor using joystick ranges; Brake mode
@@ -100,7 +101,7 @@ namespace inu {
 		/**
 		 * @returns The port of the motor.
 		*/ 
-		std::uint8_t GetPort() const;
+		inu::port GetPort() const;
 
 		/**
 		 * @returns the voltage of the motor [-127, 127]

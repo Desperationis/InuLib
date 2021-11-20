@@ -8,12 +8,14 @@
 #define CHASSIS_H
 
 #include <cstdint>
+#include <memory>
 #include "main.h"
 #include "inu/motor/PIDProfile.hpp"
+#include "inu/wrapper/InertialSensor.h"
+#include "AutoChassisBuilder.h"
+#include "inu/Types.hpp"
 
 namespace inu {
-	class AutoChassisBuilder;
-
 	/**
 	 * Abstract class used for all future chassis that move autonomously.
 	 *
@@ -171,21 +173,12 @@ namespace inu {
 		virtual double GetAbsoluteRotation() = 0;
 
 	protected:
-		unsigned int maxEncoderError;
-		unsigned int maxAngleError;
-		unsigned int maxVelocity;
-		unsigned int currentLimit;
-		unsigned int timeoutLimit;
-		double timeoutAlignLimit;
+		AutoChassisBuilder::AutoChassisOptions chassisOptions;
+		AutoChassisBuilder::AutoChassisGyroOptions gyroOptions;
 
-		pros::Imu* gyro;
-		unsigned int gyroPort;
+		std::shared_ptr<InertialSensor> gyro;
+		inu::port gyroPort;
 		bool usesGyro;
-		bool isStalling;
-
-		pros::motor_encoder_units_e_t encoderUnits;
-
-		PIDProfile gyroPID;
 	};
 }
 

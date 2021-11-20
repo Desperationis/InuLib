@@ -10,6 +10,7 @@
 #include "main.h"
 #include <array>
 #include "inu/motor/background/BackgroundMotor.h"
+#include "inu/Types.hpp"
 
 namespace inu {
 	class BackgroundMotorSystem {
@@ -27,9 +28,9 @@ namespace inu {
 
 		void RemoveMotor(BackgroundMotor* motor);
 
-		void RemoveMotor(unsigned int port);
+		void RemoveMotor(inu::port port);
 
-		bool MotorExists(unsigned int port);
+		bool MotorExists(inu::port port);
 
 		void BackgroundTask(void* parameters);
 

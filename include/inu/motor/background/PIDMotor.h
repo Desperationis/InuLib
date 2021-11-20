@@ -9,11 +9,13 @@
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
 #include "inu/motor/PID.hpp"
+#include "inu/Types.hpp"
+#include "pros/motors.h"
 
 namespace inu {
 	class PIDMotor : public BackgroundMotor {
 	public:
-		PIDMotor(unsigned int port, const PIDProfile& profile);
+		PIDMotor(inu::port port, const PIDProfile& profile);
 
 		virtual ~PIDMotor();
 
@@ -48,6 +50,16 @@ namespace inu {
 		 */
 		void SetMaximumVelocity(int velocity);
 
+		/**
+		 * Set the brake mode of the motor.
+		 *
+		 * @param mode Brake mode.
+		*/ 
+		void SetBrakeMode(pros::motor_brake_mode_e_t mode);
+
+		/**
+		 * @returns the current position of the motor.
+		*/ 
 		double GetPosition() const;
 
 		void _Update();

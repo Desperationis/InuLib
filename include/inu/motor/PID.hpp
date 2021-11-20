@@ -10,6 +10,7 @@
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/InuException.hpp"
 #include <algorithm>
+#include "main.h"
 
 namespace inu {
 	class PID {
@@ -26,6 +27,7 @@ namespace inu {
 			integral = 0;
 			derivative = 0;
 			pastError = 0;
+			target = 0;
 		}
 
 		/**
@@ -33,7 +35,7 @@ namespace inu {
 		 *
 		 * @param target Target value
 		*/ 
-		void SetTarget(const double target) {
+		void SetTarget(double target) {
 			this->target = target;
 			targetSet = true;
 		}
@@ -103,8 +105,8 @@ namespace inu {
 		 *
 		 * @param input The input value that changes when given this output.
 		*/ 
-		double Update(const double input) {
-			if(!targetSet)
+		double Update(double input) {
+			if(!targetSet) 
 				throw inu::InuException("PID.hpp: Target must be set.");
 
 			proportion = GetTarget() - input; 

@@ -1,47 +1,31 @@
 #include "inu/auto/chassis/AutoXChassis.h"
-#include "inu/auto/chassis/AutoChassisBuilder.hpp"
+#include "inu/auto/chassis/AutoChassisBuilder.h"
+#include <memory>
 
 using namespace inu;
 
 void AutoChassis::Copy(const AutoChassis& chassis) {
-	maxEncoderError = chassis.maxEncoderError;
-	maxAngleError = chassis.maxAngleError;
-	maxVelocity = chassis.maxVelocity;
-	currentLimit = chassis.currentLimit;
-	timeoutLimit = chassis.timeoutLimit;
-	timeoutAlignLimit = chassis.timeoutAlignLimit;
+	chassisOptions = chassis.chassisOptions;
 
 	usesGyro = chassis.usesGyro;
 	if(usesGyro) {
-		gyro = new pros::Imu(chassis.gyroPort);
+		gyroOptions = chassis.gyroOptions;
+		gyro.reset(new InertialSensor(chassis.gyroPort));
 		gyroPort = chassis.gyroPort;
 	}
-		
-	isStalling = chassis.isStalling;
-
-	encoderUnits = chassis.encoderUnits;
-	gyroPID = chassis.gyroPID;
 }
 
 AutoChassis::AutoChassis(const AutoChassisBuilder& builder) {
-	maxAngleError = builder.GetMaxAngleError();
-	maxEncoderError = builder.GetMaxEncoderError();
-	maxVelocity = builder.GetMaxVelocity();
-	currentLimit = builder.GetCurrentLimit();
-	timeoutLimit = builder.GetTimeout();
-	isStalling = builder.IsStalling();
-	timeoutAlignLimit = builder.GetTimeoutAlignLimit();
+	chassisOptions = builder.GetChassisOptions();
 
 	usesGyro = builder.UsesGyro();
 	gyro = nullptr;
 
 	if(usesGyro) {
-		gyro = new pros::Imu(builder.GetGyro());
-		gyroPID = builder.GetGyroPID();
-		gyroPort = builder.GetGyro();
+		gyro.reset(new InertialSensor(builder.GetGyroPort()));
+		gyroOptions = builder.GetGyroOptions();
+		gyroPort = builder.GetGyroPort();
 	}
-
-	encoderUnits = builder.GetEncoderUnits();
 }
 
 
@@ -50,12 +34,5 @@ AutoChassis::AutoChassis(const AutoChassis& chassis) {
 }
 
 AutoChassis::~AutoChassis() {
-	if(gyro != nullptr) {
-		delete gyro;
-		gyro = nullptr;
-	}
+	gyro.reset();
 };
-
-
-
-

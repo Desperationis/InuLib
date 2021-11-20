@@ -2,7 +2,7 @@
 
 using namespace inu;
 
-LineSensor::LineSensor(unsigned int port) : sensor(port) { 
+LineSensor::LineSensor(inu::port port) : sensor(port) { 
 	error = 0;
 }
 

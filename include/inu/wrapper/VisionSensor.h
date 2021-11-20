@@ -1,4 +1,4 @@
-/** VisionSensor.h
+/** @file VisionSensor.h
  * @brief Wrapper for vision sensor.
  *
  * Wrapper for vision sensor with extra features.
@@ -9,7 +9,7 @@
 #define INUVISIONSENSOR_H
 
 #include "main.h"
-#include "pros/vision.h"
+#include "inu/Types.hpp"
 #include <memory>
 
 
@@ -20,15 +20,21 @@ namespace inu {
 		 * Note that when this is created, the zero point will default to be at
 		 * the topleft.
 		 *
-		 * @param port Port of the vision sensor.
+		 * @param port Port of the vision sensor [1-20].
 		*/ 
-		VisionSensor(unsigned int port);
+		VisionSensor(inu::port port);
+
+		/**
+		 * Set the Wi-Fi mode of the Vision Sensor.
+		 *
+		 * @param enable 0 for disable, 1 for enable.
+		*/ 
+		void SetWifiMode(const std::uint8_t enable);
 
 		/**
 		 * Set a signature to the vision sensor.
 		 *
 		 * @param signatureID The ID of the signature.
-		 * 
 		 * @param signature Pointer to the signature.
 		*/ 
 		void SetSignature(const std::uint8_t signatureID, pros::vision_signature_s_t* signature);
@@ -90,8 +96,8 @@ namespace inu {
 		int GetCenterOffsetY(const pros::vision_object_s_t& object) const;
 
 		/**
-		 * Get the largest object detected by the vision sensor that has at least the minimum area
-		 * set by SetMinimumArea().
+		 * Get the largest object detected by the vision sensor that has at
+		 * least the minimum area set by SetMinimumArea().
 		 *
 		 * @returns pointer to the object. If no object is detected of minimum
 		 * width, return nullptr.

@@ -1,12 +1,18 @@
 #include "inu/wrapper/VisionSensor.h"
-#include "pros/vision.h"
+#include "inu/InuException.hpp"
 
 using namespace inu;
 
-VisionSensor::VisionSensor(unsigned int port) : vision(port) {
+VisionSensor::VisionSensor(inu::port port) : vision(port) {
+	if(port < 1 || port > 20)
+		throw InuException("VisionSensor.h: Port must be between 1-20.");
 	minimumArea = 200;
 	centerX = 0;
 	centerY = 0;
+}
+
+void VisionSensor::SetWifiMode(const std::uint8_t enable) {
+	vision.set_wifi_mode(enable);
 }
 
 void VisionSensor::SetSignature(const std::uint8_t signatureID, pros::vision_signature_s_t* signature) {
