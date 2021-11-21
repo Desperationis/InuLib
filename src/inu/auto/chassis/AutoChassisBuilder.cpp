@@ -25,6 +25,12 @@ void AutoChassisBuilder::SetGyro(inu::port port, const AutoChassisGyroOptions& g
 }
 
 void AutoChassisBuilder::SetChassisOptions(const AutoChassisOptions& options) {
+	if(options.timeoutLimit < 0)
+		throw InuException("AutoChassisBuilder.h: Timeout Limit must be positive.");
+
+	if(options.timeoutAlignLimit < 0) 
+		throw InuException("AutoChassisBuilder.h: Timeout Align Limit must be positive.");
+
 	this->chassisOptions = options;
 }
 

@@ -61,8 +61,6 @@ void opcontrol() {
 		armBuilder.SetArmMaximumVelocity(40);
 		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
 
-
-		
 		AutoChassisBuilder::AutoChassisOptions chassisOptions;
 		chassisOptions.maxVelocity = 60;
 		chassisOptions.timeoutLimit = 10;
@@ -77,20 +75,13 @@ void opcontrol() {
 		gyroOptions.gyroPID.integralWindupLimit = 50;
 		gyroOptions.gyroPID.integralLevelingError = 0;
 
+		// Need exceptions anything below	
 		AutoXChassisBuilder builder;
 		builder.SetMotors(11,20,3,4);
 		builder.SetGyro(10, gyroOptions);
 		builder.SetChassisOptions(chassisOptions);
 
 		std::shared_ptr<AutoXChassis> chassis = builder.Build();
-		chassis->Turn(-1000);
-		chassis->Turn(1000);
-		chassis->TurnA(360);
-		chassis->TurnA(-360);
-
-		while(true) {
-			pros::delay(10);
-		}
 
 		XLineFollowerBuilder followerBuilder;
 		followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'C'} );
@@ -100,7 +91,10 @@ void opcontrol() {
 		followerBuilder.SetLightThreshold(350);
 
 		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
-		follower->FollowLine(500);
+		while(true) {
+			follower->FollowLine(700);
+			chassis->TurnA(180);
+		}
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;

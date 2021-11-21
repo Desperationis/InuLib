@@ -13,6 +13,10 @@ MoveVelocity() is horrible for driving, use voltage instead
 Library issues that need to be addressed:
 * How to follow a line asynchronously such that it stops at a certain distance
 
+* Address drive train slop
+	* Add reverse motor functionality
+* Add exceptions
+
 
 
 Library Comments (since the commit after c3ae2a862709d610a57659b6e13b8ead1ca859d5):
