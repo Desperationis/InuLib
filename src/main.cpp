@@ -8,6 +8,7 @@
 #include "inu/auto/chassis/AutoXChassisBuilder.h"
 #include "inu/auto/XLineFollower.h"
 #include "inu/auto/XLineFollowerBuilder.h"
+#include "inu/wrapper/LineSensor.h"
 #include "inu/wrapper/VisionSensor.h"
 #include "inu/wrapper/InertialSensor.h"
 #include "inu/auto/ArmAssembly.h"
@@ -60,7 +61,7 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 void opcontrol() {
 	try {
 
-		pros::Motor test(20);
+		/*pros::Motor test(20);
 		test.set_reversed(true);
 		test.move_relative(4000, 30);
 		std::cout<<"moving"<<std::endl;
@@ -91,7 +92,7 @@ void opcontrol() {
 			}
 
 			pros::delay(200);
-		}
+		}*/
 
 
 		ArmAssemblyBuilder armBuilder;

@@ -2,4 +2,18 @@
 
 
 
-pros build-compile-commands && pros upload --icon "USER029x.bmp" && sleep 1s && pros terminal
+if ! pros build-compile-commands
+then
+	exit 1
+fi
+
+
+if ! pros upload --icon "USER029x.bmp" 
+then
+	exit 1
+fi
+
+sleep 4s
+
+
+pros terminal

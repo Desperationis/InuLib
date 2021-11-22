@@ -1,14 +1,20 @@
 #include "inu/wrapper/Motor.h"
 #include "inu/InuException.hpp"
 #include "pros/motors.h"
+#include "pros/apix.h"
 #include <algorithm>
 #include <cstdint>
 
 using namespace inu;
+using pros::c::v5_device_e_t::E_DEVICE_MOTOR;
 
 Motor::Motor(inu::port port) : motor(port) {
 	if(port < 1 || port > 20)
 		throw InuException("Motor.h: Port must be between 1-20.");
+
+	if(pros::c::registry_get_plugged_type(port - 1) != E_DEVICE_MOTOR)
+		throw InuException("Motor.h: Port is not a motor.");
+
 }
 
 std::int32_t Motor::CapVoltage(std::int32_t voltage) const {

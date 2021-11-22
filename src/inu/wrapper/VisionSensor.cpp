@@ -1,11 +1,16 @@
 #include "inu/wrapper/VisionSensor.h"
 #include "inu/InuException.hpp"
+#include "pros/apix.h"
 
 using namespace inu;
+using pros::c::v5_device_e_t::E_DEVICE_VISION;
 
 VisionSensor::VisionSensor(inu::port port) : vision(port) {
 	if(port < 1 || port > 20)
 		throw InuException("VisionSensor.h: Port must be between 1-20.");
+	if(pros::c::registry_get_plugged_type(port - 1) != E_DEVICE_VISION)
+		throw InuException("VisionSensor.h: Port is not a vision sensor");
+
 	minimumArea = 200;
 	centerX = 0;
 	centerY = 0;
