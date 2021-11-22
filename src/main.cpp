@@ -1,7 +1,6 @@
 #include "main.h"
 #include "inu/InuException.hpp"
 #include "inu/Color.hpp"
-#include "inu/Logo.hpp"
 #include "inu/motor/background/PIDVisionMotor.h"
 #include "inu/motor/background//SlewMotor.h"
 #include "inu/motor/PIDProfile.hpp"
@@ -13,6 +12,8 @@
 #include "inu/wrapper/InertialSensor.h"
 #include "inu/auto/ArmAssembly.h"
 #include "inu/auto/ArmAssemblyBuilder.h"
+#include "pros/colors.h"
+#include "pros/llemu.hpp"
 #include "pros/motors.h"
 #include <memory>
 #include <algorithm>
@@ -26,10 +27,18 @@ using namespace inu;
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+
+#ifdef LOGO
+#include "inu/Logo.hpp"
 void initialize() {
 	//pros::lcd::initialize();
 	inu::Logo::Draw();
-	
+#endif
+#ifndef LOGO
+	void initialize() {
+		pros::lcd::initialize();
+#endif	
 
 	// This delay is REQUIRED for the program to work; Without this, core
 	// components may or may not be initialized (i.e. inertial sensor) and 
@@ -50,9 +59,39 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 void opcontrol() {
 	try {
-		int port = 4;
-		std::cout << Color::FG_GREEN << port << Color::FG_DEFAULT << std::endl;
-		InertialSensor sensor(port); 
+
+		pros::Motor test(20);
+		test.set_reversed(true);
+		test.move_relative(4000, 30);
+		std::cout<<"moving"<<std::endl;
+
+		pros::Vision vision(12);
+		pros::Vision vision2(9);
+
+		////////////////////////////// TESTING AREA //////////////////////////////
+
+		std::vector<int> colors {
+			RGB2COLOR(100, 0, 0), // RED
+			RGB2COLOR(10, 255, 0), // ORANGE
+			RGB2COLOR(0, 255, 0), // GREEN
+			RGB2COLOR(0, 255, 10), // CYAN
+			RGB2COLOR(0, 0, 100), // BLUE
+			RGB2COLOR(1, 1, 100), // Purple
+			//RGB2COLOR(100, 0, 100), // PINk
+		};
+
+
+		while(true) {
+			std::cout<<test.get_position() << std::endl;
+
+			for(auto color : colors) {
+				vision.set_led(color);
+				vision2.set_led(color);
+				pros::delay(125);
+			}
+
+			pros::delay(200);
+		}
 
 
 		ArmAssemblyBuilder armBuilder;
