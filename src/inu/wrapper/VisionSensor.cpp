@@ -21,7 +21,6 @@ void VisionSensor::SetWifiMode(const std::uint8_t enable) {
 }
 
 void VisionSensor::SetSignature(const std::uint8_t signatureID, pros::vision_signature_s_t* signature) {
-
 	vision.set_signature(signatureID, signature);
 }
 
@@ -66,4 +65,8 @@ std::unique_ptr<pros::vision_object_s_t> VisionSensor::GetLargestObject() const 
 
 unsigned int VisionSensor::GetObjectCount() const {
 	return vision.get_object_count();
+}
+
+void VisionSensor::SetLED(std::int32_t rgb) const {
+	vision.set_led(rgb);
 }

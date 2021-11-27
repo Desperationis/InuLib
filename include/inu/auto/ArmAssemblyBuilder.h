@@ -9,6 +9,7 @@
 
 
 #include "main.h"
+#include "pros/adi.h"
 #include "pros/adi.hpp"
 #include "inu/motor/background/PIDMotor.h"
 #include "inu/wrapper/ADIMotor.h"
@@ -41,6 +42,11 @@ namespace inu {
 		void SetClawMotor(inu::port adiPort, bool reversed = false);
 
 		/**
+		 * @param port Port from 1-20, 'a'-'z', or 'A'-'Z'.
+		*/ 
+		void SetButton(inu::port adiPort);
+
+		/**
 		 * @param velocity Max velocity of the arm; clamped based on gearing.
 		*/ 
 		void SetArmMaximumVelocity(std::uint32_t velocity);
@@ -56,6 +62,11 @@ namespace inu {
 		std::shared_ptr<inu::PIDMotor> GetArmMotor() const;
 
 		/**
+		 * @returns shared_ptr to the button.
+		*/ 
+		std::shared_ptr<pros::ADIButton> GetButton() const;
+
+		/**
 		 * @returns shared_ptr to a build ArmAssembly. If something wasn't
 		 * configured, InuException will be thrown.
 		*/ 
@@ -64,6 +75,7 @@ namespace inu {
 	private:
 		std::shared_ptr<inu::ADIMotor> clawMotor;
 		std::shared_ptr<inu::PIDMotor> armMotor;
+		std::shared_ptr<pros::ADIButton> button;
 	};
 }
 #endif

@@ -35,6 +35,10 @@ void ArmAssemblyBuilder::SetArmMaximumVelocity(std::uint32_t velocity) {
 	armMotor->SetMaximumVelocity(static_cast<int>(velocity));
 }
 
+void ArmAssemblyBuilder::SetButton(inu::port port) {
+	button.reset(new pros::ADIButton(port));
+}
+
 std::shared_ptr<inu::ADIMotor> ArmAssemblyBuilder::GetClawMotor() const {
 	return clawMotor;
 }
@@ -43,9 +47,13 @@ std::shared_ptr<inu::PIDMotor> ArmAssemblyBuilder::GetArmMotor() const {
 	return armMotor;
 }
 
+std::shared_ptr<pros::ADIButton> ArmAssemblyBuilder::GetButton() const {
+	return button;
+}
+
 std::shared_ptr<ArmAssembly> ArmAssemblyBuilder::Build() {
-	if(clawMotor == nullptr || armMotor == nullptr)
-		throw InuException("ArmAssemblyBuilder.h: Arm or claw motor wasn't set.");
+	if(clawMotor == nullptr || armMotor == nullptr || button == nullptr)
+		throw InuException("ArmAssemblyBuilder.h: Arm, claw, or button wasn't set.");
 
 	return std::shared_ptr<ArmAssembly>(new ArmAssembly(*this));
 }

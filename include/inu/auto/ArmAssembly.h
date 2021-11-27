@@ -28,11 +28,11 @@ namespace inu {
 		ArmAssembly(const ArmAssemblyBuilder& builder);
 
 		/**
-		 * Sets the encoder value target of the arm.
+		 * Move the arm relative to its position via encoder units.
 		 *
-		 * @param target Target encoder value of the arm.
+		 * @param target Encoder value of the move. 
 		*/ 
-		void SetArm(int target);
+		void MoveArm(int target);
 
 		/** 
 		 * Does the grabbing action with the claw.
@@ -55,14 +55,20 @@ namespace inu {
 		*/ 
 		bool AtTarget(int error);
 
+		/**
+		 * Stalls until the arm hits the button; Motor position is tared once
+		 * the button is pressed.
+		*/ 
+		void Retract();
 
-		double GetRotation() const;
+		double GetArmPosition() const;
 
 		double GetTarget() const;
 
 	private:
 		std::shared_ptr<inu::PIDMotor> arm;
 		std::shared_ptr<inu::ADIMotor> claw;
+		std::shared_ptr<pros::ADIButton> button;
 	};
 }
 

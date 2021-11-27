@@ -116,6 +116,13 @@ namespace inu {
 		*/ 
 		unsigned int GetMinimumArea() const;
 
+		/**
+		 * Change the color of the LED on the camera.
+		 *
+		 * @param rgb The RGB code of the camera given by RGB2COLOR.
+		*/ 
+		void SetLED(std::int32_t rgb) const;
+
 	private:
 		pros::Vision vision;
 		unsigned int minimumArea;

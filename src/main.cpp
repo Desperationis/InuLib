@@ -9,13 +9,17 @@
 #include "inu/auto/XLineFollower.h"
 #include "inu/auto/XLineFollowerBuilder.h"
 #include "inu/wrapper/LineSensor.h"
+#include "inu/wrapper/Motor.h"
 #include "inu/wrapper/VisionSensor.h"
 #include "inu/wrapper/InertialSensor.h"
 #include "inu/auto/ArmAssembly.h"
 #include "inu/auto/ArmAssemblyBuilder.h"
+#include "inu/auto/ColorFollower.h"
+#include "inu/auto/ColorFollowerBuilder.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/motors.h"
+#include "pros/vision.h"
 #include <memory>
 #include <algorithm>
 #include <stdexcept>
@@ -94,12 +98,13 @@ void opcontrol() {
 			pros::delay(200);
 		}*/
 
+		inu::ColorFollowerBuilder::ColorFollowerOptions colorOptions;
+		colorOptions.exposure = 70;
+		colorOptions.minimumArea = 200;
+		colorOptions.sensitivity = 0.3f;
+		colorOptions.zeroPoint = pros::E_VISION_ZERO_CENTER;
 
-		ArmAssemblyBuilder armBuilder;
-		armBuilder.SetArmMotor(18, PIDProfile(0.7f));
-		armBuilder.SetClawMotor(1);
-		armBuilder.SetArmMaximumVelocity(40);
-		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
+		pros::vision_signature sig = pros::Vision::signature_from_utility(2, 1013, 1725, 1370, 28047, 29127, 28586, 3.000, 0);
 
 		AutoChassisBuilder::AutoChassisOptions chassisOptions;
 		chassisOptions.maxVelocity = 60;
@@ -115,6 +120,58 @@ void opcontrol() {
 		gyroOptions.gyroPID.integralWindupLimit = 50;
 		gyroOptions.gyroPID.integralLevelingError = 0;
 
+		AutoXChassisBuilder chassisBuilder;
+		chassisBuilder.SetMotors(11,20,3,4);
+		chassisBuilder.SetGyro(10, gyroOptions);
+		chassisBuilder.SetChassisOptions(chassisOptions);
+
+		std::shared_ptr<AutoXChassis> xchassis = chassisBuilder.Build();
+
+
+		inu::ColorFollowerBuilder colorBuilder;
+		colorBuilder.PushSensor(9, -50, 0);
+		colorBuilder.PushSensor(12, 50, 0);
+		colorBuilder.PushSignature(sig);
+		colorBuilder.SetChassis(xchassis);
+		colorBuilder.SetOptions(colorOptions);
+
+		std::shared_ptr<ColorFollower> colorFollower = colorBuilder.Build();
+		while(true) {
+			colorFollower->Follow(3);
+			/*std::cout<<"Objects on screen: ";
+			std::cout<<pros::Vision(9).get_object_count();
+			std::cout << " ";
+			std::cout<<pros::Vision(12).get_object_count();
+			std::cout<<std::endl;*/
+			pros::delay(200);
+		}
+
+		ArmAssemblyBuilder armBuilder;
+		armBuilder.SetArmMotor(18, PIDProfile(0.7f));
+		armBuilder.SetClawMotor('A');
+		armBuilder.SetButton('E');
+		armBuilder.SetArmMaximumVelocity(100);
+		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
+
+		/*while(true) {
+			armAssembly->Retract();
+			armAssembly->Release();
+			armAssembly->MoveArm(2200);
+			while(!armAssembly->AtTarget(30)) {
+				pros::delay(20);
+			}
+			armAssembly->Grab();
+
+			armAssembly->Retract();
+			armAssembly->Release();
+			armAssembly->MoveArm(2450);
+			while(!armAssembly->AtTarget(30)) {
+				pros::delay(20);
+			}
+			armAssembly->Grab();
+		}*/
+
+
 		// Need exceptions anything below	
 		AutoXChassisBuilder builder;
 		builder.SetMotors(11,20,3,4);
@@ -129,12 +186,17 @@ void opcontrol() {
 		followerBuilder.SetChassis(std::weak_ptr(chassis));
 		followerBuilder.ActivateOnDark(false);
 		followerBuilder.SetLightThreshold(350);
-
+		
 		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
-		while(true) {
-			follower->FollowLine(700);
-			chassis->TurnA(180);
-		}
+
+		armAssembly->Retract();
+		armAssembly->Release();
+		follower->FollowLine(1000);
+		armAssembly->MoveArm(2450);
+		while(!armAssembly->AtTarget(30)) pros::delay(20);
+		armAssembly->Grab();
+		armAssembly->Retract();
+		armAssembly->Release();
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;
