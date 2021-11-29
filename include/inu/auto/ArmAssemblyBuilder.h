@@ -12,7 +12,7 @@
 #include "pros/adi.h"
 #include "pros/adi.hpp"
 #include "inu/motor/background/PIDMotor.h"
-#include "inu/wrapper/ADIMotor.h"
+#include "inu/wrapper/Motor.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/Types.hpp"
 #include <memory>
@@ -36,10 +36,9 @@ namespace inu {
 		void SetArmMotor(inu::port port, const PIDProfile& profile);
 
 		/**
-		 * @param adiPort Port from 1-20, 'a'-'z', or 'A'-'Z'.
-		 * @param reversed Whether or not the motor is reversed.
+		 * @param adiPort Port from [1-20]
 		*/ 	
-		void SetClawMotor(inu::port adiPort, bool reversed = false);
+		void SetClawMotor(inu::port port);
 
 		/**
 		 * @param port Port from 1-20, 'a'-'z', or 'A'-'Z'.
@@ -54,7 +53,7 @@ namespace inu {
 		/**
 		 * @returns shared_ptr to the claw motor.
 		*/ 
-		std::shared_ptr<inu::ADIMotor> GetClawMotor() const;
+		std::shared_ptr<inu::Motor> GetClawMotor() const;
 
 		/**
 		 * @returns shared_ptr to the arm motor.
@@ -73,7 +72,7 @@ namespace inu {
 		std::shared_ptr<ArmAssembly> Build();
 
 	private:
-		std::shared_ptr<inu::ADIMotor> clawMotor;
+		std::shared_ptr<inu::Motor> clawMotor;
 		std::shared_ptr<inu::PIDMotor> armMotor;
 		std::shared_ptr<pros::ADIButton> button;
 	};

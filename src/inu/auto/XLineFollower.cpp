@@ -3,6 +3,7 @@
 #include "inu/auto/chassis/AutoXChassis.h"
 #include "inu/wrapper/ADIMotor.h"
 #include "inu/wrapper/LineSensor.h"
+#include "inu/InuException.hpp"
 
 using namespace inu;
 
@@ -21,31 +22,34 @@ XLineFollower::XLineFollower(const XLineFollowerBuilder& builder) {
 	}
 }
 
-void XLineFollower::FollowLine() {
+void XLineFollower::FollowLine(unsigned int velocity) {
 	auto& leftest = lightSensors[0];
 	auto& left = lightSensors[1];
 	auto& center = lightSensors[2];
 	auto& right = lightSensors[3];
 	auto& rightest = lightSensors[4];
 
+	if(velocity > 300)
+		throw InuException("XLineFollower: FollowLine() was passed in a velocity greater than 300; Maybe you meant FollowLine(distance)?");
+
 	while(LineDetected()) {
 		if(center->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 0);
+			chassis->Swerve(velocity, 0);
 		}
 		else if(left->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -6);
+			chassis->Swerve(velocity, -6);
 		}
 
 		else if(right->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 6);
+			chassis->Swerve(velocity, 6);
 		}
 
 		else if(leftest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -6);
+			chassis->Swerve(velocity, -6);
 		}
 
 		else if(rightest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 6);
+			chassis->Swerve(velocity, 6);
 		}
 
 		pros::delay(10);
@@ -54,59 +58,40 @@ void XLineFollower::FollowLine() {
 	Stop();
 }
 
-void XLineFollower::FollowLine(unsigned int distance) {
+void XLineFollower::FollowLine(unsigned int distance, unsigned int velocity) {
 	auto& leftest = lightSensors[0];
 	auto& left = lightSensors[1];
 	auto& center = lightSensors[2];
 	auto& right = lightSensors[3];
 	auto& rightest = lightSensors[4];
 
+	auto OGdirection = chassis->GetAbsoluteRotation();
 	chassis->TareDistance();
 
-	auto OGdirection = chassis->GetAbsoluteRotation();
-
 	while(chassis->GetDistance() < distance) {
-		/*if(center->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 0);
-		}
-		else if(left->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -6, 0);
-		}
-
-		else if(right->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 6, 0);
-		}
-
-		else if(leftest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->StrafeLeft(50);
-		}
-
-		else if(rightest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->StrafeRight(50);
-		}*/
 		if(center->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 0);
+			chassis->Swerve(velocity, 0);
 		}
 		else if(left->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -6);
+			chassis->Swerve(velocity, -6);
 		}
 
 		else if(right->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 6);
+			chassis->Swerve(velocity, 6);
 		}
 
 		else if(leftest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, -6);
+			chassis->Swerve(velocity, -6);
 		}
 
 		else if(rightest->IsLine(lightThreshold, activeOnDark)) {
-			chassis->Swerve(30, 6);
+			chassis->Swerve(velocity, 6);
 		}
 
 		pros::delay(10);
 	}
 
-	chassis->TurnAbsolute(OGdirection);
+	//chassis->TurnAbsolute(OGdirection);
 
 	Stop();
 }

@@ -1,9 +1,10 @@
-#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/background/BackgroundSystem.h"
 #include "inu/auto/ArmAssemblyBuilder.h"
 #include "inu/auto/ArmAssembly.h"
-#include "inu/motor/background/BackgroundMotorSystem.h"
 #include "inu/wrapper/ADIMotor.h"
 #include "inu/motor/background/PIDMotor.h"
+#include "inu/wrapper/Motor.h"
+#include "pros/motors.h"
 #include "pros/rtos.hpp"
 
 using namespace inu;
@@ -19,20 +20,27 @@ void ArmAssembly::MoveArm(int target) {
 }
 
 void ArmAssembly::Grab() {
-	claw->Set(-127);
+	claw->MoveVelocity(-100);
 	pros::delay(800);
-	claw->Set(0);
+	claw->Move(0);
+	claw->MoveVelocity(-20);
+}
+
+void ArmAssembly::LightlyGrab() {
+	claw->MoveVelocity(-60);
+	pros::delay(600);
+	claw->Move(-20);
 }
 
 void ArmAssembly::Release() {
-	claw->Set(127);
+	claw->MoveVelocity(100);
 	pros::delay(800);
-	claw->Set(0);
+	claw->Move(0);
 }
 
 void ArmAssembly::Retract() {
 	inu::Motor normalArm(arm->GetPort());
-	BackgroundMotorSystem::Instance()->RemoveMotor(arm.get());
+	BackgroundSystem::Instance()->RemoveTask(arm.get());
 	normalArm.MoveVelocity(-90);
 
 	while(button->get_value() != 1) {
@@ -41,7 +49,7 @@ void ArmAssembly::Retract() {
 
 	normalArm.TarePosition();
 	arm->Set(arm->GetPosition());
-	BackgroundMotorSystem::Instance()->EnrollMotor(arm.get());
+	BackgroundSystem::Instance()->EnrollTask(arm.get());
 }
 
 bool ArmAssembly::AtTarget(int error) {

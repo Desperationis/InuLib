@@ -8,7 +8,7 @@
 #ifndef PIDINERTIALMOTOR_H
 #define PIDINERTIALMOTOR_H
 
-#include "inu/motor/background/BackgroundMotor.h"
+#include "inu/background/BackgroundTask.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
 #include "inu/motor/PID.hpp"
@@ -16,7 +16,7 @@
 #include "main.h"
 
 namespace inu {
-	class PIDInertialMotor : public BackgroundMotor {
+	class PIDInertialMotor : public BackgroundTask {
 	public:
 		PIDInertialMotor(inu::port motorPort, inu::port gyro, const PIDProfile& profile);
 
@@ -36,7 +36,7 @@ namespace inu {
 
 		bool IsReversed() const;
 
-		void _Update();
+		void _Update() override;
 
 	private:
 		inu::Motor motor;

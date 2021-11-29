@@ -20,6 +20,7 @@ namespace inu {
 	class ArmAssemblyBuilder;
 	class PIDMotor;
 	class ADIMotor;
+	class Motor;
 
 	class ArmAssembly {
 	public:
@@ -38,6 +39,11 @@ namespace inu {
 		 * Does the grabbing action with the claw.
 		*/ 
 		void Grab();
+
+		/**
+		 * Grabs something (a cup) very lightly.
+		*/ 
+		void LightlyGrab();
 
 		/**
 		 * Tries to release whatever the claw was holding, if anything.
@@ -61,13 +67,19 @@ namespace inu {
 		*/ 
 		void Retract();
 
+		/**
+		 * @returns The absolute position of the arm in encoder units.
+		*/ 
 		double GetArmPosition() const;
 
+		/**
+		 * @returns The target value the arm is trying to reach.
+		*/ 
 		double GetTarget() const;
 
 	private:
 		std::shared_ptr<inu::PIDMotor> arm;
-		std::shared_ptr<inu::ADIMotor> claw;
+		std::shared_ptr<inu::Motor> claw;
 		std::shared_ptr<pros::ADIButton> button;
 	};
 }

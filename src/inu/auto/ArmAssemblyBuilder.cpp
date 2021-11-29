@@ -26,9 +26,10 @@ void ArmAssemblyBuilder::SetArmMotor(inu::port port, const PIDProfile& profile) 
 	armMotor->SetBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
 }
 
-void ArmAssemblyBuilder::SetClawMotor(inu::port port, bool reversed) {
-	clawMotor.reset(new inu::ADIMotor(port));
-	clawMotor->SetReversed(reversed);
+void ArmAssemblyBuilder::SetClawMotor(inu::port port) {
+	if(port < 0 || port > 20) 
+		throw InuException("ArmAssemblyBuilder.h: Claw port must be between 1-20.");
+	clawMotor.reset(new inu::Motor(port));
 }
 
 void ArmAssemblyBuilder::SetArmMaximumVelocity(std::uint32_t velocity) {
@@ -39,7 +40,7 @@ void ArmAssemblyBuilder::SetButton(inu::port port) {
 	button.reset(new pros::ADIButton(port));
 }
 
-std::shared_ptr<inu::ADIMotor> ArmAssemblyBuilder::GetClawMotor() const {
+std::shared_ptr<inu::Motor> ArmAssemblyBuilder::GetClawMotor() const {
 	return clawMotor;
 }
 

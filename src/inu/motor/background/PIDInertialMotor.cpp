@@ -1,19 +1,19 @@
 #include "inu/motor/background/PIDInertialMotor.h"
-#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/background/BackgroundSystem.h"
 #include "pros/llemu.hpp"
 #include <algorithm>
 
 using namespace inu;
 
 PIDInertialMotor::PIDInertialMotor(inu::port motorPort, inu::port gyro, const PIDProfile& profile) : 
-	BackgroundMotor(motorPort), motor(motorPort), gyro(gyro), pid(-127, 127, profile) {
+	BackgroundTask(motorPort), motor(motorPort), gyro(gyro), pid(-127, 127, profile) {
 
 	this->port = port;
-	BackgroundMotorSystem::Instance()->EnrollMotor(this);
+	BackgroundSystem::Instance()->EnrollTask(this);
 }
 
 PIDInertialMotor::~PIDInertialMotor() {
-	BackgroundMotorSystem::Instance()->RemoveMotor(this);
+	BackgroundSystem::Instance()->RemoveTask(this);
 }
 
 void PIDInertialMotor::Set(double target) {

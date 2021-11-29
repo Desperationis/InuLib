@@ -34,8 +34,10 @@ namespace inu {
 		 *
 		 * Note that this is a halting process until the chassis does not
 		 * detect the line anymore.
+		 *
+		 * @param velocity The velocity at which to follow.
 		*/
-		void FollowLine();
+		void FollowLine(unsigned int velocity);
 
 		/**
 		 * If a line is detected on the sensors follow it as best as possible
@@ -43,8 +45,11 @@ namespace inu {
 		 *
 		 * Note that this is a halting process until the chassis reaches the
 		 * desired distance.
+		 *
+		 * @param distance The distance to travel.
+		 * @param velocity The velocity at which to follow.
 		*/
-		void FollowLine(unsigned int distance);
+		void FollowLine(unsigned int distance, unsigned int velocity);
 
 		/** 
 		 * Get the recommended threshold value used for line following by

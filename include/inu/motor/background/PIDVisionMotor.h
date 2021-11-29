@@ -4,7 +4,7 @@
 #ifndef PIDVISION_MOTOR_H
 #define PIDVISION_MOTOR_H
 
-#include "inu/motor/background/BackgroundMotor.h"
+#include "inu/background/BackgroundTask.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
 #include "main.h"
@@ -15,7 +15,7 @@
 namespace inu {
 	class VisionSensor;
 
-	class PIDVisionMotor : public BackgroundMotor {
+	class PIDVisionMotor : public BackgroundTask {
 	public:
 		PIDVisionMotor(unsigned int motorPort, std::shared_ptr<VisionSensor> sensor1, std::shared_ptr<VisionSensor> sensor2);
 

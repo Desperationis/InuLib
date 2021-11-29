@@ -1,5 +1,5 @@
 #include "inu/motor/background/PIDVisionMotor.h"
-#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/background/BackgroundSystem.h"
 #include "inu/wrapper/VisionSensor.h"
 #include "pros/rtos.hpp"
 #include "pros/vision.h"
@@ -8,10 +8,10 @@
 using namespace inu;
 
 PIDVisionMotor::PIDVisionMotor(unsigned int motorPort, std::shared_ptr<VisionSensor> sensor1, std::shared_ptr<VisionSensor> sensor2) :
-	BackgroundMotor(motorPort), motor(motorPort) {
+	BackgroundTask(motorPort), motor(motorPort) {
 
 	this->port = port;
-	BackgroundMotorSystem::Instance()->EnrollMotor(this);
+	BackgroundSystem::Instance()->EnrollTask(this);
 
 	SetMaximumVelocity(127);
 	proportion = 0;
@@ -25,7 +25,7 @@ PIDVisionMotor::PIDVisionMotor(unsigned int motorPort, std::shared_ptr<VisionSen
 }
 
 PIDVisionMotor::~PIDVisionMotor() {
-	BackgroundMotorSystem::Instance()->RemoveMotor(this);
+	BackgroundSystem::Instance()->RemoveTask(this);
 }
 
 void PIDVisionMotor::Enable() {

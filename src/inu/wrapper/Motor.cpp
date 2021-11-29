@@ -15,6 +15,7 @@ Motor::Motor(inu::port port) : motor(port) {
 	if(pros::c::registry_get_plugged_type(port - 1) != E_DEVICE_MOTOR)
 		throw InuException("Motor.h: Port is not a motor.");
 
+	tare = 0;
 }
 
 std::int32_t Motor::CapVoltage(std::int32_t voltage) const {
@@ -45,7 +46,7 @@ void Motor::MoveRelative(const double position, std::int32_t velocity) const {
 
 void Motor::MoveAbsolute(const double position, std::int32_t velocity) const {
 	velocity = CapVelocity(velocity);
-	motor.move_absolute(position, velocity);
+	motor.move_absolute(position + tare, velocity);
 }
 
 void Motor::MoveVelocity(std::int32_t velocity) const {
@@ -74,7 +75,7 @@ bool Motor::IsReversed() const {
 }
 
 double Motor::GetPosition() const {
-	return motor.get_position();
+	return motor.get_position() + tare;
 }
 
 double Motor::GetTargetPosition() const {
@@ -85,8 +86,8 @@ inu::port Motor::GetPort() const {
 	return motor.get_port();
 }
 
-void Motor::TarePosition() const {
-	motor.tare_position();
+void Motor::TarePosition() {
+	tare = -motor.get_position();
 }
 
 std::int32_t Motor::GetVoltage() const {

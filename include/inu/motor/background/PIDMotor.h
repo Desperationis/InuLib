@@ -5,7 +5,7 @@
 #ifndef PIDMOTOR_H
 #define PIDMOTOR_H
 
-#include "inu/motor/background/BackgroundMotor.h"
+#include "inu/background/BackgroundTask.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/wrapper/Motor.h"
 #include "inu/motor/PID.hpp"
@@ -13,7 +13,7 @@
 #include "pros/motors.h"
 
 namespace inu {
-	class PIDMotor : public BackgroundMotor {
+	class PIDMotor : public BackgroundTask {
 	public:
 		PIDMotor(inu::port port, const PIDProfile& profile);
 
@@ -62,7 +62,7 @@ namespace inu {
 		*/ 
 		double GetPosition() const;
 
-		void _Update();
+		void _Update() override;
 
 	private:
 		inu::PID pid;

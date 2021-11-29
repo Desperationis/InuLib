@@ -2,8 +2,8 @@
 #include "inu/auto/chassis/AutoXChassisBuilder.h"
 #include "inu/motor/PIDProfile.hpp"
 #include "inu/motor/background/PIDInertialMotor.h"
-#include "inu/motor/background/BackgroundMotorSystem.h"
 #include "inu/InuException.hpp"
+#include "inu/background/BackgroundSystem.h"
 
 using namespace inu;
 
@@ -141,6 +141,7 @@ void AutoXChassis::Turn(double ticks) {
 
 void AutoXChassis::Forward(double ticks) {
 	FreeBackgroundMotors();
+	Stop();
 
 	auto maxVelocity = chassisOptions.maxVelocity;
 	auto timeoutLimit = chassisOptions.timeoutLimit;
@@ -254,18 +255,18 @@ bool AutoXChassis::CreateBackgroundMotors() {
 	int bl = bottomleft->GetPort();
 	int br = bottomright->GetPort();
 
-	auto system = BackgroundMotorSystem::Instance();
+	auto system = BackgroundSystem::Instance();
 
-	if(system->MotorExists(tl))
+	if(system->TaskExists(tl))
 		return false;
 
-	if(system->MotorExists(tr))
+	if(system->TaskExists(tr))
 		return false;
 
-	if(system->MotorExists(bl))
+	if(system->TaskExists(bl))
 		return false;
 
-	if(system->MotorExists(br)) 
+	if(system->TaskExists(br)) 
 		return false;
 
 	auto gyroPID = gyroOptions.gyroPID;

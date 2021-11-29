@@ -121,7 +121,7 @@ namespace inu {
 		/**
 		 * Tare the position of the encoder.
 		*/ 
-		void TarePosition() const;
+		void TarePosition();
 
 		/**
 		 * Whether or not the motor is settled on its target position by a
@@ -143,6 +143,7 @@ namespace inu {
 
 	private:
 		pros::Motor motor;
+		int tare;
 	};
 }
 

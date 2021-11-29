@@ -8,7 +8,7 @@
 #ifndef SLEWMOTOR_H
 #define SLEWMOTOR_H
 
-#include "inu/motor/background/BackgroundMotor.h"
+#include "inu/background/BackgroundTask.h"
 #include "inu/wrapper/Motor.h"
 #include "inu/Types.hpp"
 
@@ -18,7 +18,7 @@ namespace inu {
 	 * Motor struct that contains data members, getters, and setters used to slew a
 	 * motor.
 	*/
-	struct SlewMotor : public BackgroundMotor {
+	struct SlewMotor : public BackgroundTask {
 	public:
 		SlewMotor(inu::port port);
 

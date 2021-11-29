@@ -1,19 +1,19 @@
 #include "inu/motor/background/PIDMotor.h"
-#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/background/BackgroundSystem.h"
 #include "pros/motors.h"
 #include <algorithm>
 
 using namespace inu;
 
 PIDMotor::PIDMotor(inu::port port, const PIDProfile& profile) :
-	BackgroundMotor(port), motor(port), pid(-127, 127, profile) {
+	BackgroundTask(port), motor(port), pid(-127, 127, profile) {
 
 	this->port = port;
-	BackgroundMotorSystem::Instance()->EnrollMotor(this);
+	BackgroundSystem::Instance()->EnrollTask(this);
 }
 
 PIDMotor::~PIDMotor() {
-	BackgroundMotorSystem::Instance()->RemoveMotor(this);
+	BackgroundSystem::Instance()->RemoveTask(this);
 }
 
 void PIDMotor::Set(int target) {

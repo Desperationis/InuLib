@@ -1,17 +1,17 @@
 #include "inu/motor/background/SlewMotor.h"
-#include "inu/motor/background/BackgroundMotorSystem.h"
+#include "inu/background/BackgroundSystem.h"
 
 using namespace inu;
 
-SlewMotor::SlewMotor(inu::port port) : BackgroundMotor(port), motor(port) {
+SlewMotor::SlewMotor(inu::port port) : BackgroundTask(port), motor(port) {
 	this->port = port;
 	rate = 20;
 	targetSpeed = 0;
-	BackgroundMotorSystem::Instance()->EnrollMotor(this);
+	BackgroundSystem::Instance()->EnrollTask(this);
 }
 
 SlewMotor::~SlewMotor() {
-	BackgroundMotorSystem::Instance()->RemoveMotor(this);
+	BackgroundSystem::Instance()->RemoveTask(this);
 }
 
 void SlewMotor::Set(int speed) {
