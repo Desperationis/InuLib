@@ -61,6 +61,7 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
 
 		int value = follower->RecommendThreshold();
 		pros::lcd::print(6, "Recommended midpoint: %d", (int) value);
+
 		pros::delay(10);
 	}
 }
@@ -114,7 +115,7 @@ void opcontrol() {
 		std::shared_ptr<AutoXChassis> chassis = builder.Build();
 
 		XLineFollowerBuilder followerBuilder;
-		followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'C'} );
+		followerBuilder.SetSensors( { 'B', 'F', 'G', 'H', 'A'} );
 		followerBuilder.SetSensorError( { -30, -190, 0, 60, -450 } );
 		followerBuilder.SetChassis(std::weak_ptr(chassis));
 		followerBuilder.ActivateOnDark(false);
@@ -125,7 +126,7 @@ void opcontrol() {
 		// Go to headquarters
 		chassis->TurnA(45);
 		//follower->FollowLine(45);
-		follower->FollowLine(60);
+		follower->FollowLine(45);
 		chassis->TurnA(-360);
 		armAssembly->MoveArm(2550);
 		chassis->TurnA(-130);
@@ -203,9 +204,9 @@ void opcontrol() {
 		Collect(armAssembly);
 
 		// Go back to headquarters
-		follower->FollowLine(60);
+		follower->FollowLine(45);
 		chassis->TurnA(-135);
-		follower->FollowLine(60);
+		follower->FollowLine(45);
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;
