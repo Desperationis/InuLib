@@ -181,7 +181,7 @@ void opcontrol() {
 		while(!armAssembly->AtTarget(10)) {
 			pros::delay(20);
 		}
-		follower->FollowLine(350, 30);
+		follower->FollowLine(370, 30);
 		chassis->TurnA(-18);
 		armAssembly->MoveArm(700);
 		while(!armAssembly->AtTarget(10)) {
