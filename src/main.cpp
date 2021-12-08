@@ -132,13 +132,14 @@ void opcontrol() {
 		chassis->TurnA(-130);
 
 		// Collect the first block on the bottomleft of headquarters 
+		chassis->Forward(100);
 		Collect(armAssembly);
 
 		// Follow line till you get to the double blocks
 		armAssembly->MoveArm(2250);
 		if(!follower->LineDetected())
 			throw InuException("AHHH");
-		follower->FollowLine(1580, 45);
+		follower->FollowLine(1600, 45);
 
 		// Collect top block
 		Collect(armAssembly);
