@@ -11,6 +11,16 @@
 #include <ostream>
 
 namespace inu {
+	/**
+	 * Usage: 
+	 *
+	 * Red text for only one line:
+	 * std::cout << FG_RED << "text" << FG_DEFAULT << std::endl;
+	 *
+	 * Green text with blue background for one line:
+	 * std::cout << FG_GREEN << BG_BLUE << "TEXT" << FG_DEFAULT << BG_DEFAULT
+	 * << std::endl;
+	*/ 
 	enum Color {
 		FG_RED      = 31,
         FG_GREEN    = 32,

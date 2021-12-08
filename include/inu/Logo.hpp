@@ -28,6 +28,7 @@ namespace inu {
 			lv_img_set_src(img_src, &inuLogo);  
 			lv_obj_set_pos(img_src, 104, 0);
 
+			// File in the sides of the rectangle
 			DrawRectangle(0, 0, 104, 272, LV_COLOR_WHITE);
 			DrawRectangle(480 - 104, 0, 104, 272, LV_COLOR_WHITE);
 		}
