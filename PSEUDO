@@ -1,0 +1,22 @@
+Plan of the competition:
+Go to headquarters
+Collect the 3 Jenga Blocks (topright to bottomleft)
+Knock over kittens
+go back to starting position
+Collect two left over Jenga blocks
+Stack cup over villain
+Go back to base
+DONE
+
+Pseudocode:
+Turn right 45 degrees
+Keep going forward until you hit headquarters
+turn 360 degrees
+turn 135 degrees
+
+while hasn't reached kittens:
+	go forward
+	if block detected
+		collect it
+
+

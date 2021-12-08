@@ -1,8 +1,9 @@
-#include "ControllerCallback.h"
+#include "inu/ControllerCallback.h"
 #include "pros/misc.h"
 #include "pros/rtos.h"
 
 using namespace pros;
+using namespace inu;
 
 ControllerCallback::ControllerCallback(controller_id_e_t id) : controller(id) {
 }
@@ -30,7 +31,7 @@ void ControllerCallback::SyncCallback(controller_digital_e_t button, task_fn_t f
 
 
 void ControllerCallback::PollController() {
-	for(int i = 0; i < DIGITAL.size(); i++) {
+	for(size_t i = 0; i < DIGITAL.size(); i++) {
 		controller_digital_e_t button = DIGITAL[i];
 
 		if(callbackButtonMap.find(button) != callbackButtonMap.end()) {
