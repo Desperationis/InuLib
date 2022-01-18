@@ -3,6 +3,7 @@
 #include "inu/Color.hpp"
 #include "inu/motor/background/PIDMotor.h"
 #include "inu/motor/PIDProfile.hpp"
+#include "inu/wrapper/ADIMotor.h"
 #include "inu/wrapper/Motor.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
@@ -43,16 +44,13 @@ void initialize() {
 }
 
 void opcontrol() {
-		inu::Motor topleft(11);
+		inu::Motor topleft(6);
 		inu::Motor topright(20);
-		inu::Motor bottomleft(3);
-		inu::Motor bottomright(4);
-
-		inu::PIDProfile armProfile;
-		armProfile.p = 0.9;
-		armProfile.i = 0.0;
-		armProfile.d = 0.0;
-		inu::PIDMotor arm(10, armProfile);
+		inu::Motor bottomleft(5);
+		inu::Motor bottomright(11);
+		inu::ADIMotor arm1('A');
+		inu::ADIMotor arm2('B');
+		inu::ADIMotor elbow('C');
 
 		while(true) {
 			pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -65,13 +63,25 @@ void opcontrol() {
 			bottomleft.Move(std::clamp<int>(-x + y + turn, -70, 70));
 			bottomright.Move(std::clamp<int>(-x - y + turn, -70, 70));
 
-			arm.Set(arm.GetPosition());
+			elbow.Set(0);
 
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-				arm.Set(arm.GetPosition() - 50);
+				arm1.Set(-127);
+				arm2.Set(-127);
 			}
-			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-				arm.Set(arm.GetPosition() + 50);
+			else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+				arm1.Set(127);
+				arm2.Set(127);
+			}
+			else {
+				arm1.Set(0);
+				arm2.Set(0);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+				elbow.Set(127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+				elbow.Set(-127);
 			}
 
 			pros::delay(10);
