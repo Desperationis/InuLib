@@ -58,10 +58,10 @@ void opcontrol() {
 			int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 			int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-			topleft.Move(std::clamp<int>(x + y + turn, -70, 70));
-			topright.Move(std::clamp<int>(x - y + turn, -70, 70));
-			bottomleft.Move(std::clamp<int>(-x + y + turn, -70, 70));
-			bottomright.Move(std::clamp<int>(-x - y + turn, -70, 70));
+			topleft.Move(std::clamp<int>(x + y + turn, -100, 100));
+			topright.Move(std::clamp<int>(x - y + turn, -100, 100));
+			bottomleft.Move(std::clamp<int>(-x + y + turn, -100, 100));
+			bottomright.Move(std::clamp<int>(-x - y + turn, -100, 100));
 
 			elbow.Set(0);
 
