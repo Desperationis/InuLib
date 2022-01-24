@@ -48,9 +48,9 @@ void opcontrol() {
 		inu::Motor topright(20);
 		inu::Motor bottomleft(5);
 		inu::Motor bottomright(11);
-		inu::ADIMotor arm1('A');
-		inu::ADIMotor arm2('B');
-		inu::ADIMotor elbow('C');
+		inu::ADIMotor arm('A');
+		inu::ADIMotor elbow1('D');
+		inu::ADIMotor elbow2('C');
 
 		while(true) {
 			pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -63,25 +63,27 @@ void opcontrol() {
 			bottomleft.Move(std::clamp<int>(-x + y + turn, -100, 100));
 			bottomright.Move(std::clamp<int>(-x - y + turn, -100, 100));
 
-			elbow.Set(0);
+			elbow1.Set(0);
+			elbow2.Set(0);
+			arm.Set(0);
 
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-				arm1.Set(-127);
-				arm2.Set(-127);
+				arm.Set(-127);
 			}
-			else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-				arm1.Set(127);
-				arm2.Set(127);
-			}
-			else {
-				arm1.Set(0);
-				arm2.Set(0);
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+				arm.Set(127);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-				elbow.Set(127);
+				elbow1.Set(127);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-				elbow.Set(-127);
+				elbow1.Set(-127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+				elbow2.Set(-127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+				elbow2.Set(127);
 			}
 
 			pros::delay(10);
