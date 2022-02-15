@@ -30,7 +30,7 @@ void XLineFollower::FollowLine(unsigned int velocity) {
 	auto& rightest = lightSensors[4];
 
 	if(velocity > 300)
-		throw InuException("XLineFollower: FollowLine() was passed in a velocity greater than 300; Maybe you meant FollowLine(distance)?");
+		throw InuException("XLineFollower: FollowLine() was passed in a velocity greater than 300; Maybe you meant FollowLine(distance, velocity)?");
 
 	while(LineDetected()) {
 		if(center->IsLine(lightThreshold, activeOnDark)) {
