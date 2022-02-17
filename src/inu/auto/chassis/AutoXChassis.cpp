@@ -45,6 +45,17 @@ AutoXChassis::~AutoXChassis() {
 	FreeBackgroundMotors();
 }
 
+void AutoXChassis::Rebuild(const AutoXChassisBuilder& builder) {
+	AutoChassis::Rebuild(builder);
+
+	topleft = builder.GetTopleft().lock();
+	topright = builder.GetTopright().lock();
+	bottomleft = builder.GetBottomleft().lock();
+	bottomright = builder.GetBottomright().lock();
+
+	FreeBackgroundMotors();
+}
+
 void AutoXChassis::Swerve(std::int8_t y, std::int8_t x) {
 	Swerve(y, 0, x);
 }

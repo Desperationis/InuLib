@@ -36,6 +36,15 @@ namespace inu {
 			Copy(chassis);
 		}
 
+		/**
+		 * Rebuilds this entire chassis using an AutoChassisBuilder instance.
+		 * This is the best way to change the options of the chassis midway
+		 * through the program.
+		 *
+		 * @param builder Any instance of a valid AutoChassisBuilder class.
+		*/ 
+		virtual void Rebuild(const AutoChassisBuilder& builder);
+
 		/** 
 		 * Given two speeds x and y, swerve the entire chassis. x and y will be
 		 * clamped at the maximum velocity.
@@ -43,8 +52,9 @@ namespace inu {
 		 * This function will not stall and will simply set the speed of the
 		 * motors.
 		 *
-		 * @param y The speed you want to go forward / backwards.  @param x The
-		 * speed at which you want to turn the chassis while turning.
+		 * @param y The speed you want to go forward / backwards.  
+		 * @param x The speed at which you want to turn the chassis while
+		 * turning.
 		*/
 		virtual void Swerve(std::int8_t y, std::int8_t x) = 0;
 
@@ -165,11 +175,14 @@ namespace inu {
 		virtual void TareDistance() = 0;
 
 		/**
-		 * Take the absolute value of all motor encoder positions and average
-		 * them out.
+		 * @returns the average of all motor encoder positions.
 		 */ 
 		virtual double GetDistance() = 0;
 
+		/**
+		 * @returns the total amount of z-rotation the gyro experienced since
+		 * the start of the program.
+		*/ 
 		virtual double GetAbsoluteRotation() = 0;
 
 	protected:
