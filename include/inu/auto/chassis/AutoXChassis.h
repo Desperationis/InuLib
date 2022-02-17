@@ -108,6 +108,20 @@ namespace inu {
 		*/
 		virtual void Swerve(std::int8_t forward, std::int8_t right, std::int8_t turn);
 
+		/** 
+		 * Exactly like Swerve(), but uses raw voltage from [-127, 127] and
+		 * clamps it from [-127, 127]. Not accurate for Auton at all; Mainly
+		 * better for driving.
+		 *
+		 * @param forward Positive values move the car forward, negative backward.
+		 * @param right Positive values move car to the right, negative to the
+		 * left.
+		 * @param turn Positive values results in clockwise motion, negative
+		 * for anticlockwise.
+		*/
+		virtual void RawSwerve(std::int8_t forward, std::int8_t right, std::int8_t turn);
+
+
 	protected:
 		/**
 		 * Deallocates the space of any background motors currently running

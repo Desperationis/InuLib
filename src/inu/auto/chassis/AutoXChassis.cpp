@@ -78,6 +78,21 @@ void AutoXChassis::Swerve(std::int8_t forward, std::int8_t right, std::int8_t tu
 	bottomright->MoveVelocity(br);
 }
 
+void AutoXChassis::RawSwerve(std::int8_t forward, std::int8_t right, std::int8_t turn) {
+	forward = std::clamp<std::int8_t>(forward, -127, 127);
+	right = std::clamp<std::int8_t>(right, -127, 127);
+	turn = std::clamp<std::int8_t>(turn, -127, 127);
+
+	auto tl = std::clamp<std::int8_t>(forward + turn + right, -127, 127);
+	auto bl = std::clamp<std::int8_t>(forward + turn - right, -127, 127);
+	auto tr = std::clamp<std::int8_t>(-forward + turn + right, -127, 127);
+	auto br = std::clamp<std::int8_t>(-forward + turn - right, -127, 127);
+
+	topleft->Move(tl);
+	topright->Move(tr);
+	bottomleft->Move(bl);
+	bottomright->Move(br);
+}
 
 void AutoXChassis::TurnAbsolute(double degrees) {
 	if(!usesGyro)
