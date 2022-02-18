@@ -103,6 +103,8 @@ void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& b
 		elbow2.Set(0);
 		arm.Move(0);
 		armAssembly->MoveArm(0);
+		basket.Move(0);
+
 
 		if(deathMode) {
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
@@ -126,16 +128,23 @@ void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& b
 		}
 		if(!deathMode) {
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-				armAssembly->MoveArm(-2000);
+				armAssembly->MoveArm(-20000);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-				armAssembly->MoveArm(2000);
+				armAssembly->MoveArm(20000);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 				autoClaw.Move(80);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 				autoClaw.Move(-80);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+				Collect(armAssembly);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+				armAssembly->Release();
+				armAssembly->LightlyGrab();
 			}
 		}
 
@@ -182,7 +191,7 @@ void opcontrol() {
 		gyroOptions.steadyStateAngleError = 2;
 
 		ArmAssemblyBuilder armBuilder;
-		armBuilder.SetArmMotor(19, PIDProfile(0.7f));
+		armBuilder.SetArmMotor(19, PIDProfile(1.0f));
 		armBuilder.SetClawMotor(10);
 		armBuilder.SetButton('A');
 		armBuilder.SetArmMaximumVelocity(70);
@@ -203,7 +212,6 @@ void opcontrol() {
 		followerBuilder.SetLightThreshold(600);
 		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 
-		//DriverControl(chassis, builder, armAssembly); // Control chassis
 
 		// Get first Jenga Brick
 		armAssembly->MoveArm(2550);
@@ -274,94 +282,8 @@ void opcontrol() {
 		chassis->TurnA(360 + 20);
 		chassis->Forward(2000);
 
+		DriverControl(chassis, builder, armAssembly); // Control chassis
 		CalibrateThreshold(follower);
-		// Go to headquarters
-
-
-		/*
-		//follower->FollowLine(45);
-		follower->FollowLine(45);
-		chassis->TurnA(-360);
-		armAssembly->MoveArm(2550);
-		chassis->TurnA(-130);
-
-		// Collect the first block on the bottomleft of headquarters 
-		chassis->Forward(100);
-		Collect(armAssembly);
-
-		// Follow line till you get to the double blocks
-		armAssembly->MoveArm(2250);
-		if(!follower->LineDetected())
-			throw InuException("AHHH");
-		follower->FollowLine(1600, 45);
-
-		// Collect top block
-		Collect(armAssembly);
-
-		// Collect Second block
-		armAssembly->MoveArm(2650);
-		chassis->Forward(100);
-		Collect(armAssembly);
-
-		// Follow line to get to the brick in front of the cats
-		if(!follower->LineDetected())
-			throw InuException("NOOOO");
-		armAssembly->MoveArm(2550);
-		follower->FollowLine(1750, 40);
-
-		// Collect the brick
-		Collect(armAssembly);
-
-		// Go all the way to the cats.
-		if(!follower->LineDetected())
-			throw InuException("UUUUUUUU");
-		armAssembly->MoveArm(1650);
-		follower->FollowLine(45);
-
-		// Angle up arm, then turn around to get the cats.
-		while(!armAssembly->AtTarget(10)) {
-			pros::delay(20);
-		}
-		chassis->TurnA(-360);
-
-		// Go to cup with claw open
-		chassis->TurnA(135);
-		armAssembly->MoveArm(850);
-		follower->FollowLine(2750, 45);
-
-		// Lift up cup
-		armAssembly->LightlyGrab();
-		armAssembly->MoveArm(-900);
-		while(!armAssembly->AtTarget(10)) {
-			pros::delay(20);
-		}
-		follower->FollowLine(370, 30);
-		chassis->TurnA(-18);
-		armAssembly->MoveArm(700);
-		while(!armAssembly->AtTarget(10)) {
-			pros::delay(20);
-		}
-		armAssembly->Release();
-
-		// Go back in line, and follow it to the topleft corner.
-		armAssembly->Retract();
-		chassis->TurnA(18);
-		follower->FollowLine(40);
-
-		// Face the next row of bricks and grab the first one.
-		armAssembly->MoveArm(2550);
-		chassis->TurnA(135);
-		Collect(armAssembly);
-
-		// Go all the back to the brick back at day job
-		follower->FollowLine(3450, 50);
-		armAssembly->MoveArm(2550);
-		Collect(armAssembly);
-
-		// Go back to headquarters
-		follower->FollowLine(45);
-		chassis->TurnA(-135);
-		follower->FollowLine(45);*/
 	}
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;
