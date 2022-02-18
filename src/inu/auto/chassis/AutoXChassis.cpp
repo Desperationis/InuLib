@@ -4,6 +4,7 @@
 #include "inu/motor/background/PIDInertialMotor.h"
 #include "inu/InuException.hpp"
 #include "inu/background/BackgroundSystem.h"
+#include <cstdint>
 
 using namespace inu;
 
@@ -83,10 +84,10 @@ void AutoXChassis::RawSwerve(std::int8_t forward, std::int8_t right, std::int8_t
 	right = std::clamp<std::int8_t>(right, -127, 127);
 	turn = std::clamp<std::int8_t>(turn, -127, 127);
 
-	auto tl = std::clamp<std::int8_t>(forward + turn + right, -127, 127);
-	auto bl = std::clamp<std::int8_t>(forward + turn - right, -127, 127);
-	auto tr = std::clamp<std::int8_t>(-forward + turn + right, -127, 127);
-	auto br = std::clamp<std::int8_t>(-forward + turn - right, -127, 127);
+	auto tl = std::clamp<std::int16_t>(forward + turn + right, -127, 127);
+	auto bl = std::clamp<std::int16_t>(forward + turn - right, -127, 127);
+	auto tr = std::clamp<std::int16_t>(-forward + turn + right, -127, 127);
+	auto br = std::clamp<std::int16_t>(-forward + turn - right, -127, 127);
 
 	topleft->Move(tl);
 	topright->Move(tr);
