@@ -19,6 +19,7 @@
 #include "inu/background/CameraRainbowFlex.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
+#include "pros/misc.h"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
 #include "pros/vision.h"
@@ -79,16 +80,15 @@ void Collect(std::shared_ptr<ArmAssembly> armAssembly) {
 	armAssembly->Release();
 }
 
-void DriverControl() {
-	inu::Motor topleft(6);
-	inu::Motor topright(20);
-	inu::Motor bottomleft(5);
-	inu::Motor bottomright(11);
-	inu::ADIMotor arm('A');
+void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& builder, std::shared_ptr<ArmAssembly> armAssembly) {
+	inu::Motor arm(1);
 	inu::ADIMotor elbow1('D');
 	inu::ADIMotor elbow2('C');
+	inu::Motor autoClaw(10);
+	inu::Motor basket(18);
+	autoClaw.SetBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
 
-	bool switchSidesPressed = false;
+	bool deathMode = false;
 
 	while(true) {
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -96,32 +96,67 @@ void DriverControl() {
 		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-		topleft.Move(std::clamp<int>(x + y + turn, -100, 100));
-		topright.Move(std::clamp<int>(x - y + turn, -100, 100));
-		bottomleft.Move(std::clamp<int>(-x + y + turn, -100, 100));
-		bottomright.Move(std::clamp<int>(-x - y + turn, -100, 100));
+		chassis->RawSwerve(y, x, turn);
 
+		autoClaw.MoveVelocity(0);
 		elbow1.Set(0);
 		elbow2.Set(0);
-		arm.Set(0);
+		arm.Move(0);
+		armAssembly->MoveArm(0);
 
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			arm.Set(-127);
+		if(deathMode) {
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+				arm.MoveVelocity(-50);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+				arm.MoveVelocity(50);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+				elbow1.Set(127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+				elbow1.Set(-127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+				elbow2.Set(-127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+				elbow2.Set(127);
+			}
 		}
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			arm.Set(127);
+		if(!deathMode) {
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+				armAssembly->MoveArm(-2000);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+				armAssembly->MoveArm(2000);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+				autoClaw.Move(80);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+				autoClaw.Move(-80);
+			}
 		}
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-			elbow1.Set(127);
+
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+			basket.Move(50);
 		}
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-			elbow1.Set(-127);
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+			basket.Move(-50);
 		}
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-			elbow2.Set(-127);
+
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X) && !deathMode) {
+			deathMode = true;
+			builder.SetMotors(6, 20, 5, 11);
+			chassis->Rebuild(builder);
 		}
-		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
-			elbow2.Set(127);
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y) && deathMode) {
+			deathMode = false;
+			builder.SetMotors(11,5,20,6);
+			chassis->Rebuild(builder);
 		}
 
 		pros::delay(10);
@@ -168,38 +203,74 @@ void opcontrol() {
 		followerBuilder.SetLightThreshold(600);
 		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 
+		//DriverControl(chassis, builder, armAssembly); // Control chassis
+
+		// Set up initial state
 		armAssembly->Retract();
-		armAssembly->LightlyGrab();
-		chassis->Forward(750);
-		follower->FollowLine(2000, 40);
+		armAssembly->Release();
+
+		// Get first Jenga Brick
+		armAssembly->MoveArm(2550);
+		chassis->Forward(350);
+		follower->FollowLine(1000, 40);
+		while(!armAssembly->AtTarget(10))
+			pros::delay(10);
+		armAssembly->Grab();
+		armAssembly->Retract();
+		armAssembly->Release();
+		armAssembly->Retract();
+
+		// Go to kittens
+		follower->FollowLine(1450, 40);
 		armAssembly->MoveArm(1900);
 		chassis->TurnA(45);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
 		chassis->TurnA(-45 - 180);
-		follower->FollowLine(500, 40);
+
+		// Go back and turn left then right to face villain
+		follower->FollowLine(600, 40);
 		chassis->TurnA(-90);
 		follower->FollowLine(60);
 		chassis->TurnA(90);
+
+		// Get the first block
 		armAssembly->Retract();
 		armAssembly->Release();
+		armAssembly->MoveArm(2550);
+		while(!armAssembly->AtTarget(10))
+			pros::delay(10); 
+		follower->FollowLine(350, 40);
+		armAssembly->Grab();
+		armAssembly->Retract();
+		armAssembly->Release();
+
+		// Get the cup for villain
 		armAssembly->MoveArm(2350);
-		follower->FollowLine(1450, 40);
+		follower->FollowLine(1100, 40);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
-
 		armAssembly->LightlyGrab();
 		armAssembly->MoveArm(-1000);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
 
+		// Stack it on villain
 		chassis->Backward(100);
 		chassis->TurnA(-15);
 		armAssembly->MoveArm(800);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
-
 		armAssembly->Release();
+		armAssembly->Retract();
+
+		// Turn back, do 360 turn, then go to final exit block
+		chassis->TurnA(-180 + 15);
+		follower->FollowLine(900, 40);
+		chassis->StrafeLeft(600);
+		chassis->TurnA(360);
+		chassis->TurnA(20);
+		chassis->Forward(2000);
 
 		CalibrateThreshold(follower);
 		// Go to headquarters
