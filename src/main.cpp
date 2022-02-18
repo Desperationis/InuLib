@@ -205,10 +205,6 @@ void opcontrol() {
 
 		//DriverControl(chassis, builder, armAssembly); // Control chassis
 
-		// Set up initial state
-		armAssembly->Retract();
-		armAssembly->Release();
-
 		// Get first Jenga Brick
 		armAssembly->MoveArm(2550);
 		chassis->Forward(350);
@@ -218,11 +214,10 @@ void opcontrol() {
 		armAssembly->Grab();
 		armAssembly->Retract();
 		armAssembly->Release();
-		armAssembly->Retract();
 
 		// Go to kittens
 		follower->FollowLine(1450, 40);
-		armAssembly->MoveArm(1900);
+		armAssembly->MoveArm(1950);
 		chassis->TurnA(45);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
@@ -232,12 +227,11 @@ void opcontrol() {
 		follower->FollowLine(600, 40);
 		chassis->TurnA(-90);
 		follower->FollowLine(60);
+		armAssembly->MoveArm(600);
 		chassis->TurnA(90);
+		chassis->StrafeLeft(100);
 
 		// Get the first block
-		armAssembly->Retract();
-		armAssembly->Release();
-		armAssembly->MoveArm(2550);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10); 
 		follower->FollowLine(350, 40);
@@ -264,12 +258,20 @@ void opcontrol() {
 		armAssembly->Release();
 		armAssembly->Retract();
 
-		// Turn back, do 360 turn, then go to final exit block
+		// Turn back and go to central block.
 		chassis->TurnA(-180 + 15);
-		follower->FollowLine(900, 40);
+		follower->FollowLine(850, 60);
 		chassis->StrafeLeft(600);
-		chassis->TurnA(360);
-		chassis->TurnA(20);
+
+		// Crank up turning speed 
+		chassisOptions.maxVelocity = 100;
+		builder.SetChassisOptions(chassisOptions);
+		gyroOptions.gyroPID.p = 1.2;
+		builder.SetGyro(15, gyroOptions);
+		chassis->Rebuild(builder);
+
+		// Turn back, do 360 turn, then go to final exit block
+		chassis->TurnA(360 + 20);
 		chassis->Forward(2000);
 
 		CalibrateThreshold(follower);
