@@ -39,6 +39,15 @@ namespace inu {
 
 		~AutoXChassis();
 
+		/**
+		 * Rebuilds this entire chassis using an AutoXChassisBuilder instance.
+		 * This is the best way to change the options of the chassis midway
+		 * through the program.
+		 *
+		 * @param builder Any instance of a valid AutoXChassisBuilder class.
+		*/ 
+		virtual void Rebuild(const AutoXChassisBuilder& builder);
+
 		virtual void Swerve(std::int8_t y, std::int8_t x) override;
 
 		virtual void TurnA(double degrees) override;
@@ -83,7 +92,35 @@ namespace inu {
 		*/
 		virtual void StrafeRight(double ticks);
 
+		/** 
+		 * Given three velocities forward, right, and turn, swerve the entire
+		 * chassis. Velocities will be clamped at the maximum velocity of the
+		 * motor.
+		 *
+		 * This function will not stall and will simply set the speed of the
+		 * motors.
+		 *
+		 * @param forward Positive values move the car forward, negative backward.
+		 * @param right Positive values move car to the right, negative to the
+		 * left.
+		 * @param turn Positive values results in clockwise motion, negative
+		 * for anticlockwise.
+		*/
 		virtual void Swerve(std::int8_t forward, std::int8_t right, std::int8_t turn);
+
+		/** 
+		 * Exactly like Swerve(), but uses raw voltage from [-127, 127] and
+		 * clamps it from [-127, 127]. Not accurate for Auton at all; Mainly
+		 * better for driving.
+		 *
+		 * @param forward Positive values move the car forward, negative backward.
+		 * @param right Positive values move car to the right, negative to the
+		 * left.
+		 * @param turn Positive values results in clockwise motion, negative
+		 * for anticlockwise.
+		*/
+		virtual void RawSwerve(std::int8_t forward, std::int8_t right, std::int8_t turn);
+
 
 	protected:
 		/**
@@ -110,8 +147,7 @@ namespace inu {
 		std::shared_ptr<inu::Motor> topright;
 		std::shared_ptr<inu::Motor> bottomleft;
 		std::shared_ptr<inu::Motor> bottomright;
-
-		std::unique_ptr<inu::PIDInertialMotor> inertialTopleft;
+std::unique_ptr<inu::PIDInertialMotor> inertialTopleft;
 		std::unique_ptr<inu::PIDInertialMotor> inertialTopright;
 		std::unique_ptr<inu::PIDInertialMotor> inertialBottomleft;
 		std::unique_ptr<inu::PIDInertialMotor> inertialBottomright;

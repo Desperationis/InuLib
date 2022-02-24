@@ -23,12 +23,12 @@ void ArmAssembly::Grab() {
 	claw->MoveVelocity(-100);
 	pros::delay(800);
 	claw->Move(0);
-	claw->MoveVelocity(-20);
+	claw->MoveVelocity(-40);
 }
 
 void ArmAssembly::LightlyGrab() {
 	claw->MoveVelocity(-60);
-	pros::delay(600);
+	pros::delay(850);
 	claw->Move(-20);
 }
 

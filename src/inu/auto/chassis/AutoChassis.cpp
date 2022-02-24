@@ -16,6 +16,10 @@ void AutoChassis::Copy(const AutoChassis& chassis) {
 }
 
 AutoChassis::AutoChassis(const AutoChassisBuilder& builder) {
+	Rebuild(builder);
+}
+
+void AutoChassis::Rebuild(const AutoChassisBuilder& builder) {
 	chassisOptions = builder.GetChassisOptions();
 
 	usesGyro = builder.UsesGyro();
