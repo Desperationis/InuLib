@@ -72,9 +72,10 @@ void CalibrateThreshold(std::shared_ptr<XLineFollower> follower) {
  * and if so, grab the object, retract the arm, and let go.
 */ 
 void Collect(std::shared_ptr<ArmAssembly> armAssembly) {
-	while(!armAssembly->AtTarget(10)) {
-		pros::delay(20);
-	}
+	armAssembly->MoveArm(0);
+	while(!armAssembly->AtTarget(10))
+		pros::delay(10);
+
 	armAssembly->Grab();
 	armAssembly->Retract();
 	armAssembly->Release();
@@ -86,6 +87,7 @@ void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& b
 	inu::ADIMotor elbow2('C');
 	inu::Motor autoClaw(10);
 	inu::Motor basket(18);
+	inu::Motor autoArm(19);
 	autoClaw.SetBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
 
 	bool deathMode = false;
@@ -102,16 +104,16 @@ void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& b
 		elbow1.Set(0);
 		elbow2.Set(0);
 		arm.Move(0);
-		armAssembly->MoveArm(0);
+		autoArm.Move(0);
 		basket.Move(0);
 
 
 		if(deathMode) {
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-				arm.MoveVelocity(-50);
+				arm.Move(-70);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-				arm.MoveVelocity(50);
+				arm.Move(70);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 				elbow1.Set(127);
@@ -128,10 +130,10 @@ void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& b
 		}
 		if(!deathMode) {
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-				armAssembly->MoveArm(-20000);
+				autoArm.Move(-70);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-				armAssembly->MoveArm(20000);
+				autoArm.Move(70);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 				autoClaw.Move(80);
@@ -143,6 +145,7 @@ void DriverControl(std::shared_ptr<AutoXChassis> chassis, AutoXChassisBuilder& b
 				Collect(armAssembly);
 			}
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+				armAssembly->MoveArm(0);
 				armAssembly->Release();
 				armAssembly->LightlyGrab();
 			}
@@ -191,10 +194,10 @@ void opcontrol() {
 		gyroOptions.steadyStateAngleError = 2;
 
 		ArmAssemblyBuilder armBuilder;
-		armBuilder.SetArmMotor(19, PIDProfile(1.0f));
+		armBuilder.SetArmMotor(19, PIDProfile(0.9f));
 		armBuilder.SetClawMotor(10);
 		armBuilder.SetButton('A');
-		armBuilder.SetArmMaximumVelocity(70);
+		armBuilder.SetArmMaximumVelocity(60);
 		std::shared_ptr<ArmAssembly> armAssembly = armBuilder.Build();
 
 		AutoXChassisBuilder builder;
@@ -212,11 +215,12 @@ void opcontrol() {
 		followerBuilder.SetLightThreshold(600);
 		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 
+		DriverControl(chassis,builder, armAssembly);
 
 		// Get first Jenga Brick
-		armAssembly->MoveArm(2550);
+		armAssembly->MoveArm(2500);
 		chassis->Forward(350);
-		follower->FollowLine(1000, 40);
+		follower->FollowLine(900, 40);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
 		armAssembly->Grab();
@@ -224,10 +228,10 @@ void opcontrol() {
 		armAssembly->Release();
 
 		// Go to kittens
-		follower->FollowLine(1450, 40);
+		follower->FollowLine(1550, 40);
 		armAssembly->MoveArm(1950);
 		chassis->TurnA(45);
-		while(!armAssembly->AtTarget(10))
+		while(!armAssembly->AtTarget(5))
 			pros::delay(10);
 		chassis->TurnA(-45 - 180);
 
@@ -235,23 +239,23 @@ void opcontrol() {
 		follower->FollowLine(600, 40);
 		chassis->TurnA(-90);
 		follower->FollowLine(60);
-		armAssembly->MoveArm(600);
 		chassis->TurnA(90);
-		chassis->StrafeLeft(100);
+		chassis->StrafeLeft(40);
+		armAssembly->MoveArm(700);
 
 		// Get the first block
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10); 
-		follower->FollowLine(350, 40);
+		follower->FollowLine(180, 40);
 		armAssembly->Grab();
 		armAssembly->Retract();
 		armAssembly->Release();
 
 		// Get the cup for villain
-		armAssembly->MoveArm(2350);
-		follower->FollowLine(1100, 40);
+		armAssembly->MoveArm(2450);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
+		follower->FollowLine(1250, 40);
 		armAssembly->LightlyGrab();
 		armAssembly->MoveArm(-1000);
 		while(!armAssembly->AtTarget(10))
@@ -268,7 +272,7 @@ void opcontrol() {
 
 		// Turn back and go to central block.
 		chassis->TurnA(-180 + 15);
-		follower->FollowLine(850, 60);
+		follower->FollowLine(800, 60);
 		chassis->StrafeLeft(600);
 
 		// Crank up turning speed 
