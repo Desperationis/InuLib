@@ -215,11 +215,9 @@ void opcontrol() {
 		followerBuilder.SetLightThreshold(600);
 		std::shared_ptr<XLineFollower> follower = followerBuilder.Build();
 
-		DriverControl(chassis,builder, armAssembly);
-
 		// Get first Jenga Brick
 		armAssembly->MoveArm(2500);
-		chassis->Forward(350);
+		chassis->Forward(400);
 		follower->FollowLine(900, 40);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
@@ -236,17 +234,17 @@ void opcontrol() {
 		chassis->TurnA(-45 - 180);
 
 		// Go back and turn left then right to face villain
-		follower->FollowLine(600, 40);
+		follower->FollowLine(550, 40);
 		chassis->TurnA(-90);
 		follower->FollowLine(60);
 		chassis->TurnA(90);
 		chassis->StrafeLeft(40);
-		armAssembly->MoveArm(700);
+		armAssembly->MoveArm(650);
 
 		// Get the first block
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10); 
-		follower->FollowLine(180, 40);
+		follower->FollowLine(380, 40);
 		armAssembly->Grab();
 		armAssembly->Retract();
 		armAssembly->Release();
@@ -255,15 +253,15 @@ void opcontrol() {
 		armAssembly->MoveArm(2450);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
-		follower->FollowLine(1250, 40);
+		follower->FollowLine(1150, 40);
 		armAssembly->LightlyGrab();
 		armAssembly->MoveArm(-1000);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
 
 		// Stack it on villain
-		chassis->Backward(100);
-		chassis->TurnA(-15);
+		chassis->Backward(300);
+		chassis->TurnA(-10);
 		armAssembly->MoveArm(800);
 		while(!armAssembly->AtTarget(10))
 			pros::delay(10);
