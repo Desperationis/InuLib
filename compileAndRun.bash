@@ -8,7 +8,7 @@ then
 fi
 
 
-if ! pros upload --icon "USER029x.bmp" 
+if ! pros upload 
 then
 	exit 1
 fi
