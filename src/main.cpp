@@ -17,6 +17,7 @@
 #include "inu/auto/ColorFollower.h"
 #include "inu/auto/ColorFollowerBuilder.h"
 #include "inu/background/CameraRainbowFlex.h"
+#include "inu/ControllerStream.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -58,11 +59,15 @@ void initialize() {
 
 void opcontrol() {
 	try {
+		inu::ControllerStream stream;
+		stream.Start();
+
 		inu::Motor topleft(20);
 		inu::Motor topright(12);
 		inu::Motor bottomleft(10);
 		inu::Motor bottomright(1);
 		inu::Motor intake(11);
+		inu::Motor rollers(19);
 
 		inu::SlewMotor shooter1(9);
 		inu::SlewMotor shooter2(13);
@@ -97,6 +102,7 @@ void opcontrol() {
 			intake.MoveVelocity(0);
 			shooter1.Set(0);
 			shooter2.Set(0);
+			rollers.Move(0);
 
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
 				intake.Move(127);
@@ -105,18 +111,25 @@ void opcontrol() {
 				intake.Move(-127);
 			}
 
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+				rollers.Move(127);
+			}
+			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+				rollers.Move(-127);
+			}
+
 			// Shooter Speed Code
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP) && !pressed1) {
 				controller.rumble("-");
-				shooterMult = std::clamp<float>(shooterMult + 0.1f, 0.3f, 0.8f);
+				shooterMult = std::clamp<float>(shooterMult + 0.1f, 0.3f, 1.0f);
 			}
 			pressed1 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP);
 
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) && !pressed2) {
 				controller.rumble("-");
-				shooterMult = std::clamp<float>(shooterMult - 0.1f, 0.3f, 0.8f);
+				shooterMult = std::clamp<float>(shooterMult - 0.1f, 0.3f, 1.0f);
 			}
-			pressed2 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP);
+			pressed2 = controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN);
 
 
 			// Reverse Code
