@@ -4,8 +4,8 @@
  * Chassis used to control a x-drive.
 */
 
-#ifndef XCHASSIS_H
-#define XCHASSIS_H
+#ifndef INU_AUTOXCHASSIS_H
+#define INU_AUTOXCHASSIS_H
 
 #include "main.h"
 #include "inu/auto/chassis/AutoChassis.h"

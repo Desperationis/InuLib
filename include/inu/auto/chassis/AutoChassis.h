@@ -4,8 +4,8 @@
  * Abstract class used to move a chassis autonomously.
 */
 
-#ifndef CHASSIS_H
-#define CHASSIS_H
+#ifndef INU_AUTOCHASSIS_H
+#define INU_AUTOCHASSIS_H
 
 #include <cstdint>
 #include <memory>
