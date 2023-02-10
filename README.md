@@ -10,6 +10,10 @@ A PROS library for the V5 system specifically tailored to fight against NLMUSD d
     │    
     │── background/ # Files related for running background tasks
     │  
+    │── controller/ # Files related to communicate with controller
+    │  
+    │── terminal/ # Files related to the terminal
+    │  
     │── motor/ # Files related to motor wrappers
     │  └──background/ # Motors that run in the background
     │    
@@ -21,14 +25,14 @@ This is *extremely* rough documentation of the functions available in InuLib. Wh
 
 Not all classes are documented as some are overly simple, or just interfaces. 
 
-### inu/Color.hpp
+### inu/terminal/Color.hpp
 Color modifiers for text
 
 ```cpp
 std::cout << FG_RED << "text" << FG_DEFAULT << std::endl;
 ```
 
-### inu/ControllerCallback.h
+### inu/controller/ControllerCallback.h
 Allows you to assign functions as callbacks for controller buttons.
 
 ```cpp
@@ -42,7 +46,7 @@ while(true) {
 }
 ```
 
-### inu/ControllerStream.h
+### inu/controller/ControllerStream.h
 Static methods to print text to the controller. Runs as a background task. It is important to note that this is **extremely buggy and may not work most of the time.**
 
 ```cpp

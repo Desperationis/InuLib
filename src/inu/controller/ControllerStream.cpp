@@ -1,4 +1,4 @@
-#include "inu/ControllerStream.h"
+#include "inu/controller/ControllerStream.h"
 #include "pros/misc.h"
 
 using namespace pros;
