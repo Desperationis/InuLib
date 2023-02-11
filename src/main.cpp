@@ -18,6 +18,12 @@
 #include "inu/auto/ColorFollowerBuilder.h"
 #include "inu/background/CameraRainbowFlex.h"
 #include "inu/controller/ControllerStream.h"
+#include "inu/motor/engines/VelocityEngine.h"
+#include "inu/motor/engines/VoltageEngine.h"
+#include "inu/motor/engines/AbsoluteEngine.h"
+#include "inu/motor/engines/RelativeEngine.h"
+#include "inu/motor/engines/SlewEngine.h"
+#include "inu/motor/MechMotor.hpp"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -58,6 +64,22 @@ void initialize() {
 
 
 void opcontrol() {
+	MechMotor motor(20);
+	motor.ChangeEngine<engine::SlewEngine>();
+	auto e = motor.GetEngine<engine::SlewEngine>();
+	e->SetSlewRate(5);
+
+	for(int i = 0; i < 20; i++) {
+		e->SetTarget(100 * (i % 2 == 0 ? -1 : 1));
+		e->Execute();
+		std::cout << Color::FG_BLUE << "Setting motor speed to " << 100 * (i % 2 == 0 ? -1 : 1) << Color::FG_DEFAULT << std::endl;
+		pros::delay(5000);
+	}
+
+
+	while(true)
+		pros::delay(50);
+
 	try {
 		inu::ControllerStream stream;
 		stream.Start();
