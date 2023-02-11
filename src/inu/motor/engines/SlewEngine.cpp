@@ -10,7 +10,7 @@ SlewEngine::SlewEngine(inu::port motorPort) : Engine(motorPort), BackgroundTask(
 }
 
 SlewEngine::~SlewEngine() {
-	BackgroundSystem::Instance()->RemoveTask(this);
+	this->Shutdown();
 }
 
 void SlewEngine::Execute() {

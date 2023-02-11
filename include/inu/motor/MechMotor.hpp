@@ -26,6 +26,9 @@ public:
 
 	template<typename T>
 	void ChangeEngine() {
+		if (currentEngine)
+			currentEngine->Shutdown();
+
 		currentEngine.reset();
 		auto tmp = std::make_shared<T>(port);
 		currentEngine = std::dynamic_pointer_cast<inu::engine::Engine>(tmp);
@@ -51,6 +54,10 @@ public:
 
 	void Execute() {
 		currentEngine->Execute();
+	}
+
+	void Shutdown() {
+		currentEngine->Shutdown();
 	}
 
 private:

@@ -91,8 +91,21 @@ void opcontrol() {
 		auto e2 = ea2.lock();
 		e2->SetTarget(-10);
 		e2->Execute();
-		
+		pros::delay(500);
+		e2->Shutdown();
 	}
+
+	motor.ChangeEngine<engine::AbsoluteEngine>();
+	{
+		auto ea = motor.GetEngine<engine::AbsoluteEngine>();
+		auto e = ea.lock();
+		e->SetTarget(1000);
+		e->SetMaxSpeed(10);
+		e->Execute();
+		pros::delay(20000);
+		e->Shutdown();
+	}
+
 
 
 
