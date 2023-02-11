@@ -7,7 +7,7 @@
 
 #include "inu/wrapper/Motor.h"
 #include "inu/Types.hpp"
-#include "inu/motor/engines/Engine.h"
+#include "inu/motor/engines/Engine.hpp"
 #include "inu/background/BackgroundTask.h"
 
 namespace inu {
@@ -17,19 +17,18 @@ class SlewEngine : public Engine, BackgroundTask {
 public:
 	SlewEngine(inu::port motorPort);
 	~SlewEngine();
-	virtual void SetTarget(double value);
-	virtual void Execute();
+	virtual void Execute() override;
+	virtual void Shutdown() override;
 
 	void SetSlewRate(uint8_t rate);
-	void _Update();
+	void _Update() override;
 
 private:
 	int Interpolate(int start, int end, unsigned int maximum);
 
 private:
 	uint8_t slewRate;
-	double target;
-	inu::Motor motor;
+	bool enrolled; // memoize
 };
 
 

@@ -1,4 +1,5 @@
 #include "inu/background/BackgroundSystem.h"
+#include "inu/InuException.hpp"
 
 using pros::Task;
 using namespace inu;
@@ -54,6 +55,14 @@ void BackgroundSystem::EnrollTask(BackgroundTask* task) {
 	if(!TaskExists(task->GetPort())) {
 		tasks[index] = task;
 	}
+	else {
+		throw InuException("BackgroundSystem.h: Port is already enrolled.");
+	}
+}
+
+void BackgroundSystem::RemoveTask(inu::port port) {
+	// Never call delete here; we don't own the pointers
+	tasks[port - 1] = nullptr;
 }
 
 void BackgroundSystem::RemoveTask(BackgroundTask* task) {
@@ -70,8 +79,12 @@ bool BackgroundSystem::TaskExists(inu::port port) {
 	return tasks[port - 1] != nullptr;
 }
 
-void BackgroundSystem::RemoveTask(inu::port port) {
-	// Never call delete here; we don't own the pointers
-	tasks[port - 1] = nullptr;
-}
+bool BackgroundSystem::TaskExists(BackgroundTask* task) {
+	for(int i = 0; i < tasks.size(); i++) {
+		if (tasks[i] == task) {
+			return true;
+		}
+	}
 
+	return false;
+}

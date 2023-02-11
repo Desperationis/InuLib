@@ -7,7 +7,7 @@
 
 #include "inu/wrapper/Motor.h"
 #include "inu/Types.hpp"
-#include "inu/motor/engines/Engine.h"
+#include "inu/motor/engines/Engine.hpp"
 
 namespace inu {
 namespace engine {
@@ -15,15 +15,12 @@ namespace engine {
 class RelativeEngine : public Engine {
 public:
 	RelativeEngine(inu::port motorPort);
-	virtual void SetTarget(double value);
-	virtual void Execute();
+	virtual void Execute() override;
 
 	void SetMaxSpeed(uint8_t speed);
 
 private:
-	double target;
 	uint8_t maxSpeed;
-	inu::Motor motor;
 };
 
 

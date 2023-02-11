@@ -7,7 +7,7 @@
 
 #include "inu/wrapper/Motor.h"
 #include "inu/Types.hpp"
-#include "inu/motor/engines/Engine.h"
+#include "inu/motor/engines/Engine.hpp"
 
 namespace inu {
 namespace engine {
@@ -15,11 +15,7 @@ namespace engine {
 class VelocityEngine : public Engine {
 public:
 	VelocityEngine(inu::port motorPort);
-	virtual void SetTarget(double value);
-	virtual void Execute();
-private:
-	double target;
-	inu::Motor motor;
+	virtual void Execute() override;
 };
 
 

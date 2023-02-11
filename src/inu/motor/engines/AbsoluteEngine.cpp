@@ -2,12 +2,8 @@
 
 using namespace inu::engine;
 
-AbsoluteEngine::AbsoluteEngine(inu::port motorPort) : motor(motorPort) {
+AbsoluteEngine::AbsoluteEngine(inu::port motorPort) : Engine(motorPort) {
 	maxSpeed = 127;
-}
-
-void AbsoluteEngine::SetTarget(double value) {
-	target = value;
 }
 
 void AbsoluteEngine::SetMaxSpeed(uint8_t speed) {

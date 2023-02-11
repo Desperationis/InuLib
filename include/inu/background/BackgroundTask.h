@@ -2,7 +2,7 @@
  * @brief Abstract class for background tasks on a specific port.
  *
  * Abstract class for anything that needs to be constantly updated in the 
- * background, whether it be LED lights or motors.
+ * background relating to a single port, whether it be LED lights or motors.
 */
 
 #ifndef BACKGROUNDTASK_H

@@ -2,13 +2,9 @@
 
 using namespace inu::engine;
 
-VelocityEngine::VelocityEngine(inu::port motorPort) : motor(motorPort) {
+VelocityEngine::VelocityEngine(inu::port motorPort) : Engine(motorPort) {
 
 
-}
-
-void VelocityEngine::SetTarget(double value) {
-	target = value;
 }
 
 void VelocityEngine::Execute() {

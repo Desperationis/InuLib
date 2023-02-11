@@ -25,11 +25,13 @@ namespace inu {
 
 		void EnrollTask(BackgroundTask* task);
 
-		void RemoveTask(BackgroundTask* task);
-
 		void RemoveTask(inu::port port);
 
+		void RemoveTask(BackgroundTask* task);
+
 		bool TaskExists(inu::port port);
+
+		bool TaskExists(BackgroundTask* task);
 
 		void BackgroundSystemTask(void* parameters);
 

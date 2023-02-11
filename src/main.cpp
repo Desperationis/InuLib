@@ -65,17 +65,39 @@ void initialize() {
 
 void opcontrol() {
 	MechMotor motor(20);
+	MechMotor motor2(20);
 	motor.ChangeEngine<engine::SlewEngine>();
-	auto e = motor.GetEngine<engine::SlewEngine>();
-	e->SetSlewRate(5);
+	auto ea = motor.GetEngine<engine::SlewEngine>();
 
-	for(int i = 0; i < 20; i++) {
-		e->SetTarget(100 * (i % 2 == 0 ? -1 : 1));
-		e->Execute();
-		std::cout << Color::FG_BLUE << "Setting motor speed to " << 100 * (i % 2 == 0 ? -1 : 1) << Color::FG_DEFAULT << std::endl;
-		pros::delay(5000);
+	std::cout << Color::FG_GREEN << "# of references of weak: " << ea.use_count() << std::endl;
+	
+	{
+		auto e = ea.lock();
+		e->SetSlewRate(5);
+
+		for(int i = 0; i < 3; i++) {
+			e->SetTarget(10 * (i % 2 == 0 ? -1 : 1));
+			e->Execute();
+			std::cout << Color::FG_BLUE << "Setting motor speed to " << 100 * (i % 2 == 0 ? -1 : 1) << Color::FG_DEFAULT << std::endl;
+			pros::delay(2000);
+		}
+
+		e->Shutdown();
+		pros::delay(200);
+	
+
+		motor2.ChangeEngine<engine::SlewEngine>();
+		auto ea2 = motor2.GetEngine<engine::SlewEngine>();
+		auto e2 = ea2.lock();
+		e2->SetTarget(-10);
+		e2->Execute();
+		
 	}
 
+
+
+
+	std::cout << Color::FG_GREEN << "# of references of weak: " << ea.use_count() << std::endl;
 
 	while(true)
 		pros::delay(50);

@@ -12,7 +12,7 @@
 #include "main.h"
 #include "inu/InuException.hpp"
 #include "inu/Types.hpp"
-#include "inu/motor/engines/Engine.h"
+#include "inu/motor/engines/Engine.hpp"
 
 namespace inu {
 
@@ -35,13 +35,13 @@ public:
 	}
 
 	template<typename T>
-	std::shared_ptr<T> GetEngine() {
+	std::weak_ptr<T> GetEngine() {
 		auto engine = std::dynamic_pointer_cast<T>(currentEngine);
 
 		if (engine == nullptr)
 			throw InuException("MechMotor.hpp: Unable to cast to child class");
 
-		return engine;
+		return std::weak_ptr<T>(engine);
 	}
 
 

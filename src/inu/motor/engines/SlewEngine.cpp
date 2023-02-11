@@ -3,23 +3,21 @@
 
 using namespace inu::engine;
 
-SlewEngine::SlewEngine(inu::port motorPort) : motor(motorPort), BackgroundTask(motorPort) {
+SlewEngine::SlewEngine(inu::port motorPort) : Engine(motorPort), BackgroundTask(motorPort) {
 	slewRate = 20;
 	target = 0;
-	BackgroundSystem::Instance()->EnrollTask(this);
-
+	enrolled = false;
 }
 
 SlewEngine::~SlewEngine() {
 	BackgroundSystem::Instance()->RemoveTask(this);
 }
 
-void SlewEngine::SetTarget(double value) {
-	target = value;
-}
-
 void SlewEngine::Execute() {
-	motor.Move(target);
+	if (!enrolled) {
+		BackgroundSystem::Instance()->EnrollTask(this);
+		enrolled = true;
+	}
 }
 
 int SlewEngine::Interpolate(int start, int end, unsigned int maximum) {
@@ -37,6 +35,15 @@ int SlewEngine::Interpolate(int start, int end, unsigned int maximum) {
 
 void SlewEngine::SetSlewRate(uint8_t rate) {
 	slewRate = rate;
+}
+
+void SlewEngine::Shutdown() {
+	Engine::Shutdown();
+
+	if(enrolled) {
+		BackgroundSystem::Instance()->RemoveTask(this);
+		enrolled = false;
+	}
 }
 
 void SlewEngine::_Update() {
