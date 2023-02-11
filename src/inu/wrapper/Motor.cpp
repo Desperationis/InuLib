@@ -12,8 +12,12 @@ Motor::Motor(inu::port port) : motor(port) {
 	if(port < 1 || port > 20)
 		throw InuException("Motor.h: Port must be between 1-20.");
 
-	if(pros::c::registry_get_plugged_type(port - 1) != E_DEVICE_MOTOR)
-		throw InuException("Motor.h: Port is not a motor.");
+	if(pros::c::registry_get_plugged_type(port - 1) != E_DEVICE_MOTOR) {
+		char sport[10];
+		itoa(port, sport, 10);
+		std::string s(sport);
+		throw InuException("Motor.h: Port " + s + " is not a motor.");
+	}
 
 	tare = 0;
 }
