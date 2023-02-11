@@ -24,13 +24,13 @@ public:
 		currentEngine = nullptr;
 	}
 
-	template<typename T>
-	void ChangeEngine() {
+	template<typename T, typename ... A>
+	void ChangeEngine(A...args) {
 		if (currentEngine)
 			currentEngine->Shutdown();
 
 		currentEngine.reset();
-		auto tmp = std::make_shared<T>(port);
+		auto tmp = std::make_shared<T>(port, args...);
 		currentEngine = std::dynamic_pointer_cast<inu::engine::Engine>(tmp);
 
 		if (currentEngine == nullptr)

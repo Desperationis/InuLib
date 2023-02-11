@@ -22,38 +22,38 @@ Motor::Motor(inu::port port) : motor(port) {
 	tare = 0;
 }
 
-std::int32_t Motor::CapVoltage(std::int32_t voltage) const {
-   return std::clamp<std::int32_t>(voltage, -127, 127);
+int Motor::CapVoltage(int voltage) const {
+   return std::clamp<int>(voltage, -127, 127);
 }   
 
-std::int32_t Motor::CapVelocity(std::int32_t velocity) const {
+int Motor::CapVelocity(int velocity) const {
 	pros::motor_gearset_e_t gearing = motor.get_gearing();
 
 	if(gearing == pros::E_MOTOR_GEARSET_36)
-		return std::clamp<std::int32_t>(velocity, -100, 100);
+		return std::clamp<int>(velocity, -100, 100);
 
 	else if(gearing == pros::E_MOTOR_GEARSET_18)
-		return std::clamp<std::int32_t>(velocity, -200, 200);
+		return std::clamp<int>(velocity, -200, 200);
 
-	return std::clamp<std::int32_t>(velocity, -600, 600);
+	return std::clamp<int>(velocity, -600, 600);
 }
 
-void Motor::Move(std::int32_t voltage) const {
+void Motor::Move(int voltage) const {
 	voltage = CapVoltage(voltage);
 	motor.move(voltage);
 }
 
-void Motor::MoveRelative(const double position, std::int32_t velocity) const {
+void Motor::MoveRelative(const double position, int velocity) const {
 	velocity = CapVelocity(velocity);
 	motor.move_relative(position, velocity);
 }
 
-void Motor::MoveAbsolute(const double position, std::int32_t velocity) const {
+void Motor::MoveAbsolute(const double position, int velocity) const {
 	velocity = CapVelocity(velocity);
 	motor.move_absolute(position + tare, velocity);
 }
 
-void Motor::MoveVelocity(std::int32_t velocity) const {
+void Motor::MoveVelocity(int velocity) const {
 	velocity = CapVelocity(velocity);
 	motor.move_velocity(velocity);
 }
@@ -62,7 +62,7 @@ void Motor::SetBrakeMode(pros::motor_brake_mode_e_t mode) const {
 	motor.set_brake_mode(mode);
 }
 
-void Motor::SetCurrentLimit(const std::int32_t limit) const {
+void Motor::SetCurrentLimit(const int limit) const {
 	motor.set_current_limit(limit);
 }
 
@@ -94,15 +94,15 @@ void Motor::TarePosition() {
 	tare = -motor.get_position();
 }
 
-std::int32_t Motor::GetVoltage() const {
+int Motor::GetVoltage() const {
 	return (motor.get_voltage() / 12000.0) * 127;
 }
 
-std::int32_t Motor::GetActualVelocity() const {
+int Motor::GetActualVelocity() const {
 	return motor.get_actual_velocity();
 }
 
-std::int32_t Motor::GetTargetVelocity() const {
+int Motor::GetTargetVelocity() const {
 	return motor.get_target_velocity();
 }
 

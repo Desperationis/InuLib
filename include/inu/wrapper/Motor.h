@@ -25,7 +25,7 @@ namespace inu {
 		 * @param voltage Voltage of the motor, [-127, 127]. Value will be
 		 * clamped.
 		*/ 
-		void Move(std::int32_t voltage) const;
+		void Move(int voltage) const;
 
 		/**
 		 * Using the integrated control loop, move to a specific position
@@ -34,7 +34,7 @@ namespace inu {
 		 * @param position Target position from current position.
 		 * @param velocity Max velocity from +-100, 200, or 600.
 		*/ 
-		void MoveRelative(const double position, std::int32_t velocity) const;
+		void MoveRelative(const double position, int velocity) const;
 
 		/**
 		 * Using the integrated control loop, move to a specific position
@@ -43,7 +43,7 @@ namespace inu {
 		 * @param position Target absolute position.
 		 * @param velocity Max velocity from +-100, 200, or 600.
 		*/ 
-		void MoveAbsolute(const double position, std::int32_t velocity) const;
+		void MoveAbsolute(const double position, int velocity) const;
 
 		/**
 		 * Moves the motor at a constant velocity using the integrated
@@ -51,7 +51,7 @@ namespace inu {
 		 *
 		 * @param velocity Velocity from +-100, 200, or 600.
 		*/ 
-		void MoveVelocity(std::int32_t velocity) const;
+		void MoveVelocity(int velocity) const;
 
 		/**
 		 * Set the brake mode used by MoveVelocity().
@@ -65,7 +65,7 @@ namespace inu {
 		 *
 		 * @param limit Current limit.
 		*/ 
-		void SetCurrentLimit(const std::int32_t limit) const;
+		void SetCurrentLimit(const int limit) const;
 
 		/**
 		 * Change the encoder units of the motor.
@@ -106,17 +106,17 @@ namespace inu {
 		/**
 		 * @returns the voltage of the motor [-127, 127]
 		*/ 
-		std::int32_t GetVoltage() const;
+		int GetVoltage() const;
 
 		/**
 		 * @returns the actual velocity of the motor.
 		*/ 
-		std::int32_t GetActualVelocity() const;
+		int GetActualVelocity() const;
 
 		/**
 		 * @returns the target velocity of the motor.
 		*/ 
-		std::int32_t GetTargetVelocity() const;
+		int GetTargetVelocity() const;
 
 		/**
 		 * Tare the position of the encoder.
@@ -134,12 +134,12 @@ namespace inu {
 		/**
 		 * Caps voltage at [-127, 127].
 		*/ 
-		std::int32_t CapVoltage(std::int32_t velocity) const;
+		int CapVoltage(int velocity) const;
 
 		/**
 		 * Caps velocity at +- 100, 200, or 600 depending on gearing.
 		*/ 
-		std::int32_t CapVelocity(std::int32_t velocity) const;
+		int CapVelocity(int velocity) const;
 
 	private:
 		pros::Motor motor;

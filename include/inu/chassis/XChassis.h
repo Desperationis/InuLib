@@ -10,6 +10,7 @@
 #include "main.h"
 #include "inu/wrapper/Motor.h"
 #include "inu/motor/MechMotor.hpp"
+#include "inu/motor/engines/EncoderEngine.h"
 #include <memory>
 
 namespace inu {
@@ -62,18 +63,6 @@ public:
 	virtual void Stop();
 
 	/**
-	 * Resets total distance traveled.
-	*/ 
-	virtual void TareDistance();
-
-	/**
-	 * Get the average distance all motors have traveled.
-	 *
-	 * @return Average distance in encoder ticks.
-	*/ 
-	virtual double GetDistance();
-
-	/**
 	* Shortcut for StrafeRight(-ticks).
 	*
 	* @param ticks The number of encoder ticks to move each wheel. If encoder
@@ -107,7 +96,7 @@ public:
 	* @param turn Positive values results in clockwise motion, negative
 	* for anticlockwise.
 	*/
-	virtual void Swerve(std::int8_t forward, std::int8_t right, std::int8_t turn);
+	virtual void Swerve(int forward, int right, int turn, int maxVelocity);
 
 	/**
 	* Exactly like Swerve(), but uses raw voltage from [-127, 127] and
@@ -120,23 +109,35 @@ public:
 	* @param turn Positive values results in clockwise motion, negative
 	* for anticlockwise.
 	*/
-	virtual void RawSwerve(std::int8_t forward, std::int8_t right,
-						 std::int8_t turn);
+	virtual void RawSwerve(int forward, int right, int turn);
 
 private:
-	template<typename T>
-	void ChangeEngine() {
-		topleft.ChangeEngine<T>();
-		topright.ChangeEngine<T>();
-		bottomright.ChangeEngine<T>();
-		bottomleft.ChangeEngine<T>();
+	template<typename T, typename...A>
+	void ChangeEngine(A...args) {
+		topleft.ChangeEngine<T>(args...);
+		topright.ChangeEngine<T>(args...);
+		bottomright.ChangeEngine<T>(args...);
+		bottomleft.ChangeEngine<T>(args...);
 	}
 
+	void Execute();
+
+	/**
+	 * When using EncoderEngine, wait for all motors to finish.
+	 *
+	 * @param steadyWait Seconds to wait after all motors are in "steady
+	 * state". This ensures that the motors have even more time to adjust
+	 * themselves (slowly) to the desired target.
+	 */
+	void WaitForEncoders(double steadyWait); 
+
 protected:
-  inu::MechMotor topleft;
-  inu::MechMotor topright;
-  inu::MechMotor bottomleft;
-  inu::MechMotor bottomright;
+	engine::EncoderEngineSettings encoderSettings;
+	
+	inu::MechMotor topleft;
+	inu::MechMotor topright;
+	inu::MechMotor bottomleft;
+	inu::MechMotor bottomright;
 };
 } // namespace inu
 

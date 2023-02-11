@@ -20,10 +20,10 @@
 #include "inu/controller/ControllerStream.h"
 #include "inu/motor/engines/VelocityEngine.h"
 #include "inu/motor/engines/VoltageEngine.h"
-#include "inu/motor/engines/AbsoluteEngine.h"
-#include "inu/motor/engines/RelativeEngine.h"
+#include "inu/motor/engines/EncoderEngine.h"
 #include "inu/motor/engines/SlewEngine.h"
 #include "inu/motor/MechMotor.hpp"
+#include "inu/chassis/XChassis.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -64,56 +64,24 @@ void initialize() {
 
 
 void opcontrol() {
-	MechMotor motor(20);
-	MechMotor motor2(20);
-	motor.ChangeEngine<engine::SlewEngine>();
-	auto ea = motor.GetEngine<engine::SlewEngine>();
+	XChassis chassis(11, 5, 20, 6);
+	chassis.Forward(1000);
+	chassis.Backward(500);
+	chassis.Forward(500);
+	chassis.Backward(1000);
+	chassis.StrafeLeft(300);
+	chassis.StrafeRight(300);
+	chassis.Stop();
 
-	std::cout << Color::FG_GREEN << "# of references of weak: " << ea.use_count() << std::endl;
-	
-	{
-		auto e = ea.lock();
-		e->SetSlewRate(5);
+	while(true) {
+		pros::Controller controller(pros::E_CONTROLLER_MASTER);
+		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-		for(int i = 0; i < 3; i++) {
-			e->SetTarget(10 * (i % 2 == 0 ? -1 : 1));
-			e->Execute();
-			std::cout << Color::FG_BLUE << "Setting motor speed to " << 100 * (i % 2 == 0 ? -1 : 1) << Color::FG_DEFAULT << std::endl;
-			pros::delay(2000);
-		}
-
-		e->Shutdown();
-		pros::delay(200);
-	
-
-		motor2.ChangeEngine<engine::SlewEngine>();
-		auto ea2 = motor2.GetEngine<engine::SlewEngine>();
-		auto e2 = ea2.lock();
-		e2->SetTarget(-10);
-		e2->Execute();
-		pros::delay(500);
-		e2->Shutdown();
+		chassis.RawSwerve(y, x, turn);
+		pros::delay(20);
 	}
-
-	motor.ChangeEngine<engine::AbsoluteEngine>();
-	{
-		auto ea = motor.GetEngine<engine::AbsoluteEngine>();
-		auto e = ea.lock();
-		e->SetTarget(1000);
-		e->SetMaxSpeed(10);
-		e->Execute();
-		pros::delay(20000);
-		e->Shutdown();
-	}
-
-
-
-
-
-	std::cout << Color::FG_GREEN << "# of references of weak: " << ea.use_count() << std::endl;
-
-	while(true)
-		pros::delay(50);
 
 	try {
 		inu::ControllerStream stream;
