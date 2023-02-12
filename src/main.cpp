@@ -1,21 +1,11 @@
 #include "main.h"
 #include "inu/InuException.hpp"
 #include "inu/terminal/Color.hpp"
-#include "inu/motor/background/PIDVisionMotor.h"
-#include "inu/motor/background/SlewMotor.h"
-#include "inu/motor/PIDProfile.hpp"
-#include "inu/auto/chassis/AutoXChassis.h"
-#include "inu/auto/chassis/AutoXChassisBuilder.h"
-#include "inu/auto/XLineFollower.h"
-#include "inu/auto/XLineFollowerBuilder.h"
+#include "inu/util/PIDProfile.hpp"
 #include "inu/wrapper/LineSensor.h"
 #include "inu/wrapper/Motor.h"
 #include "inu/wrapper/VisionSensor.h"
 #include "inu/wrapper/InertialSensor.h"
-#include "inu/auto/ArmAssembly.h"
-#include "inu/auto/ArmAssemblyBuilder.h"
-#include "inu/auto/ColorFollower.h"
-#include "inu/auto/ColorFollowerBuilder.h"
 #include "inu/background/CameraRainbowFlex.h"
 #include "inu/controller/ControllerStream.h"
 #include "inu/motor/engines/VelocityEngine.h"
@@ -57,10 +47,15 @@ void initialize() {
 		pros::lcd::initialize();
 #endif	
 
+
+
 	// This delay is REQUIRED for the program to work; Without this, core
 	// components may or may not be initialized (i.e. inertial sensor) and 
 	// return wicked weird values like NaN
-	pros::delay(3000);
+	pros::delay(1000);
+	inu::InertialSensor imu(15);
+	imu.Calibrate();
+	imu.TareRotation();
 }
 
 
@@ -72,6 +67,9 @@ void opcontrol() {
 	chassis.Backward(1000);
 	chassis.Stop();
 
+	inu::Stopwatch watch;
+	watch.Mark();
+
 	while(true) {
 		pros::Controller controller(pros::E_CONTROLLER_MASTER);
 		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -80,7 +78,16 @@ void opcontrol() {
 
 		chassis.RawSwerve(y, turn);
 		pros::delay(20);
+
+		if(watch.GetElapsed() > 500) {
+			inu::InertialSensor imu(15);
+			std::cout<<imu.GetRotation() << std::endl;
+			watch.Mark();
+
+		}
 	}
+
+
 
 	try {
 		inu::ControllerStream stream;
@@ -93,8 +100,11 @@ void opcontrol() {
 		inu::Motor intake(11);
 		inu::Motor rollers(19);
 
-		inu::SlewMotor shooter1(9);
-		inu::SlewMotor shooter2(13);
+		inu::MechMotor shooter1(9);
+		shooter1.ChangeEngine<engine::SlewEngine>();
+
+		inu::MechMotor shooter2(13);
+		shooter1.ChangeEngine<engine::SlewEngine>();
 
 		bool reverseForward = false;
 		bool shooterToggle = false;
@@ -124,8 +134,8 @@ void opcontrol() {
 			}
 
 			intake.MoveVelocity(0);
-			shooter1.Set(0);
-			shooter2.Set(0);
+			shooter1.SetTarget(0);
+			shooter2.SetTarget(0);
 			rollers.Move(0);
 
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
@@ -164,8 +174,8 @@ void opcontrol() {
 
 			// Shooter code
 			if(shooterToggle) {
-				shooter1.Set(-127 * shooterMult);
-				shooter2.Set(127 * shooterMult);
+				shooter1.SetTarget(-127 * shooterMult);
+				shooter2.SetTarget(127 * shooterMult);
 			}
 
 			if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2) && !pressed4) {
