@@ -3,6 +3,7 @@
 #include "inu/motor/engines/VelocityEngine.h"
 #include "inu/motor/engines/VoltageEngine.h"
 #include "inu/motor/engines/EncoderEngine.h"
+#include "inu/util/VectorMath.hpp"
 #include "inu/util/Stopwatch.hpp"
 #include <cstdint>
 
@@ -69,6 +70,14 @@ void XChassis::RawSwerve(int forward, int right, int turn) {
 	bottomright.SetTarget(br);
 
 	Execute();
+}
+
+
+void XChassis::VectorPush(int magnitude, int turn, Vector robotVector, Vector targetVector) {
+
+	Vector rel = VectorMath::RelativeVector(robotVector, targetVector);
+	rel = rel.Normalize();
+	RawSwerve(rel.y * magnitude, rel.x * magnitude, turn);
 }
 
 

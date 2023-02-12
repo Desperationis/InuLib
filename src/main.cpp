@@ -56,15 +56,23 @@ void initialize() {
 	inu::InertialSensor imu(15);
 	imu.Calibrate();
 	imu.TareRotation();
+	pros::delay(2000);
 }
 
 
 void opcontrol() {
-	TankChassis chassis(11, 5, 20, 6);
-	chassis.Forward(1000);
-	chassis.Backward(500);
-	chassis.Forward(500);
-	chassis.Backward(1000);
+	XChassis chassis(11, 5, 20, 6);
+
+
+	inu::InertialSensor imu(15);
+	Vector robotVector = Vector::FromAngle(imu.GetRotation() * (M_PI / 180.0), 1);
+
+	chassis.VectorPush(40, 0, robotVector, Vector(1,1));
+	pros::delay(1000);
+	chassis.VectorPush(40, 0, robotVector, Vector(-1,-1));
+	pros::delay(500);
+	chassis.VectorPush(40, 0, robotVector, Vector(1,-1));
+	pros::delay(1000);
 	chassis.Stop();
 
 	inu::Stopwatch watch;
@@ -76,14 +84,19 @@ void opcontrol() {
 		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-		chassis.RawSwerve(y, turn);
+		//chassis.RawSwerve(y, x, turn);
+		inu::InertialSensor imu(15);
+
+		// Must be negative as imu.GetRotation is positive the other way
+		// Cast to radians as GetRotation is in degrees
+		Vector robotVector = Vector::FromAngle(-imu.GetRotation() * (M_PI / 180.0), 1);
+		Vector tmp(x,y);
+		chassis.VectorPush(tmp.Magnitude(), turn, robotVector, tmp);
 		pros::delay(20);
 
-		if(watch.GetElapsed() > 500) {
-			inu::InertialSensor imu(15);
+		if(watch.GetElapsed() > 2000) {
 			std::cout<<imu.GetRotation() << std::endl;
 			watch.Mark();
-
 		}
 	}
 

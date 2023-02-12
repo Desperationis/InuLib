@@ -11,6 +11,7 @@
 #include "inu/wrapper/Motor.h"
 #include "inu/motor/MechMotor.hpp"
 #include "inu/motor/engines/EncoderEngine.h"
+#include "inu/util/Vector.hpp"
 #include <memory>
 
 namespace inu {
@@ -110,6 +111,21 @@ public:
 	* for anticlockwise.
 	*/
 	virtual void RawSwerve(int forward, int right, int turn);
+
+	/**
+	 * "Pushes" the robot into the direction of `targetVector` with voltage
+	 * `magnitude` and turning voltage `turn`.
+	 *
+	 * @param magnitude Magnitude of the voltage to travel in. Must be
+	 * positive
+	 * @param turn Voltage used for turning; Polarity matters.
+	 * @param targetVector Normalized direction to travel in relation to the
+	 * global coordinate system.
+	 * @param robotVector Heading of the robot in relation to the global
+	 * coordinate system. This direction of this vector has to be the same
+	 * as the heading of the robot.
+	 */
+	virtual void VectorPush(int magnitude, int turn, Vector robotVector, Vector targetVector);
 
 private:
 	template<typename T, typename...A>
