@@ -24,6 +24,7 @@
 #include "inu/motor/engines/SlewEngine.h"
 #include "inu/motor/MechMotor.hpp"
 #include "inu/chassis/XChassis.h"
+#include "inu/chassis/TankChassis.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -64,13 +65,11 @@ void initialize() {
 
 
 void opcontrol() {
-	XChassis chassis(11, 5, 20, 6);
+	TankChassis chassis(11, 5, 20, 6);
 	chassis.Forward(1000);
 	chassis.Backward(500);
 	chassis.Forward(500);
 	chassis.Backward(1000);
-	chassis.StrafeLeft(300);
-	chassis.StrafeRight(300);
 	chassis.Stop();
 
 	while(true) {
@@ -79,7 +78,7 @@ void opcontrol() {
 		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-		chassis.RawSwerve(y, x, turn);
+		chassis.RawSwerve(y, turn);
 		pros::delay(20);
 	}
 
