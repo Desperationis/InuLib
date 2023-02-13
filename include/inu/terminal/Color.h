@@ -32,12 +32,10 @@ namespace inu {
         BG_DEFAULT  = 49
 	};
 
-	std::ostream& operator<<(std::ostream& os, Color color) {
-		return os << "\033[" << static_cast<int>(color) << "m";
-	}
 }
 
 
+std::ostream& operator<<(std::ostream& os, inu::Color color);
 
 
 

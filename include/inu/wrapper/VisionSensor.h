@@ -111,6 +111,15 @@ namespace inu {
 		unsigned int GetObjectCount() const;
 
 		/**
+		 * Get array of objects detected, sorted by rough size.
+		 *
+		 * @param count Max amount of objects to return.
+		 * @param arr Array to hold the list of detected objects.
+		 * @return Amount of objects copied ot array.
+		 */ 
+		unsigned int GetObjectsBySize(unsigned int count, pros::vision_object_s_t* arr);
+
+		/**
 		 * @returns the minimum area a object has to be in order to be returned
 		 * by GetLargestObject().
 		*/ 

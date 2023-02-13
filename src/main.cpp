@@ -1,6 +1,6 @@
 #include "main.h"
 #include "inu/InuException.hpp"
-#include "inu/terminal/Color.hpp"
+#include "inu/terminal/Color.h"
 #include "inu/util/PIDProfile.hpp"
 #include "inu/wrapper/LineSensor.h"
 #include "inu/wrapper/Motor.h"
@@ -15,6 +15,7 @@
 #include "inu/motor/MechMotor.hpp"
 #include "inu/chassis/XChassis.h"
 #include "inu/chassis/TankChassis.h"
+#include "inu/nav/assignment/DiskAssignment.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -61,6 +62,21 @@ void initialize() {
 
 
 void opcontrol() {
+	inu::VisionSensor vision(13);
+	auto sig = pros::Vision::signature_from_utility(1, 1087, 1919, 1502, -4855, -3903, -4378, 2.900, 0);
+	vision.SetSignature(0, &sig);
+	vision.SetMinimumArea(20);
+	vision.SetCenterPoint(90,50);
+
+	auto disk = DiskAssignment(vision);
+
+
+	while(true) {
+		disk.Run();
+
+		pros::delay(500);
+	}
+
 	XChassis chassis(11, 5, 20, 6);
 
 

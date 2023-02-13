@@ -63,6 +63,14 @@ std::unique_ptr<pros::vision_object_s_t> VisionSensor::GetLargestObject() const 
 	return pObject;
 }
 
+unsigned int VisionSensor::GetObjectsBySize(unsigned int count, pros::vision_object_s_t* arr) {
+	unsigned int tmp = vision.read_by_size(0, count, arr);
+	if (tmp == PROS_ERR)
+		return 0;
+
+	return tmp;
+}
+
 unsigned int VisionSensor::GetObjectCount() const {
 	return vision.get_object_count();
 }
