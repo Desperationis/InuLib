@@ -26,6 +26,14 @@ namespace inu {
         void SetOffset(double xOffset, double yOffset);
 
         /**
+         * If GPS is not mounted facing forward of the robot, offset the
+         * degrees by adding this amount.
+         *
+         * @param hOffset Amount in degrees
+         */
+        void SetHeadingOffset(double headingOffset);
+
+        /**
          * Sets the initial pose of the robot from the center of the field.
          * This is used to avoid deadzones in the field's GPS strips.
          *
@@ -64,6 +72,7 @@ namespace inu {
 
 	private:
 		pros::GPS sensor;
+		double headingOffset;
 
 	};
 

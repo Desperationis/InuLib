@@ -10,10 +10,16 @@ GPS::GPS(inu::port port) : sensor(port) {
 
 	if(pros::c::registry_get_plugged_type(port - 1) != pros::c::E_DEVICE_GPS)
 		throw InuException("GPS.h: Port is not a GPS.");
+
+	headingOffset = 0;
 }
 
 void GPS::SetOffset(double xOffset, double yOffset) {
 	sensor.set_offset(xOffset, yOffset);
+}
+
+void GPS::SetHeadingOffset(double headingOffset) {
+	this->headingOffset = headingOffset;
 }
 
 void GPS::SetInitialPose(double xInitial, double yInitial, double heading) {
@@ -33,5 +39,12 @@ pros::c::gps_status_s_t GPS::GetInfo() const {
 }
 
 double GPS::GetHeading() const {
-	return sensor.get_heading();
+	double heading = sensor.get_heading() + headingOffset;
+
+	// Clamp to [0, 360)
+	heading = fmod(heading,360);
+    if (heading < 0)
+        heading += 360;
+	
+	return heading;
 }
