@@ -7,7 +7,7 @@
 #ifndef INUPID_H
 #define INUPID_H
 
-#include "inu/motor/PIDProfile.hpp"
+#include "inu/util/PIDProfile.hpp"
 #include "inu/InuException.hpp"
 #include <algorithm>
 #include "main.h"
