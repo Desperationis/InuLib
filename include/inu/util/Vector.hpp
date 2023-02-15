@@ -6,67 +6,74 @@
 #define INU_VECTOR_HPP
 
 #include <cmath>
+#include "MathPoint.h"
 
 
 namespace inu {
 
 
+template<typename T>
 struct Vector {
-	double x = 0;
-	double y = 0;
+	T point;
 
-	Vector() {
-		this->x = 0;
-		this->y = 0;
-	}
+	Vector() : point (0,0) {}
 
-	Vector(double x, double y) {
-		this->x = x;
-		this->y = y;
-	}
+	Vector(double x, double y) : point(x, y) {}
+
+	Vector(T point) : point(point) {}
 
 	constexpr double SquareMagnitude() const {
-		return (x * x) + (y*y);
+		double x = point.x;
+		double y = point.y;
+
+		return (x * x) + (y * y);
 	}
 	
 	double Magnitude() const {
 		return std::sqrt(SquareMagnitude());
 	}
 
+	/**
+	 * Radians of the Vector, measured from the standard unit circle origin.
+	 */
 	double Radians() const {
+		double x = point.x;
+		double y = point.y;
+
 		return std::atan2(y, x);
+	}
+
+	/**
+	 * Degrees of the Vector, measured from the standard unit circle origin.
+	 */
+	double Degrees() const {
+		return Radians() * (180.0 / M_PI);
 	}
 
 
 	/**
 	* Return new Vector such that angle is preserved, but magnitude is 1.
 	*/ 
-	Vector Normalize() {
-		Vector tmp;
-		tmp.x = x / Magnitude();
-		tmp.y = y / Magnitude();
+	Vector<T> Normalize() {
+		double x = point.x;
+		double y = point.y;
+
+		Vector<T> tmp(x / Magnitude(), y / Magnitude());
 
 		return tmp;
 	}
 
 
 	/**
-	* @param radians Positive moves counterclockwise.
-	*/
-	Vector Rotate(double radians) {
-		double length = Magnitude();
-		double newRad = radians + Radians();
+	 * Converts the point of this vector into the point of another.
+	 */
 
-		return FromAngle(newRad, length);
-	}
+	template<typename A>
+	Vector<A> ConvertTo() {	
+		A newPoint(point);
+		Vector<A> converted(newPoint);
 
-
-	static Vector FromAngle(double radians, double magnitude) {
-		Vector tmp;
-		tmp.x = std::cos(radians) * magnitude;
-		tmp.y = std::sin(radians) * magnitude;
-
-		return tmp;
+		return converted;
 	}
 };
 

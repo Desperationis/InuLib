@@ -4,6 +4,7 @@
 #include "inu/motor/engines/VoltageEngine.h"
 #include "inu/motor/engines/EncoderEngine.h"
 #include "inu/util/VectorMath.hpp"
+#include "inu/util/MathPoint.h"
 #include "inu/util/Stopwatch.hpp"
 #include <cstdint>
 
@@ -73,11 +74,21 @@ void XChassis::RawSwerve(int forward, int right, int turn) {
 }
 
 
-void XChassis::VectorPush(int magnitude, int turn, Vector robotVector, Vector targetVector) {
+void XChassis::VectorPush(int magnitude, int turn, Vector<MathPoint> robotVector, Vector<MathPoint> targetVector) {
+	// Math explanation:
+	//
+	// Use RelativeVetor to make robotVector the origin (0 degrees) and
+	// transform targetVector accordingly. With this, we can now directly
+	// translate the transformed targetVector, rel, into chassis components.
+	//
+	// To make sense as to why rel.(x, y) refers to chassis(y, x), draw a
+	// unit circle such that theta is on the right and the chassis is
+	// aligned with it. You see that any X actually moves the robot forward,
+	// hence why they are flipped.
 
 	Vector rel = VectorMath::RelativeVector(robotVector, targetVector);
 	rel = rel.Normalize();
-	RawSwerve(rel.y * magnitude, rel.x * magnitude, turn);
+	RawSwerve(rel.point.x * magnitude, -rel.point.y * magnitude, turn);
 }
 
 

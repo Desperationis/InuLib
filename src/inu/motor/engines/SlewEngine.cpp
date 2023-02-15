@@ -48,5 +48,6 @@ void SlewEngine::Shutdown() {
 
 void SlewEngine::_Update() {
 	int currentSpeed = motor.GetVoltage();
+	std::cout<<"Moving to " << Interpolate(currentSpeed, target, slewRate);
 	motor.Move(Interpolate(currentSpeed, target, slewRate));
 }

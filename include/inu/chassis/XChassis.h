@@ -12,9 +12,11 @@
 #include "inu/motor/MechMotor.hpp"
 #include "inu/motor/engines/EncoderEngine.h"
 #include "inu/util/Vector.hpp"
+#include "inu/util/MathPoint.h"
 #include <memory>
 
 namespace inu {
+
 /**
  * Controls a x-drive powered chassis with a topleft, topright, bottomleft, and
  * bottomright motor.
@@ -125,7 +127,7 @@ public:
 	 * coordinate system. This direction of this vector has to be the same
 	 * as the heading of the robot.
 	 */
-	virtual void VectorPush(int magnitude, int turn, Vector robotVector, Vector targetVector);
+	virtual void VectorPush(int magnitude, int turn, Vector<MathPoint> robotVector, Vector<MathPoint> targetVector);
 
 private:
 	template<typename T, typename...A>

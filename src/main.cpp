@@ -13,9 +13,12 @@
 #include "inu/motor/engines/EncoderEngine.h"
 #include "inu/motor/engines/SlewEngine.h"
 #include "inu/motor/MechMotor.hpp"
+#include "inu/nav/FieldController.h"
 #include "inu/chassis/XChassis.h"
 #include "inu/chassis/TankChassis.h"
 #include "inu/nav/assignment/DiskAssignment.h"
+#include "inu/util/VectorMath.hpp"
+#include "inu/util/FieldPoint.h"
 #include "pros/colors.h"
 #include "pros/llemu.hpp"
 #include "pros/misc.h"
@@ -29,7 +32,7 @@
 
 using namespace inu;
 
-#define LOGO
+//#define LOGO
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -54,14 +57,128 @@ void initialize() {
 	// components may or may not be initialized (i.e. inertial sensor) and 
 	// return wicked weird values like NaN
 	pros::delay(1000);
-	inu::InertialSensor imu(15);
-	imu.Calibrate();
-	imu.TareRotation();
 	pros::delay(2000);
 }
 
 
 void opcontrol() {
+	pros::ADIDigitalOut piston('A');
+	pros::ADIDigitalOut cuc('B');
+	cuc.set_value(0);
+
+
+	auto pchassis = std::make_shared<XChassis>(1, 19, 5, 7);
+	inu::GPS gps(8);
+	gps.SetHeadingOffset(-90);
+	//gps.SetOffset(-0.055, 0.076);
+
+
+	FieldController fieldController(pchassis, gps);
+	/*fieldController.LinearTo(0.9, -1.11);
+	fieldController.TurnTo(180);
+	fieldController.LinearTo(1.086, -1.48);
+	pros::delay(5000);
+
+	fieldController.LinearTo(-1.2, 0.97);
+	fieldController.TurnTo(270);
+	fieldController.LinearTo(-1.53, 0.97);
+	pros::delay(5000);
+	fieldController.LinearTo(0.5, -1.2);*/
+
+
+	//pchassis->Stop();
+	inu::MechMotor shooter(3);
+	shooter.ChangeEngine<engine::SlewEngine>();
+	auto slew = shooter.GetEngine<engine::SlewEngine>().lock();
+	slew->SetSlewRate(5);
+
+	inu::MechMotor intake(20);
+	intake.ChangeEngine<engine::SlewEngine>();
+	auto slew2 = intake.GetEngine<engine::SlewEngine>().lock();
+	slew2->SetSlewRate(15);
+
+
+	inu::Motor stick(2);
+	inu::Motor rollers(11);
+	bool shooterOn = false;
+
+	Stopwatch w;
+	bool pressed = false;
+
+	bool vectorDrive = false;
+	w.Mark();
+	while(true) {
+		pros::delay(20);
+		pros::Controller controller(pros::E_CONTROLLER_MASTER);
+		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+		intake.SetTarget(0);
+		stick.Move(0);
+		rollers.Move(0);
+
+		piston.set_value(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT));
+		cuc.set_value(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT));
+
+		if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
+			if(shooterOn)
+				shooter.SetTarget(0);
+			else
+				shooter.SetTarget(80);
+
+			shooterOn = !shooterOn;
+		}
+
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) 
+			intake.SetTarget(127);
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) 
+			intake.SetTarget(-127);
+
+		if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) 
+			vectorDrive = !vectorDrive;
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) 
+			stick.Move(127);
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) 
+			stick.Move(-127);
+
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) 
+			rollers.Move(127);
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) 
+			rollers.Move(-127);
+
+		shooter.Execute();
+		intake.Execute();
+
+		if(!vectorDrive) {
+			pchassis->RawSwerve(y, x, turn);
+		}
+		else {
+			Vector<MathPoint> dir = Vector<FieldPoint>(x, y).ConvertTo<MathPoint>();
+			Vector<MathPoint> robotVector = VectorMath::FromDegrees(-gps.GetHeading(), 1);
+
+			pchassis->VectorPush(dir.Magnitude(), turn, robotVector, dir);
+		}
+
+		if(w.GetElapsed() > 1000) {
+			auto info = gps.GetInfo();
+
+			std::cout<<"GPS X: " << info.x << std::endl;
+			std::cout<<"GPS Y: " << info.y << std::endl;
+			w.Mark();
+		}
+
+		if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A))
+			fieldController.LookAt(1.35, 1.3);
+
+
+	}
+
+
+
+	//////////////////////////////////////// TEST HOW MANY DISKS IT CAN DETECT
 	inu::VisionSensor vision(13);
 	auto sig = pros::Vision::signature_from_utility(1, 1087, 1919, 1502, -4855, -3903, -4378, 2.900, 0);
 	vision.SetSignature(0, &sig);
@@ -77,17 +194,19 @@ void opcontrol() {
 		pros::delay(500);
 	}
 
-	XChassis chassis(11, 5, 20, 6);
+
+	//////////////////////////////////////// CONTROL WITH VECTOR PUSH
+	/*XChassis chassis(11, 5, 20, 6);
 
 
 	inu::InertialSensor imu(15);
-	Vector robotVector = Vector::FromAngle(imu.GetRotation() * (M_PI / 180.0), 1);
+	Vector robotVector = Vector<FieldPoint>::FromDegrees(-imu.GetRotation(), 1);
 
-	chassis.VectorPush(40, 0, robotVector, Vector(1,1));
+	//chassis.VectorPush(40, 0, robotVector, Vector<FieldPoint>(1,1));
 	pros::delay(1000);
-	chassis.VectorPush(40, 0, robotVector, Vector(-1,-1));
+	//chassis.VectorPush(40, 0, robotVector, Vector<FieldPoint>(-1,-1));
 	pros::delay(500);
-	chassis.VectorPush(40, 0, robotVector, Vector(1,-1));
+	//chassis.VectorPush(40, 0, robotVector, Vector<FieldPoint>(1,-1));
 	pros::delay(1000);
 	chassis.Stop();
 
@@ -105,9 +224,9 @@ void opcontrol() {
 
 		// Must be negative as imu.GetRotation is positive the other way
 		// Cast to radians as GetRotation is in degrees
-		Vector robotVector = Vector::FromAngle(-imu.GetRotation() * (M_PI / 180.0), 1);
-		Vector tmp(x,y);
-		chassis.VectorPush(tmp.Magnitude(), turn, robotVector, tmp);
+		Vector robotVector = Vector<FieldPoint>::FromDegrees(-imu.GetRotation(), 1);
+		Vector<FieldPoint> tmp(x,y);
+		//chassis.VectorPush(tmp.Magnitude(), turn, robotVector, tmp);
 		pros::delay(20);
 
 		if(watch.GetElapsed() > 2000) {
@@ -118,6 +237,7 @@ void opcontrol() {
 
 
 
+	///////////////////////////////////// OLD COMPETITION CODE
 	try {
 		inu::ControllerStream stream;
 		stream.Start();
@@ -218,7 +338,7 @@ void opcontrol() {
 	catch(InuException e) {
 		std::cout << Color::FG_RED << e.what() << Color::FG_DEFAULT << std::endl;
 		throw std::runtime_error("InuException thrown");
-	}
+	}*/
 
 
 	// In case we exit; Delay indefinitely so that the motors don't get 

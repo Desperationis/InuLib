@@ -1,5 +1,6 @@
 #include "inu/wrapper/GPS.h"
 #include "inu/InuException.hpp"
+#include "inu/util/TrigMath.hpp"
 #include "pros/apix.h"
 
 using namespace inu;
@@ -42,9 +43,7 @@ double GPS::GetHeading() const {
 	double heading = sensor.get_heading() + headingOffset;
 
 	// Clamp to [0, 360)
-	heading = fmod(heading,360);
-    if (heading < 0)
-        heading += 360;
-	
+	heading = TrigMath::Wrap360(heading);
+
 	return heading;
 }

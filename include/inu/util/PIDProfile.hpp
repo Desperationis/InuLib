@@ -32,8 +32,8 @@ namespace inu {
 			p = i = d = 0;
 		}
 
-		PIDProfile(float p) : p(p) {}
-		PIDProfile(float p, float i) : p(p), i(i) {}
+		PIDProfile(float p) : p(p), i(0.0), d(0.0) {}
+		PIDProfile(float p, float i) : p(p), i(i), d(0.0) {}
 		PIDProfile(float p, float i, float d) : p(p), i(i), d(d) {}
 	};
 }
