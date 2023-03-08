@@ -23,7 +23,7 @@ void XChassis::operator=(const XChassis& chassis) {
 
 XChassis::XChassis(inu::port tl, inu::port tr, inu::port bl, inu::port br) : topleft(tl), topright(tr), bottomleft(bl), bottomright(br) {
 
-	encoderSettings.maxVelocity = 10;
+	encoderSettings.maxVelocity = 50;
 }
 
 XChassis::~XChassis() {
@@ -141,6 +141,8 @@ void XChassis::StrafeLeft(double ticks) {
 }
 
 void XChassis::WaitForEncoders(double steadyWait) {
+	inu::Stopwatch w;
+	w.Mark();
 	inu::Stopwatch inSteady;
 	bool steady = false;
 
@@ -149,7 +151,7 @@ void XChassis::WaitForEncoders(double steadyWait) {
 	auto br = bottomright.GetEngine<engine::EncoderEngine>().lock();
 	auto bl = bottomleft.GetEngine<engine::EncoderEngine>().lock();
 
-	while (true) {
+	while (w.GetElapsed() < 3000) {
 		if(tl->IsFinished() && tr->IsFinished() &&
 			bl->IsFinished() && br->IsFinished() && !steady) {
 

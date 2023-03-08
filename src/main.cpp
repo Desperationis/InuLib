@@ -66,27 +66,8 @@ void opcontrol() {
 	pros::ADIDigitalOut cuc('B');
 	cuc.set_value(0);
 
+	pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-	auto pchassis = std::make_shared<XChassis>(1, 19, 5, 7);
-	inu::GPS gps(8);
-	gps.SetHeadingOffset(-90);
-	//gps.SetOffset(-0.055, 0.076);
-
-
-	FieldController fieldController(pchassis, gps);
-	/*fieldController.LinearTo(0.9, -1.11);
-	fieldController.TurnTo(180);
-	fieldController.LinearTo(1.086, -1.48);
-	pros::delay(5000);
-
-	fieldController.LinearTo(-1.2, 0.97);
-	fieldController.TurnTo(270);
-	fieldController.LinearTo(-1.53, 0.97);
-	pros::delay(5000);
-	fieldController.LinearTo(0.5, -1.2);*/
-
-
-	//pchassis->Stop();
 	inu::MechMotor shooter(3);
 	shooter.ChangeEngine<engine::SlewEngine>();
 	auto slew = shooter.GetEngine<engine::SlewEngine>().lock();
@@ -102,6 +83,36 @@ void opcontrol() {
 	inu::Motor rollers(11);
 	bool shooterOn = false;
 
+
+
+	auto pchassis = std::make_shared<XChassis>(1, 19, 5, 7);
+	inu::GPS gps(8);
+	gps.SetHeadingOffset(-90);
+	//gps.SetOffset(-0.055, 0.076);
+
+
+	FieldController fieldController(pchassis, gps);
+
+	if(!controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+		pchassis->Forward(100);
+		pchassis->StrafeRight(1900);
+		rollers.Move(100);
+		pchassis->Turn(950);
+		pchassis->StrafeRight(1500);
+		
+		//fieldController.TurnTo(90);
+		//pros::delay(5000);
+	}
+	
+
+	/*fieldController.LinearTo(-1.2, 0.97);
+	fieldController.TurnTo(270);
+	fieldController.LinearTo(-1.53, 0.97);
+	pros::delay(5000);
+	fieldController.LinearTo(0.5, -1.2);*/
+
+
+	//pchassis->Stop();
 	Stopwatch w;
 	bool pressed = false;
 
@@ -109,7 +120,6 @@ void opcontrol() {
 	w.Mark();
 	while(true) {
 		pros::delay(20);
-		pros::Controller controller(pros::E_CONTROLLER_MASTER);
 		int y = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
 		int x = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 		int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -152,15 +162,15 @@ void opcontrol() {
 		shooter.Execute();
 		intake.Execute();
 
-		if(!vectorDrive) {
-			pchassis->RawSwerve(y, x, turn);
-		}
+		//if(!vectorDrive) {
+		pchassis->RawSwerve(y, x, turn);
+		/*}
 		else {
 			Vector<MathPoint> dir = Vector<FieldPoint>(x, y).ConvertTo<MathPoint>();
 			Vector<MathPoint> robotVector = VectorMath::FromDegrees(-gps.GetHeading(), 1);
 
 			pchassis->VectorPush(dir.Magnitude(), turn, robotVector, dir);
-		}
+		}*/
 
 		if(w.GetElapsed() > 1000) {
 			auto info = gps.GetInfo();
@@ -171,7 +181,7 @@ void opcontrol() {
 		}
 
 		if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A))
-			fieldController.LookAt(1.35, 1.3);
+			fieldController.LookAt(1.3, 1.3);
 
 
 	}

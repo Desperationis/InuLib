@@ -74,7 +74,9 @@ void FieldController::TurnTo(double degrees) {
 
 
 void FieldController::LinearTo(double x, double y, bool align) {
-	while(true) {
+	Stopwatch timeoutTimer;
+	timeoutTimer.Mark();
+	while(timeoutTimer.GetElapsed() < 5000) {
 		double heading = gps.GetHeading();
 		auto info = gps.GetInfo();
 
@@ -108,6 +110,8 @@ void FieldController::LinearTo(double x, double y, bool align) {
 		pros::delay(20);
 
 	}
+
+	chassis->Stop();
 }
 
 double FieldController::CalcTurnVol(double heading, PIDProfile profile) {
